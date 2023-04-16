@@ -8,12 +8,11 @@ import org.springframework.stereotype.Component;
  * @desc token工具类
  * @date 2023年02月21日 22:40
  */
-@Component
 public class TokenUtil {
 
     private static final String signature = "user";
 
-    public String getToken(String userId) {
+    public static String getToken(String userId) {
         JwtBuilder jwtBuilder = Jwts.builder();
         return jwtBuilder.setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
@@ -22,7 +21,7 @@ public class TokenUtil {
                 .compact();
     }
 
-    public Claims parseToken(String token) {
+    public static Claims parseToken(String token) {
         JwtParser jwtParser = Jwts.parser();
         Jws<Claims> claimsJws = jwtParser.setSigningKey(signature).parseClaimsJws(token);
         return claimsJws.getBody();

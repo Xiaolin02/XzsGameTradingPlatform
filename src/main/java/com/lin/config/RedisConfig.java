@@ -13,8 +13,9 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * @author 林炳昌
- * @date 2023年03月29日 18:26
+ * @author Xiaolin
+ * @desc redis配置
+ * @date 2023/4/16 19:23
  */
 @Configuration
 public class RedisConfig {

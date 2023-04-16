@@ -1,7 +1,10 @@
 package com.lin.service;
 
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.RegisterDTO;
 import com.lin.controller.DTO.UserDTO;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author 林炳昌
@@ -11,5 +14,9 @@ import com.lin.controller.DTO.UserDTO;
 public interface BasicService {
 
     ResponseResult login(UserDTO userDTO);
+
+    ResponseResult getCode(String phone) throws ExecutionException, InterruptedException;
+
+    ResponseResult register(RegisterDTO registerDTO);
 
 }

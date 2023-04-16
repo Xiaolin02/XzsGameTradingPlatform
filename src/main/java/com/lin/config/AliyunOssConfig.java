@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author 林炳昌
- * @desc
+ * @desc 阿里云oss服务配置
  * @date 2023年04月09日 21:45
  */
 @Data

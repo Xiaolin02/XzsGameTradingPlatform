@@ -18,8 +18,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.stereotype.Component;
 
 /**
- * @author 林炳昌
- * @date 2023年03月13日 21:54
+ * @author Xiaolin
+ * @desc spring-security配置
+ * @date 2023/4/16 19:23
  */
 @Component
 @EnableWebSecurity

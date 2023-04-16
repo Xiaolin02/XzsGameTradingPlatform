@@ -13,20 +13,19 @@ import java.util.Random;
  * @desc 随机数工具类
  * @date 2023/4/1 18:55
  */
-@Component
 public class RandomUtil {
 
-	private final Random random = new Random();
+	private static final Random random = new Random();
 
-	private final DecimalFormat fourdf = new DecimalFormat("0000");
+	private static final DecimalFormat fourdf = new DecimalFormat("0000");
 
-	private final DecimalFormat sixdf = new DecimalFormat("000000");
+	private static final DecimalFormat sixdf = new DecimalFormat("000000");
 
-	public String getFourBitRandom() {
+	public static String getFourBitRandom() {
 		return fourdf.format(random.nextInt(10000));
 	}
 
-	public String getSixBitRandom() {
+	public static String getSixBitRandom() {
 		return sixdf.format(random.nextInt(1000000));
 	}
 
@@ -36,7 +35,7 @@ public class RandomUtil {
 	 * @param n
 	 * @return
 	 */
-	public ArrayList getRandom(List list, int n) {
+	public static ArrayList getRandom(List list, int n) {
 
 		Random random = new Random();
 

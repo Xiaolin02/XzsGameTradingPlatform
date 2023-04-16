@@ -5,8 +5,9 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * @author 林炳昌
- * @date 2023/3/31 15:25
+ * @author Xiaolin
+ * @desc 统一返回类
+ * @date 2023/4/16 19:20
  */
 @Data
 @NoArgsConstructor
@@ -25,6 +26,9 @@ public class ResponseResult<T> {
      */
     private T data;
 
+    public ResponseResult(Integer code) {
+        this.code = code;
+    }
 
     public ResponseResult(Integer code, String msg) {
         this.code = code;

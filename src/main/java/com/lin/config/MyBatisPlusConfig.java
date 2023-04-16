@@ -8,8 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author 林炳昌
- * @date 2023年03月01日 22:33
+ * @author Xiaolin
+ * @desc mybatis-plus配置
+ * @date 2023/4/16 19:22
  */
 @Configuration
 public class MyBatisPlusConfig {

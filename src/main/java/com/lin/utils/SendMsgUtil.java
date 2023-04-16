@@ -18,15 +18,11 @@ import java.util.concurrent.ExecutionException;
  * @desc
  * @date 2023年04月01日 19:02
  */
-@Component
 public class SendMsgUtil {
 
-    @Autowired
-    RandomUtil randomUtil;
+    public static String sendMsg(String phone) throws ExecutionException, InterruptedException {
 
-    public String sendMsg(String phone) throws ExecutionException, InterruptedException {
-
-        String code = randomUtil.getFourBitRandom();
+        String code = RandomUtil.getFourBitRandom();
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
                 .accessKeyId("LTAI5tSNS5KVv5795nBQMBX9")
                 .accessKeySecret("grLuUdI5L6jJ8PpQrpPs9izMtoQ8WT")

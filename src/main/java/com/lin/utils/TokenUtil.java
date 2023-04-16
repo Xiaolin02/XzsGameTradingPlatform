@@ -12,11 +12,11 @@ public class TokenUtil {
 
     private static final String signature = "user";
 
-    public static String getToken(String userId) {
+    public static String getToken(String username) {
         JwtBuilder jwtBuilder = Jwts.builder();
         return jwtBuilder.setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-                .claim("userId", userId)
+                .claim("username", username)
                 .signWith(SignatureAlgorithm.HS256, signature)
                 .compact();
     }

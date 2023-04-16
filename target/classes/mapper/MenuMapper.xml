@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lin.mapper.MenuMapper">
+
+    <!--TODO-->
+    <select id="selectPermsByUserId" resultType="java.lang.String">
+        select
+            distinct m.perm_key
+        from
+            user_role ur
+                left join role r on r.id = ur.role_id
+                left join role_menu rm on rm.role_id = ur.role_id
+                left join menu m on m.id = rm.menu_id
+        where
+            ur.user_id = #{userid}
+          and r.status = 1
+          and m.status = 1
+    </select>
+
+</mapper>

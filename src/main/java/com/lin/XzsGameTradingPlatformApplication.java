@@ -10,4 +10,5 @@ public class XzsGameTradingPlatformApplication {
         SpringApplication.run(XzsGameTradingPlatformApplication.class, args);
     }
 
+
 }

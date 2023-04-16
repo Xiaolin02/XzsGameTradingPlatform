@@ -25,8 +25,8 @@ public class RandomUtil {
 		return fourdf.format(random.nextInt(10000));
 	}
 
-	public static String getSixBitRandom() {
-		return sixdf.format(random.nextInt(1000000));
+	public static String getNineBitRandom() {
+		return sixdf.format(random.nextInt(1000000000));
 	}
 
 	/**

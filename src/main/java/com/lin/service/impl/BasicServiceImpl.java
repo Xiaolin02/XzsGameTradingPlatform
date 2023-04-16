@@ -70,7 +70,7 @@ public class BasicServiceImpl implements BasicService {
             return new ResponseResult<>(403,"验证码错误");
         } else {
             User newUser = new User();
-            newUser.setUserId(Integer.parseInt(RandomUtil.getSixBitRandom()));
+            newUser.setUserId(Integer.parseInt(RandomUtil.getNineBitRandom()));
             newUser.setPhone(registerDTO.getPhone());
             userMapper.insert(newUser);
             return new ResponseResult<>(200,"注册成功");

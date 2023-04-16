@@ -6,6 +6,7 @@ import com.lin.controller.DTO.UserDTO;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.service.BasicService;
+import com.lin.utils.RandomUtil;
 import com.lin.utils.SendMsgUtil;
 import com.lin.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,7 @@ public class BasicServiceImpl implements BasicService {
             return new ResponseResult<>(403,"验证码错误");
         } else {
             User newUser = new User();
+            newUser.setUserId(Integer.parseInt(RandomUtil.getSixBitRandom()));
             newUser.setPhone(registerDTO.getPhone());
             userMapper.insert(newUser);
             return new ResponseResult<>(200,"注册成功");

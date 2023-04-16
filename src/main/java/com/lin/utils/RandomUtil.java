@@ -1,7 +1,5 @@
 package com.lin.utils;
 
-import org.springframework.stereotype.Component;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;

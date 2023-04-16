@@ -8,11 +8,9 @@ import org.springframework.stereotype.Component;
  * @desc
  * @date 2023年04月01日 20:57
  */
-@Component
 public class PasswordEncodingUtil {
 
-    public String encoding(String password) {
-
+    public static String encoding(String password) {
 
         return new BCryptPasswordEncoder().encode(password);
 

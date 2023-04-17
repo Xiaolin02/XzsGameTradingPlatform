@@ -9,14 +9,17 @@ import com.lin.service.BasicService;
 import com.lin.utils.RandomUtil;
 import com.lin.utils.SendMsgUtil;
 import com.lin.utils.TokenUtil;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -70,10 +73,19 @@ public class BasicServiceImpl implements BasicService {
             return new ResponseResult<>(403,"验证码错误");
         } else {
             User newUser = new User();
-            newUser.setUserId(Integer.parseInt(RandomUtil.getNineBitRandom()));
+            Integer randomUserId = Integer.parseInt(RandomUtil.getNineBitRandom());
+            String randomUsername = RandomStringUtils.randomAlphanumeric(10);
+            if(randomUserId < 100000000)
+                randomUserId += new Random().nextInt(9) + 1;
+            newUser.setUserId(randomUserId);
+            newUser.setUsername(randomUsername);
             newUser.setPhone(registerDTO.getPhone());
+            newUser.setPassword(new BCryptPasswordEncoder().encode("123456"));
             userMapper.insert(newUser);
-            return new ResponseResult<>(200,"注册成功");
+            HashMap<String, String> map = new HashMap<>();
+            map.put("username", randomUsername);
+            map.put("password", "123456");
+            return new ResponseResult<>(200,"注册成功",map);
         }
 
     }

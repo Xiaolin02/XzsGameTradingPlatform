@@ -7,7 +7,8 @@ package com.lin.common;
  */
 public interface CodeConstants {
 
-    int CODE_SUCCESS = 200;
-    int CODE_PARAMETER_ERROR = 403;
+    int CODE_SUCCESS = 200;             //成功
+    int CODE_PARAMETER_ERROR = 401;     //参数错误
+    int CODE_EMPTY_PARAMETER = 402;     //参数为空
 
 }

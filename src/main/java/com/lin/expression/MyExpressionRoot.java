@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * @author 林炳昌
+ * @desc 自定义权限表达式
  * @date 2023年03月21日 15:42
  */
 @Component("ex")

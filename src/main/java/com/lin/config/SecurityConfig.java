@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login","/register").anonymous()
+                .requestMatchers("/login","/register","/forgetpwd").anonymous()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -65,7 +65,6 @@ public class SecurityConfig {
                 .and()
                 .cors()
                 .and()
-                //.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

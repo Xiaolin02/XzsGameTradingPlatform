@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @author 林炳昌
+ * @desc UserMapper
  * @date 2023年03月31日 15:44
  */
 @Mapper

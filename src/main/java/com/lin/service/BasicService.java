@@ -1,6 +1,7 @@
 package com.lin.service;
 
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.ForgetpwdDTO;
 import com.lin.controller.DTO.RegisterDTO;
 import com.lin.controller.DTO.UserDTO;
 
@@ -18,5 +19,9 @@ public interface BasicService {
     ResponseResult getCode(String phone) throws ExecutionException, InterruptedException;
 
     ResponseResult register(RegisterDTO registerDTO);
+
+    ResponseResult forgetpwd(String phone) throws ExecutionException, InterruptedException;
+
+    ResponseResult forgetpwd(ForgetpwdDTO forgetpwdDTO);
 
 }

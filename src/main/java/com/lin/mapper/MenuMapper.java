@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * @author 林炳昌
+ * @desc MenuMapper
  * @date 2023年03月31日 22:42
  */
 @Mapper

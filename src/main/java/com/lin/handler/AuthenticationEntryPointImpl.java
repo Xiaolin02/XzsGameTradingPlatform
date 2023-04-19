@@ -15,6 +15,7 @@ import java.io.IOException;
 
 /**
  * @author 林炳昌
+ * @desc 自定义异常处理器
  * @date 2023年03月21日 15:05
  */
 @Component

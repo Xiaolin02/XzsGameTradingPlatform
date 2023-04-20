@@ -1,5 +1,6 @@
 package com.lin.filter;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.mapper.MenuMapper;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.LoginUser;
@@ -43,8 +44,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         Claims claims = TokenUtil.parseToken(token);
-        String userId = (String) claims.get("userId");
-        User user = userMapper.selectById(userId);
+        String username = (String) claims.get("username");
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",username);
+        User user = userMapper.selectOne(wrapper);
         LoginUser loginUser = new LoginUser(user, menuMapper.selectPermsByUserId(user.getUserId()));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

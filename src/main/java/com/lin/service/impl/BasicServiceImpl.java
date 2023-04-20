@@ -5,15 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ForgetpwdDTO;
+import com.lin.controller.DTO.OfferDTO;
 import com.lin.controller.DTO.RegisterDTO;
 import com.lin.controller.DTO.UserDTO;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.service.BasicService;
-import com.lin.utils.PasswordEncodingUtil;
-import com.lin.utils.RandomUtil;
-import com.lin.utils.SendMsgUtil;
-import com.lin.utils.TokenUtil;
+import com.lin.utils.*;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,21 +44,24 @@ public class BasicServiceImpl implements BasicService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    OssUtil ossUtil;
+
     @Override
     public ResponseResult login(UserDTO userDTO) {
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUsername(),userDTO.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
-        if(Objects.isNull(authenticate)) {
+        if (Objects.isNull(authenticate)) {
             throw new RuntimeException("登陆失败");
         }
 
         String jwt = TokenUtil.getToken(userDTO.getUsername());
         HashMap<String, String> map = new HashMap<>();
-        map.put("token",jwt);
+        map.put("token", jwt);
 
-        return new ResponseResult(CodeConstants.CODE_SUCCESS,"登陆成功",map);
+        return new ResponseResult(CodeConstants.CODE_SUCCESS, "登陆成功", map);
 
     }
 
@@ -67,25 +70,25 @@ public class BasicServiceImpl implements BasicService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("phone", phone);
         User user = userMapper.selectOne(wrapper);
-        if(!Objects.isNull(user))
-            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR,"该手机号已经被注册");
+        if (!Objects.isNull(user))
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "该手机号已经被注册");
         code = SendMsgUtil.sendMsg(phone);
 //        redisUtil.set("code",code);
 //        HashMap<String, String> map = new HashMap<>();
 //        map.put("phone",phone);
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"验证码已发送到用户填写的手机号上，请注意查收");
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "验证码已发送到用户填写的手机号上，请注意查收");
     }
 
     @Override
     public ResponseResult register(RegisterDTO registerDTO) {
 
-        if(!Objects.equals(registerDTO.getCode(),code)) {
-            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR,"验证码错误");
+        if (!Objects.equals(registerDTO.getCode(), code)) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             User newUser = new User();
             Integer randomUserId = Integer.parseInt(RandomUtil.getNineBitRandom());
             String randomUsername = RandomStringUtils.randomAlphanumeric(10);
-            if(randomUserId < 100000000)
+            if (randomUserId < 100000000)
                 randomUserId += new Random().nextInt(9) + 1;
             newUser.setUserId(randomUserId);
             newUser.setUsername(randomUsername);
@@ -95,7 +98,7 @@ public class BasicServiceImpl implements BasicService {
             HashMap<String, String> map = new HashMap<>();
             map.put("username", randomUsername);
             map.put("password", "123456");
-            return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"注册成功",map);
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "注册成功", map);
         }
 
     }
@@ -106,28 +109,34 @@ public class BasicServiceImpl implements BasicService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("phone", phone);
         User user = userMapper.selectOne(wrapper);
-        if(Objects.isNull(user))
-            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR,"该手机号尚未被注册");
+        if (Objects.isNull(user))
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "该手机号尚未被注册");
         code = SendMsgUtil.sendMsg(phone);
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"验证码已发送到用户填写的手机号上，请注意查收");
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "验证码已发送到用户填写的手机号上，请注意查收");
 
     }
 
     @Override
     public ResponseResult forgetpwd(ForgetpwdDTO forgetpwdDTO) {
 
-        if(!Objects.equals(code,forgetpwdDTO.getCode())) {
-            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR,"验证码错误");
+        if (!Objects.equals(code, forgetpwdDTO.getCode())) {
+            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("phone",forgetpwdDTO.getPhone());
+            queryWrapper.eq("phone", forgetpwdDTO.getPhone());
             UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
             updateWrapper.set("password", PasswordEncodingUtil.encoding("123456"));
-            userMapper.update(userMapper.selectOne(queryWrapper),updateWrapper);
+            userMapper.update(userMapper.selectOne(queryWrapper), updateWrapper);
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "密码已经重置为123456");
         }
 
     }
 
+    @Override
+    public void contact(HttpServletResponse response) {
+
+        ossUtil.downFile("https://xzs-gametradingplatform.oss-cn-shenzhen.aliyuncs.com/Xiaolin/QQ/MyQQ.png", response);
+
+    }
 
 }

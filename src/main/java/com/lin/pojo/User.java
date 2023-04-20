@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 林炳昌
+ * @desc 用户实体类
  * @date 2023年03月31日 15:20
  */
 @Data

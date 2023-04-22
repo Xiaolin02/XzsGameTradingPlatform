@@ -28,7 +28,7 @@ public class MessageController {
     @GetMapping("/pushMsg/{toId}")
     public ResponseResult pushMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
-        log.info("访问了pushMsgToOneUser接口");
+        log.info("访问了{}接口",Thread.currentThread().getStackTrace()[1].getMethodName());
         return messageService.pushMsgToOneUser(token,toId,content);
 
     }

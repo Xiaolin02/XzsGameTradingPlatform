@@ -34,4 +34,17 @@ public class DateUtil {
 
     }
 
+    /**
+     * @desc 获取当前时间到秒
+     * @date 2023/4/22 11:34
+     */
+    public static String getDateTime() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
+        Date now = new Date();//获取当前时间
+        String date=sdf.format(now);
+        return date;
+
+    }
+
 }

@@ -3,6 +3,7 @@ package com.lin.controller;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.OfferDTO;
 import com.lin.service.impl.BuyerServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

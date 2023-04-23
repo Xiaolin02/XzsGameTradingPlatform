@@ -1,5 +1,7 @@
 package com.lin.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.ResponseResult;
 import com.lin.controller.WebSocketServer;
 import com.lin.mapper.MessageMapper;
@@ -51,6 +53,25 @@ public class MessageServiceImpl implements MessageService {
         return new ResponseResult(200);
 
 
+    }
+
+    @Override
+    public ResponseResult pushMsg(String token, Integer toId, String content) throws IOException {
+        JSONObject jsonObject = JSONObject.parseObject(content);
+        String toStringContent = jsonObject.get("content").toString();
+        Claims claims = TokenUtil.parseToken(token);
+        String username = claims.get("username").toString();
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", username);
+        User fromUser = userMapper.selectOne(wrapper);
+        User toUser = userMapper.selectById(toId);
+        Message message = new Message();
+        message.setToUser(toUser.getUsername());
+        message.setFromUser(fromUser.getUsername());
+        message.setContent(toStringContent);
+        message.setSendTime(DateUtil.getDateTime());
+        messageMapper.insert(message);
+        return new ResponseResult(200);
     }
 
 }

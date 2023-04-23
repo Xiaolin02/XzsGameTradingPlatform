@@ -1,6 +1,10 @@
 package com.lin.utils;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lin.mapper.UserMapper;
+import com.lin.pojo.User;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**

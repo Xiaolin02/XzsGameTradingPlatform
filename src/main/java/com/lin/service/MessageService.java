@@ -15,4 +15,6 @@ public interface MessageService {
 
     ResponseResult pushSystemMsgToOneUser(String token, Integer toId, String content, String title);
 
+    ResponseResult pushMsg(String token, Integer toId, String content) throws IOException;
+
 }

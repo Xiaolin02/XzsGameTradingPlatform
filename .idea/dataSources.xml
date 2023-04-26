@@ -6,14 +6,12 @@
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@81.71.138.10" uuid="0e36888e-6035-42da-abeb-7cd7a57c2949">
+    <data-source source="LOCAL" name="@81.71.138.10" uuid="9ff184db-8da4-4ddb-bb21-9018892fef3f">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://81.71.138.10:1028?allowPublicKeyRetrieval=true</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
+      <jdbc-url>jdbc:mysql://81.71.138.10:1028</jdbc-url>
       <driver-properties>
         <property name="useSSL" value="FALSE" />
       </driver-properties>

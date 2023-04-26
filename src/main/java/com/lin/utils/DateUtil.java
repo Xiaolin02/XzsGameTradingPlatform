@@ -1,5 +1,6 @@
 package com.lin.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ public class DateUtil {
     }
 
     /**
-     * @desc 以参数date为第一周,计算当天是第几周(默认date为星期一)
+     * @desc 以参数date为第一周, 计算当天是第几周(默认date为星期一)
      * @date 2023/4/14 22:48
      */
     public static Long getWeekNumber(Date date) {
@@ -42,9 +43,20 @@ public class DateUtil {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
         Date now = new Date();//获取当前时间
-        String date=sdf.format(now);
+        String date = sdf.format(now);
         return date;
 
+    }
+
+    public static boolean isDateValid(String dateStr) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+        try {
+            Date date = sdf.parse(dateStr);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
 }

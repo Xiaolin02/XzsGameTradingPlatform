@@ -6,5 +6,40 @@
         insert into commodity_offer(commodity_id, buyer_id, offer)
         values (#{commodityId}, #{buyerId}, #{offer});
     </insert>
+    <select id="search" parameterType="SearchDTO" resultType="Product">
+        SELECT * FROM commodity
+        <where>
+            <if test="releaseTimeEarliest != null">
+                AND release_time &gt;= #{releaseTimeEarliest}
+            </if>
+            <if test="releaseTimeLatest != null">
+                AND release_time &lt;= #{releaseTimeLatest}
+            </if>
+            <if test="priceMin != null">
+                AND price &gt;= #{priceMin}
+            </if>
+            <if test="priceMax != null">
+                AND price &lt;= #{priceMax}
+            </if>
+            <if test="allowBargaining != null">
+                AND allow_bargaining = #{allowBargaining}
+            </if>
+            <if test="descriptionDesired != null and descriptionDesired.size() &gt; 0">
+                <foreach item="description" collection="descriptionDesired" open="" separator="" close="">
+                    AND description LIKE CONCAT('%', #{description}, '%')
+                </foreach>
+            </if>
+        </where>
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+    <insert id="favorite">
+        INSERT INTO commodity_favorite(commodity_id, user_id)
+        values (#{commodity_id}, #{user_id})
+    </insert>
+    <insert id="report">
+        INSERT INTO commodity_report(commodity_id, user_id, reason)
+        values (#{commodity_id}, #{user_id}, #{reason})
+    </insert>
+
 
 </mapper>

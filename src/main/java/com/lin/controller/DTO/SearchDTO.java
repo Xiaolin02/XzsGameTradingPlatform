@@ -25,7 +25,7 @@ public class SearchDTO {
     @Nullable
     private Integer priceMin;
     @Nullable
-    private boolean allowBargaining;
+    private Boolean allowBargaining;
     @Nullable
     private List<String> descriptionDesired;
     private Integer pageSize;

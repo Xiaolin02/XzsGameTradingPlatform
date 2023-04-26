@@ -32,6 +32,7 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Override
     public ResponseResult searchCommodity(String token, SearchDTO searchDTO) {
+//return null;
         if (searchDTO.getPriceMax() != null && searchDTO.getPriceMin() != null && searchDTO.getPriceMax() < searchDTO.getPriceMin()) {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "最大价格小于最小价格");
         }
@@ -51,23 +52,22 @@ public class CommodityServiceImpl implements CommodityService {
 
     @Override
     public ResponseResult favoriteCommodity(String token, Integer commodityId) {
-        Claims claims = TokenUtil.parseToken(token);
-        String username = claims.get("username").toString();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
-        User user = userMapper.selectOne(wrapper);
-        commodityMapper.favorite(commodityId, user.getUserId());
+        commodityMapper.favorite(commodityId, getUserIdByToken(token));
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "收藏成功");
     }
 
     @Override
     public ResponseResult reportCommodity(String token, Integer commodityId, String reason) {
+//return null;
+        commodityMapper.report(commodityId, getUserIdByToken(token), reason);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "举报成功");
+    }
+    private Integer getUserIdByToken(String token){
         Claims claims = TokenUtil.parseToken(token);
         String username = claims.get("username").toString();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         User user = userMapper.selectOne(wrapper);
-        commodityMapper.report(commodityId, user.getUserId(), reason);
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "举报成功");
+        return user.getUserId();
     }
 }

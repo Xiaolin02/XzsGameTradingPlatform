@@ -1,7 +1,10 @@
 package com.lin.service;
 
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.SearchDTO;
+import com.lin.controller.DTO.SearchCommodityDTO;
+import com.lin.pojo.Commodity;
+
+import java.util.List;
 
 /**
  * @author czh
@@ -9,7 +12,7 @@ import com.lin.controller.DTO.SearchDTO;
  * @date 2023/4/23 21:59
  */
 public interface CommodityService {
-    ResponseResult searchCommodity(String token, SearchDTO searchDTO);
-    ResponseResult favoriteCommodity(String token, Integer commodityId);
-    ResponseResult reportCommodity(String token, Integer commodityId, String reason);
+    ResponseResult<Object> searchCommodity(SearchCommodityDTO searchDTO);
+
+    ResponseResult<Object> reportCommodity(String token, Integer commodityId, String reason);
 }

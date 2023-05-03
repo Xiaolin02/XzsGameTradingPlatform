@@ -1,7 +1,7 @@
 package com.lin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lin.controller.DTO.SearchDTO;
+import com.lin.controller.DTO.SearchCommodityDTO;
 import com.lin.pojo.Commodity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,7 +16,5 @@ import java.util.List;
 public interface CommodityMapper extends BaseMapper<Commodity> {
 
     void offer(Integer commodityId, Integer buyerId, Integer offer);
-    List<Commodity> search(SearchDTO searchDTO);
-    void favorite(Integer commodityId, Integer userId);
     void report(Integer commodityId, Integer userId, String reason);
 }

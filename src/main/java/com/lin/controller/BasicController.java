@@ -3,7 +3,6 @@ package com.lin.controller;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ForgetpwdDTO;
-import com.lin.controller.DTO.OfferDTO;
 import com.lin.controller.DTO.RegisterDTO;
 import com.lin.controller.DTO.UserDTO;
 import com.lin.service.impl.BasicServiceImpl;
@@ -45,7 +44,7 @@ public class BasicController {
             if (!Pattern.matches("^1[3-9]\\d{9}$", phone))
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
         } else {
-            return new ResponseResult(CodeConstants.CODE_EMPTY_PARAMETER, "手机号不得为空");
+            return new ResponseResult(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
         }
         return basicService.getCode(phone);
     }
@@ -76,7 +75,7 @@ public class BasicController {
             if (!Pattern.matches("^1[3-9]\\d{9}$", phone))
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
         } else {
-            return new ResponseResult(CodeConstants.CODE_EMPTY_PARAMETER, "手机号不得为空");
+            return new ResponseResult(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
         }
         return basicService.forgetpwd(phone);
     }

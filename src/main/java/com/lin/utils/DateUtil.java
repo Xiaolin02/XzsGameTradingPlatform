@@ -11,7 +11,8 @@ import java.util.Date;
  */
 public class DateUtil {
 
-
+    public static final String DEFAULT_DATA_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DEFAULT_DATA_FORMAT = "yyyy-MM-dd";
     /**
      * @desc 获取当天是星期几
      * @date 2023/4/14 22:28
@@ -41,7 +42,7 @@ public class DateUtil {
      */
     public static String getDateTime() {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //设置时间格式
+        SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATA_TIME_FORMAT); //设置时间格式
         Date now = new Date();//获取当前时间
         String date = sdf.format(now);
         return date;
@@ -49,7 +50,7 @@ public class DateUtil {
     }
 
     public static boolean isDateValid(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATA_FORMAT);
         sdf.setLenient(false);
         try {
             Date date = sdf.parse(dateStr);

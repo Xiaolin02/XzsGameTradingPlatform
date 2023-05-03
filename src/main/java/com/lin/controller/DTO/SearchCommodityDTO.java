@@ -1,5 +1,6 @@
 package com.lin.controller.DTO;
 
+import com.lin.controller.DTO.General.PageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,24 +16,25 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchDTO {
-    @Nullable
-    private String releaseTimeEarliest;
-    @Nullable
-    private String releaseTimeLatest;
+public class SearchCommodityDTO {
     @Nullable
     private Integer priceMax;
     @Nullable
     private Integer priceMin;
     @Nullable
+    private String releaseTimeEarliest;
+    @Nullable
+    private String releaseTimeLatest;
+    @Nullable
     private Boolean allowBargaining;
     @Nullable
-    private List<String> descriptionDesired;
-    private Integer pageSize;
-    private Integer pageNum;
+    private List<String> descriptionDesiredList;
+    private PageDTO page;
+//    private Integer pageSize;
+//    private Integer pageNum;
 
-    public Integer getOffset() {
-        return (pageNum - 1) * pageSize;
-    }
+//    public Integer getOffset() {
+//        return (pageNum - 1) * pageSize;
+//    }
 }
 

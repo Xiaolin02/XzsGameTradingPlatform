@@ -7,7 +7,7 @@ import com.lin.pojo.Favorite;
 
 /**
  * @Author czh
- * @desc TODO
+ * @desc
  * @date 2023/5/3 19:21
  */
 public interface FavoriteService {

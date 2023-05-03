@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @Author czh
- * @desc TODO
+ * @desc
  * @date 2023/5/3 19:18
  */
 @Mapper

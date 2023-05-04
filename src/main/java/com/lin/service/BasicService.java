@@ -27,8 +27,6 @@ public interface BasicService {
 
     ResponseResult register(RegisterDTO registerDTO);
 
-    ResponseResult forgetpwd(String phone) throws ExecutionException, InterruptedException;
-
     ResponseResult forgetpwd(ForgetpwdDTO forgetpwdDTO);
 
     void contact(HttpServletResponse response);

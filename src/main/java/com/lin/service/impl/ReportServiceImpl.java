@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @Author czh
- * @desc
+ * @desc 举报
  * @date 2023/5/4 8:55
  */
 @Service
@@ -25,6 +25,11 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     UserMapper userMapper;
 
+    /**
+     * @Author czh
+     * @desc 添加举报（用户或商品只能举报一个）
+     * @date 2023/5/4 13:50
+     */
     @Override
     public ResponseResult<Object> insertReport(String token, ReportDTO reportDTO) {
         Integer userId = BasicService.getUserIdByToken(userMapper, token);
@@ -41,6 +46,11 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "举报成功");
     }
 
+    /**
+     * @Author czh
+     * @desc 撤销/删除 举报
+     * @date 2023/5/4 13:50
+     */
     @Override
     public ResponseResult<Object> deleteReport(String token, Integer reportId) {
         Integer userId = BasicService.getUserIdByToken(userMapper, token);

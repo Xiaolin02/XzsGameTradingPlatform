@@ -5,7 +5,7 @@ import com.lin.controller.DTO.General.PageDTO;
 
 /**
  * @Author czh
- * @desc
+ * @desc 收藏
  * @date 2023/5/3 19:21
  */
 public interface FavoriteService {

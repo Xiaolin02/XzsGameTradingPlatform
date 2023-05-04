@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author czh
- * @desc
+ * @desc 举报记录实体类
  * @date 2023/5/4 7:54
  */
 @Data

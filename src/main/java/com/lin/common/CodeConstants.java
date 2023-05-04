@@ -11,6 +11,6 @@ public interface CodeConstants {
     int CODE_PARAMETER_ERROR = 401;     // 参数错误
     int CODE_PARAMETER_EMPTY = 402;     // 参数为空
     int CODE_NOT_FOUND = 404;           // 查询未找到
-    int CODE_CONFLICT = 409;            // 重复添加，删除不存在
+    int CODE_CONFLICT = 409;            // 重复添加记录，或者删除不存在的记录
 
 }

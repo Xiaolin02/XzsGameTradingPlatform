@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @Author czh
- * @desc 搜索商品模型
+ * @desc 搜索商品DTO
  * @date 2023/4/23 22:12
  */
 @Data
@@ -30,11 +30,5 @@ public class SearchCommodityDTO {
     @Nullable
     private List<String> descriptionDesiredList;
     private PageDTO page;
-//    private Integer pageSize;
-//    private Integer pageNum;
-
-//    public Integer getOffset() {
-//        return (pageNum - 1) * pageSize;
-//    }
 }
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @Author czh
- * @desc
+ * @desc 收藏
  * @date 2023/5/3 19:23
  */
 @Service
@@ -31,6 +31,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     CommodityMapper commodityMapper;
 
+    /**
+     * @Author czh
+     * @desc 添加收藏（不可重复添加）
+     * @date 2023/5/4 13:50
+     */
     @Override
     public ResponseResult<Object> insertFavorite(String token, Integer commodityId) {
 
@@ -44,6 +49,11 @@ public class FavoriteServiceImpl implements FavoriteService {
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功添加收藏记录");
     }
 
+    /**
+     * @Author czh
+     * @desc 删除收藏（不可删除不存在的收藏）
+     * @date 2023/5/4 13:50
+     */
     @Override
     public ResponseResult<Object> deleteFavorite(String token, Integer commodityId) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
@@ -56,6 +66,11 @@ public class FavoriteServiceImpl implements FavoriteService {
         }
     }
 
+    /**
+     * @Author czh
+     * @desc 查看收藏的商品List
+     * @date 2023/5/4 13:50
+     */
     @Override
     public ResponseResult<Object> selectFavoriteCommodity(String token, PageDTO pageDTO) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();

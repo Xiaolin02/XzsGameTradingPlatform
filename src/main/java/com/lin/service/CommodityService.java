@@ -14,5 +14,4 @@ import java.util.List;
 public interface CommodityService {
     ResponseResult<Object> searchCommodity(SearchCommodityDTO searchDTO);
 
-    ResponseResult<Object> reportCommodity(String token, Integer commodityId, String reason);
 }

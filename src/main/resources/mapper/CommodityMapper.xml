@@ -6,10 +6,5 @@
         insert into commodity_offer(commodity_id, buyer_id, offer)
         values (#{commodityId}, #{buyerId}, #{offer});
     </insert>
-    <insert id="report">
-        INSERT INTO commodity_report(commodity_id, user_id, reason)
-        values (#{commodityId}, #{userId}, #{reason})
-    </insert>
-
 
 </mapper>

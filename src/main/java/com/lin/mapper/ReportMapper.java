@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @Author czh
- * @desc
+ * @desc 举报
  * @date 2023/5/4 7:54
  */
 @Mapper

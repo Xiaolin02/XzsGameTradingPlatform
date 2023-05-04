@@ -49,14 +49,19 @@ public class DateUtil {
 
     }
 
-    public static boolean isDateValid(String dateStr) {
+    /**
+     * @Author czh
+     * @desc 判断日期是否符合格式，目前用于搜索商品
+     * @date 2023/5/4 13:50
+     */
+    public static boolean isNotValidDate(String dateStr) {
         SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATA_FORMAT);
         sdf.setLenient(false);
         try {
             Date date = sdf.parse(dateStr);
-            return true;
-        } catch (ParseException e) {
             return false;
+        } catch (ParseException e) {
+            return true;
         }
     }
 

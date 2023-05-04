@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author czh
- * @desc 通用分页查询
+ * @desc 通用的分页查询DTO
  * @date 2023/5/3 20:07
  */
 @Data

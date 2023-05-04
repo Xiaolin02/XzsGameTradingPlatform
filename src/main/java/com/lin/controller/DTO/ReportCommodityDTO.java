@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 2023/4/26 21:32
  */
 @Data
-public class    ReportCommodityDTO {
+public class ReportCommodityDTO {
     private Integer commodityId;
     private String reason;
 }

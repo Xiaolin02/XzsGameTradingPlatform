@@ -1,9 +1,7 @@
 package com.lin.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.General.PageDTO;
-import com.lin.pojo.Favorite;
 
 /**
  * @Author czh
@@ -11,7 +9,7 @@ import com.lin.pojo.Favorite;
  * @date 2023/5/3 19:21
  */
 public interface FavoriteService {
-    public ResponseResult<Object> addFavorite(String token, Integer commodityId);
-    public ResponseResult<Object> deleteFavorite(String token, Integer commodityId);
-    public ResponseResult<Object> searchFavorite(String token, PageDTO pageDTO);
+    ResponseResult<Object> insertFavorite(String token, Integer commodityId);
+    ResponseResult<Object> deleteFavorite(String token, Integer commodityId);
+    ResponseResult<Object> selectFavoriteCommodity(String token, PageDTO pageDTO);
 }

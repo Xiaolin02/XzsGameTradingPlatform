@@ -32,7 +32,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     CommodityMapper commodityMapper;
 
     @Override
-    public ResponseResult<Object> addFavorite(String token, Integer commodityId) {
+    public ResponseResult<Object> insertFavorite(String token, Integer commodityId) {
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("commodity_id", commodityId);
@@ -57,7 +57,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public ResponseResult<Object> searchFavorite(String token, PageDTO pageDTO) {
+    public ResponseResult<Object> selectFavoriteCommodity(String token, PageDTO pageDTO) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", BasicService.getUserIdByToken(userMapper, token));
         List<Favorite> favoriteList = favoriteMapper.selectPage(pageDTO.toPage(), favoriteQueryWrapper).getRecords();

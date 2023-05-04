@@ -2,9 +2,7 @@ package com.lin.controller;
 
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.General.PageDTO;
-import com.lin.service.BasicService;
 import com.lin.service.FavoriteService;
-import com.lin.service.impl.BasicServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +20,8 @@ public class FavoriteController {
     FavoriteService favoriteService;
 
     @PostMapping("/commodity/{commodityId}")
-    public ResponseResult addFavorite(@RequestHeader String token, @PathVariable Integer commodityId) {
-        return favoriteService.addFavorite(token, commodityId);
+    public ResponseResult insertFavorite(@RequestHeader String token, @PathVariable Integer commodityId) {
+        return favoriteService.insertFavorite(token, commodityId);
     }
 
     @DeleteMapping("/commodity/{commodityId}")
@@ -32,8 +30,8 @@ public class FavoriteController {
     }
 
     @GetMapping("/commodity")
-    public ResponseResult searchFavorite(@RequestHeader String token, @RequestBody PageDTO pageDTO) {
-        return favoriteService.searchFavorite(token, pageDTO);
+    public ResponseResult selectFavoriteCommodity(@RequestHeader String token, @RequestBody PageDTO pageDTO) {
+        return favoriteService.selectFavoriteCommodity(token, pageDTO);
     }
 
 }

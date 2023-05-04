@@ -35,10 +35,10 @@ public class BasicController {
     }
 
     /**
-     * @desc 注册时获取手机验证码接口
+     * @desc 获取手机验证码接口
      * @date 2023/4/16 19:26
      */
-    @GetMapping("/register")
+    @GetMapping("/getCode")
     public ResponseResult getCode(@RequestHeader String phone) throws ExecutionException, InterruptedException {
         if (!Objects.isNull(phone)) {
             if (!Pattern.matches("^1[3-9]\\d{9}$", phone))
@@ -63,21 +63,6 @@ public class BasicController {
             return basicService.register(registerDTO);
         }
 
-    }
-
-    /**
-     * @desc 忘记密码接口
-     * @date 2023/4/19 21:27
-     */
-    @GetMapping("/forgetpwd")
-    public ResponseResult forgetpwd(@RequestHeader String phone) throws ExecutionException, InterruptedException {
-        if (!Objects.isNull(phone)) {
-            if (!Pattern.matches("^1[3-9]\\d{9}$", phone))
-                return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
-        } else {
-            return new ResponseResult(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
-        }
-        return basicService.forgetpwd(phone);
     }
 
     /**

@@ -12,5 +12,7 @@ public interface BuyerService {
 
     ResponseResult offer(String token, OfferDTO offerDTO);
 
+    ResponseResult addOrder(String token, Integer commodityId);
+
 
 }

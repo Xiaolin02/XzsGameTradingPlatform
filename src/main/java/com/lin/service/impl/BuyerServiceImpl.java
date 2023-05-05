@@ -1,16 +1,17 @@
 package com.lin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
+import com.lin.common.OrderStatusConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.OfferDTO;
 import com.lin.mapper.CommodityMapper;
+import com.lin.mapper.OrderMapper;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.Commodity;
+import com.lin.pojo.Order;
 import com.lin.pojo.User;
 import com.lin.service.BuyerService;
-import com.lin.utils.TokenUtil;
-import io.jsonwebtoken.Claims;
+import com.lin.utils.ParseTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,20 +29,33 @@ public class BuyerServiceImpl implements BuyerService {
     @Autowired
     CommodityMapper commodityMapper;
 
+    @Autowired
+    OrderMapper orderMapper;
+
+    @Autowired
+    ParseTokenUtil parseTokenUtil;
+
+
     @Override
     public ResponseResult offer(String token, OfferDTO offerDTO) {
 
-        Claims claims = TokenUtil.parseToken(token);
-        String username = claims.get("username").toString();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
-        User user = userMapper.selectOne(wrapper);
+        User user = parseTokenUtil.parseTokenToGetUser(token);
         Commodity commodity = commodityMapper.selectById(offerDTO.getCommodityId());
         if(commodity.getPrice() <= offerDTO.getMoney()) {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "出价小于等于商品价格");
         }
         commodityMapper.offer(offerDTO.getCommodityId(), user.getUserId(), offerDTO.getMoney());
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "出价成功");
+
+    }
+
+    @Override
+    public ResponseResult addOrder(String token, Integer commodityId) {
+
+        User user = parseTokenUtil.parseTokenToGetUser(token);
+        Commodity commodity = commodityMapper.selectById(commodityId);
+        orderMapper.insert(new Order(commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), OrderStatusConstants.STATUS_UNPAID));
+        return new ResponseResult<>(200,"提交成功");
 
     }
 

@@ -5,7 +5,7 @@ import lombok.Data;
 
 /**
  * @author 林炳昌
- * @desc
+ * @desc 出价模型
  * @date 2023年04月20日 16:52
  */
 @Data

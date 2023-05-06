@@ -5,6 +5,7 @@ import com.lin.common.CodeConstants;
 import com.lin.common.OrderStatusConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.OfferDTO;
+import com.lin.controller.VO.GetOrderVO;
 import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.OrderMapper;
 import com.lin.mapper.UserMapper;
@@ -12,10 +13,12 @@ import com.lin.pojo.Commodity;
 import com.lin.pojo.Order;
 import com.lin.pojo.User;
 import com.lin.service.BuyerService;
+import com.lin.utils.DateUtil;
 import com.lin.utils.ParseTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,7 +60,7 @@ public class BuyerServiceImpl implements BuyerService {
 
         User user = parseTokenUtil.parseTokenToGetUser(token);
         Commodity commodity = commodityMapper.selectById(commodityId);
-        orderMapper.insert(new Order(commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), OrderStatusConstants.STATUS_UNPAID));
+        orderMapper.insert(new Order(commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
         return new ResponseResult<>(200,"提交成功");
 
     }
@@ -69,7 +72,19 @@ public class BuyerServiceImpl implements BuyerService {
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
         wrapper.eq("buyer_id", user.getUserId());
         List<Order> orders = orderMapper.selectList(wrapper);
-        return new ResponseResult(20);
+        ArrayList<GetOrderVO> list = new ArrayList<>();
+        for (Order order : orders) {
+            list.add(
+                    new GetOrderVO(
+                    order.getCommodityId(),
+                    userMapper.selectById(order.getSellerId()).getUsername(),
+                    order.getMoney(),
+                    order.getAddTime(),
+                    order.getStatus()
+                )
+            );
+        }
+        return new ResponseResult(200, list);
 
     }
 

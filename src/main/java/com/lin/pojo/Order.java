@@ -22,6 +22,7 @@ public class Order {
     private Integer sellerId;
     private Integer buyerId;
     private Integer money;
+    private String addTime;
     @TableField(value = "`status`")
     private Integer status;
 

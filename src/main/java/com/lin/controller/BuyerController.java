@@ -36,9 +36,14 @@ public class BuyerController {
         return buyerService.getOrder(token);
     }
 
-//    @PostMapping("/delOrder")
-//    public ResponseResult delOrder() {
-//
-//    }
+    @PostMapping("/delOrder/{orderId}")
+    public ResponseResult delOrder(@RequestHeader String token, @PathVariable Integer orderId) {
+        return buyerService.delOrder(token, orderId);
+    }
+
+    @PostMapping("/payOrder/{orderId}")
+    public ResponseResult payOrder(@RequestHeader String token, @PathVariable Integer orderId) {
+        return buyerService.payOrder(token, orderId);
+    }
 
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 林炳昌
@@ -60,8 +61,10 @@ public class BuyerServiceImpl implements BuyerService {
 
         User user = parseTokenUtil.parseTokenToGetUser(token);
         Commodity commodity = commodityMapper.selectById(commodityId);
+        if(Objects.isNull(commodity))
+            return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "未找到该商品");
         orderMapper.insert(new Order(null, commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
-        return new ResponseResult<>(200,"提交成功");
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"提交成功");
 
     }
 
@@ -72,6 +75,8 @@ public class BuyerServiceImpl implements BuyerService {
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
         wrapper.eq("buyer_id", user.getUserId());
         List<Order> orders = orderMapper.selectList(wrapper);
+        if (Objects.equals(orders.size(), 0 ))
+            return new ResponseResult(CodeConstants.CODE_SUCCESS, "该用户没有订单");
         ArrayList<GetOrderVO> list = new ArrayList<>();
         for (Order order : orders) {
             list.add(
@@ -85,7 +90,26 @@ public class BuyerServiceImpl implements BuyerService {
                 )
             );
         }
-        return new ResponseResult(200, list);
+        return new ResponseResult(CodeConstants.CODE_SUCCESS, list);
+
+    }
+
+    @Override
+    public ResponseResult delOrder(String token, Integer orderId) {
+
+        Order order = orderMapper.selectById(orderId);
+        if(Objects.isNull(order))
+            return new ResponseResult(CodeConstants.CODE_NOT_FOUND, "该订单不存在");
+        order.setStatus(OrderStatusConstants.STATUS_BUYER_CANCEL);
+        orderMapper.updateById(order);
+        return new ResponseResult(CodeConstants.CODE_SUCCESS,"取消成功");
+
+    }
+
+    @Override
+    public ResponseResult payOrder(String token, Integer orderId) {
+
+        return null;
 
     }
 

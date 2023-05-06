@@ -16,4 +16,7 @@ public interface BuyerService {
 
     ResponseResult getOrder(String token);
 
+    ResponseResult delOrder(String token, Integer orderId);
+
+    ResponseResult payOrder(String token, Integer orderId);
 }

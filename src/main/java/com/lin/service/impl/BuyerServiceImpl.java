@@ -1,5 +1,6 @@
 package com.lin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.OrderStatusConstants;
 import com.lin.common.ResponseResult;
@@ -14,6 +15,8 @@ import com.lin.service.BuyerService;
 import com.lin.utils.ParseTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author 林炳昌
@@ -56,6 +59,17 @@ public class BuyerServiceImpl implements BuyerService {
         Commodity commodity = commodityMapper.selectById(commodityId);
         orderMapper.insert(new Order(commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), OrderStatusConstants.STATUS_UNPAID));
         return new ResponseResult<>(200,"提交成功");
+
+    }
+
+    @Override
+    public ResponseResult getOrder(String token) {
+
+        User user = parseTokenUtil.parseTokenToGetUser(token);
+        QueryWrapper<Order> wrapper = new QueryWrapper<>();
+        wrapper.eq("buyer_id", user.getUserId());
+        List<Order> orders = orderMapper.selectList(wrapper);
+
 
     }
 

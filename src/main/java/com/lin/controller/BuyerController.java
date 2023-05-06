@@ -31,4 +31,9 @@ public class BuyerController {
         return buyerService.addOrder(token, commodityId);
     }
 
+    @GetMapping("/getOrder")
+    public ResponseResult getOrder(@RequestHeader String token) {
+        return buyerService.getOrder(token);
+    }
+
 }

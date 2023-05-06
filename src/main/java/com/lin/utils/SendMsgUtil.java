@@ -6,6 +6,7 @@ import com.aliyun.sdk.service.dysmsapi20170525.AsyncClient;
 import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.sdk.service.dysmsapi20170525.models.SendSmsResponse;
 import com.google.gson.Gson;
+import com.lin.config.AliyunConfig;
 import darabonba.core.client.ClientOverrideConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,14 +19,18 @@ import java.util.concurrent.ExecutionException;
  * @desc
  * @date 2023年04月01日 19:02
  */
+@Component
 public class SendMsgUtil {
 
-    public static String sendMsg(String phone) throws ExecutionException, InterruptedException {
+    @Autowired
+    AliyunConfig aliyunConfig;
+
+    public String sendMsg(String phone) throws ExecutionException, InterruptedException {
 
         String code = RandomUtil.getFourBitRandom();
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
-                .accessKeyId("LTAI5tSNS5KVv5795nBQMBX9")
-                .accessKeySecret("grLuUdI5L6jJ8PpQrpPs9izMtoQ8WT")
+                .accessKeyId(aliyunConfig.getAccessKeyId())
+                .accessKeySecret(aliyunConfig.getAccessKeySecret())
                 .build());
 
         AsyncClient client = AsyncClient.builder()

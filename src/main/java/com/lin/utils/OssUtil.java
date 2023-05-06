@@ -7,7 +7,7 @@ import com.aliyun.oss.model.ListObjectsRequest;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.OSSObjectSummary;
 import com.aliyun.oss.model.ObjectListing;
-import com.lin.config.AliyunOssConfig;
+import com.lin.config.AliyunConfig;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class OssUtil {
     OSS ossClient;
 
     @Autowired
-    AliyunOssConfig aliyunOssConfig;
+    AliyunConfig aliyunConfig;
 
 
     /**
@@ -37,7 +37,7 @@ public class OssUtil {
      * @date 2023/4/10 10:46
      */
     public String uploadfile(MultipartFile multipartFile,Integer userId,String type) {
-        String bucketName = "xiaolin02";
+        String bucketName = aliyunConfig.getBucketName();
         try {
             InputStream inputStream = multipartFile.getInputStream();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -46,7 +46,7 @@ public class OssUtil {
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileUrl = type + "/" + dataPath + "/" + userId + suffix;
             ossClient.putObject(bucketName, fileUrl, inputStream);
-            return "https://" + bucketName + "." + aliyunOssConfig.getEndpoint() + "/" + fileUrl;
+            return "https://" + bucketName + "." + aliyunConfig.getEndpoint() + "/" + fileUrl;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -61,7 +61,7 @@ public class OssUtil {
         // 设置最大个数。
         final int maxKeys = 200;
         // 列举文件。
-        ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(aliyunOssConfig.getBucketName()).withMaxKeys(maxKeys));
+        ObjectListing objectListing = ossClient.listObjects(new ListObjectsRequest(aliyunConfig.getBucketName()).withMaxKeys(maxKeys));
         List<OSSObjectSummary> sums = objectListing.getObjectSummaries();
         return sums;
     }
@@ -72,7 +72,7 @@ public class OssUtil {
      */
     public void delete(String objectName) {
         // 根据BucketName,objectName删除文件
-        ossClient.deleteObject(aliyunOssConfig.getBucketName(), objectName);
+        ossClient.deleteObject(aliyunConfig.getBucketName(), objectName);
     }
 
     public void downFile(String oss_url, HttpServletResponse response) {
@@ -80,7 +80,7 @@ public class OssUtil {
 //        String oss_url = request.getParameter("url");
 
         // 获取域名后面的内容
-        String oss_domain = aliyunOssConfig.getUrl();
+        String oss_domain = aliyunConfig.getUrl();
         String file_name = oss_url.replace(oss_domain, "");
         // 获取oss文件byte[]
         byte[] oss_byte = getOssFileByteArray(file_name);
@@ -114,10 +114,10 @@ public class OssUtil {
                 ClientConfiguration conf = new ClientConfiguration();
                 // 开启支持CNAME选项
                 conf.setSupportCname(true);
-                ossClient = new OSSClient(aliyunOssConfig.getEndpoint(), aliyunOssConfig.getAccessKeyId(), aliyunOssConfig.getAccessKeySecret(), conf);
+                ossClient = new OSSClient(aliyunConfig.getEndpoint(), aliyunConfig.getAccessKeyId(), aliyunConfig.getAccessKeySecret(), conf);
 
                 // 上传
-                OSSObject ossObj = ossClient.getObject(aliyunOssConfig.getBucketName(), filepath);
+                OSSObject ossObj = ossClient.getObject(aliyunConfig.getBucketName(), filepath);
                 if (ossObj != null) {
                     InputStream is = ossObj.getObjectContent();
                     result = InputStreamToByteArray(is);

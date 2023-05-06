@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-public class AliyunOssConfig {
+public class AliyunConfig {
 
     @Value("${aliyun.endpoint}")
     private String endpoint;

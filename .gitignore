@@ -1,0 +1,14 @@
+# 忽略所有的 .class 文件
+*.class
+
+# 忽略 target 目录下的所有内容
+/target/
+
+# 忽略 .idea 目录下的所有内容
+/.idea/
+
+# 忽略日志文件
+*.log
+
+# 忽略配置文件
+/src/main/resources/application.properties

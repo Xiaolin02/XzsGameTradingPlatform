@@ -45,6 +45,9 @@ public class BasicServiceImpl implements BasicService {
     UserMapper userMapper;
 
     @Autowired
+    SendMsgUtil sendMsgUtil;
+
+    @Autowired
     OssUtil ossUtil;
 
     @Override
@@ -72,7 +75,7 @@ public class BasicServiceImpl implements BasicService {
         User user = userMapper.selectOne(wrapper);
         if (!Objects.isNull(user))
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "该手机号已经被注册");
-        code = SendMsgUtil.sendMsg(phone);
+        code = sendMsgUtil.sendMsg(phone);
 //        redisUtil.set("code",code);
 //        HashMap<String, String> map = new HashMap<>();
 //        map.put("phone",phone);

@@ -14,5 +14,6 @@ public interface BuyerService {
 
     ResponseResult addOrder(String token, Integer commodityId);
 
+    ResponseResult getOrder(String token);
 
 }

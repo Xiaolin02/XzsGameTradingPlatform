@@ -69,7 +69,7 @@ public class BuyerServiceImpl implements BuyerService {
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
         wrapper.eq("buyer_id", user.getUserId());
         List<Order> orders = orderMapper.selectList(wrapper);
-        return new ResponseResult(200);
+        return new ResponseResult(20);
 
     }
 

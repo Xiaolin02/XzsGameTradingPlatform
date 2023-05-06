@@ -60,7 +60,7 @@ public class BuyerServiceImpl implements BuyerService {
 
         User user = parseTokenUtil.parseTokenToGetUser(token);
         Commodity commodity = commodityMapper.selectById(commodityId);
-        orderMapper.insert(new Order(commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
+        orderMapper.insert(new Order(null, commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
         return new ResponseResult<>(200,"提交成功");
 
     }
@@ -76,6 +76,7 @@ public class BuyerServiceImpl implements BuyerService {
         for (Order order : orders) {
             list.add(
                     new GetOrderVO(
+                    order.getId(),
                     order.getCommodityId(),
                     userMapper.selectById(order.getSellerId()).getUsername(),
                     order.getMoney(),

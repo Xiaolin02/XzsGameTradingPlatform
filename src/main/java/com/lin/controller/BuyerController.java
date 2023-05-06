@@ -36,4 +36,9 @@ public class BuyerController {
         return buyerService.getOrder(token);
     }
 
+//    @PostMapping("/delOrder")
+//    public ResponseResult delOrder() {
+//
+//    }
+
 }

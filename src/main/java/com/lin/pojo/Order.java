@@ -1,5 +1,6 @@
 package com.lin.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -18,6 +19,8 @@ import lombok.NoArgsConstructor;
 @TableName("`order`")
 public class Order {
 
+    @TableId(type = IdType.ASSIGN_ID)
+    private Integer id;
     private Integer commodityId;
     private Integer sellerId;
     private Integer buyerId;

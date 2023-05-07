@@ -62,6 +62,7 @@ public class SellerServiceImpl implements SellerService {
         for (MultipartFile file : files) {
             ossUtil.uploadfile(file, user.getUserId(), "release");
         }
+
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "上传成功");
 
     }

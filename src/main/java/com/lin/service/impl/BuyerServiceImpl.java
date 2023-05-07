@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.OrderStatusConstants;
 import com.lin.common.ResponseResult;
+import com.lin.common.SystemMsgTitleConstants;
 import com.lin.controller.DTO.OfferDTO;
 import com.lin.controller.VO.GetOrderVO;
 import com.lin.mapper.CommodityMapper;
@@ -41,6 +42,9 @@ public class BuyerServiceImpl implements BuyerService {
 
     @Autowired
     ParseTokenUtil parseTokenUtil;
+
+    @Autowired
+    MessageServiceImpl messageService;
 
 
     @Override
@@ -84,7 +88,7 @@ public class BuyerServiceImpl implements BuyerService {
                     order.getId(),
                     order.getCommodityId(),
                     userMapper.selectById(order.getSellerId()).getUsername(),
-                    order.getMoney(),
+                    order.getPrice(),
                     order.getAddTime(),
                     order.getStatus()
                 )
@@ -109,7 +113,24 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult payOrder(String token, Integer orderId) {
 
-        return null;
+        User user = parseTokenUtil.parseTokenToGetUser(token);
+        Order order = orderMapper.selectById(orderId);
+        if(user.getBalance() < order.getPrice())
+            return new ResponseResult<>(CodeConstants.CODE_INSUFFICIENT_BALANCE, "用户余额不足");
+        else {
+            user.setBalance(user.getBalance() - order.getPrice());
+            order.setStatus(OrderStatusConstants.STATUS_PAID);
+            userMapper.updateById(user);
+            orderMapper.updateById(order);
+            Commodity commodity = commodityMapper.selectById(order.getCommodityId());
+            messageService.pushSystemMsgToOneUser(
+                    token,
+                    order.getSellerId(),
+                    "买家 " + user.getUsername() + " 购买了您 \"" + commodity.getTitle() + "\" 的商品,请尽快与买家完成验货",
+                    SystemMsgTitleConstants.SYSTEM_MSG_PAID_ORDER
+            );
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "付款成功");
+        }
 
     }
 

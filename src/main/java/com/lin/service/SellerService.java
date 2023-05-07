@@ -2,6 +2,7 @@ package com.lin.service;
 
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author 林炳昌
@@ -10,6 +11,7 @@ import com.lin.controller.DTO.ReleaseDTO;
  */
 public interface SellerService {
 
-    public ResponseResult release(String token, ReleaseDTO releaseDTO);
+    ResponseResult release(String token, ReleaseDTO releaseDTO);
 
+    ResponseResult upload(String token, MultipartFile[] files);
 }

@@ -43,8 +43,8 @@ public class OssUtil {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             String dataPath = dateFormat.format(new Date());
             String originalFilename = multipartFile.getOriginalFilename();
-            String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-            String fileUrl = type + "/" + dataPath + "/" + userId + suffix;
+            //String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+            String fileUrl = type + "/" +userId + "/" + dataPath + "/" + originalFilename;
             ossClient.putObject(bucketName, fileUrl, inputStream);
             return "https://" + bucketName + "." + aliyunConfig.getEndpoint() + "/" + fileUrl;
         } catch (Exception e) {

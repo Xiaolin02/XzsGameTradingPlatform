@@ -4,10 +4,8 @@ import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
 import com.lin.service.impl.SellerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author 林炳昌
@@ -28,6 +26,11 @@ public class SellerController {
     @PostMapping("/release")
     public ResponseResult release(@RequestHeader String token, @RequestBody ReleaseDTO releaseDTO) {
         return sellerService.release(token, releaseDTO);
+    }
+
+    @PostMapping("/release/upload")
+    public ResponseResult upload(@RequestHeader String token, @RequestPart MultipartFile[] files) {
+        return sellerService.upload(token, files);
     }
 
 

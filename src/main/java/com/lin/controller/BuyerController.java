@@ -26,21 +26,37 @@ public class BuyerController {
         return buyerService.offer(token, offerDTO);
     }
 
+    /**
+     * @desc 提交订单
+     * @date 2023/5/7 15:22
+     */
     @PostMapping("/addOrder/{commodityId}")
     public ResponseResult addOffer(@RequestHeader String token, @PathVariable Integer commodityId) {
         return buyerService.addOrder(token, commodityId);
     }
 
+    /**
+     * @desc 查看订单
+     * @date 2023/5/7 15:22
+     */
     @GetMapping("/getOrder")
     public ResponseResult getOrder(@RequestHeader String token) {
         return buyerService.getOrder(token);
     }
 
+    /**
+     * @desc 取消订单(订单状态置为 2 )
+     * @date 2023/5/7 15:22
+     */
     @PostMapping("/delOrder/{orderId}")
     public ResponseResult delOrder(@RequestHeader String token, @PathVariable Integer orderId) {
         return buyerService.delOrder(token, orderId);
     }
 
+    /**
+     * @desc 付款(订单状态置为 1 )
+     * @date 2023/5/7 15:23
+     */
     @PostMapping("/payOrder/{orderId}")
     public ResponseResult payOrder(@RequestHeader String token, @PathVariable Integer orderId) {
         return buyerService.payOrder(token, orderId);

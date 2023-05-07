@@ -19,8 +19,8 @@ import lombok.NoArgsConstructor;
 @TableName("`order`")
 public class Order {
 
-    @TableId(type = IdType.ASSIGN_ID)
-    private Integer id;
+    @TableId
+    private String id;
     private Integer commodityId;
     private Integer sellerId;
     private Integer buyerId;

@@ -1,6 +1,8 @@
 package com.lin.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +21,17 @@ public class Commodity {
     private Integer commodityId;
     private String releaseTime;
     private String title;
+    @TableField(value = "`description`")
     private String description;
     private Integer price;
     private Integer sellerId;
+    @ApiModelProperty("游戏名")
+    private String game;
+    @ApiModelProperty("游戏账号")
+    private String accountNumber;
+    @ApiModelProperty("游戏账号的密码")
+    private String accountPassword;
     private boolean allowBargaining;
+    @TableField(value = "`status`")
     private Integer status;
 }

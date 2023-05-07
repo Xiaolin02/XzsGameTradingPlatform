@@ -12,7 +12,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetOrderVO {
 
-    private Integer order_id;
+    private String order_id;
     private Integer commodityId;
     private String sellerName;
     private Integer price;

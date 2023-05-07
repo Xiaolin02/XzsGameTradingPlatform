@@ -27,6 +27,11 @@ public class RandomUtil {
 		return sixdf.format(random.nextInt(1000000000));
 	}
 
+	public static String getEighteenBitRandom() {
+		return sixdf.format(random.nextInt(1000000000)) + sixdf.format(random.nextInt(1000000000));
+	}
+
+
 	/**
 	 * 给定数组，抽取n个数据
 	 * @param list

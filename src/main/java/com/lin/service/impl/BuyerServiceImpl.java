@@ -16,6 +16,7 @@ import com.lin.pojo.User;
 import com.lin.service.BuyerService;
 import com.lin.utils.DateUtil;
 import com.lin.utils.ParseTokenUtil;
+import com.lin.utils.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,7 @@ public class BuyerServiceImpl implements BuyerService {
         Commodity commodity = commodityMapper.selectById(commodityId);
         if(Objects.isNull(commodity))
             return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "未找到该商品");
-        orderMapper.insert(new Order(null, commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
+        orderMapper.insert(new Order(RandomUtil.getEighteenBitRandom(), commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"提交成功");
 
     }

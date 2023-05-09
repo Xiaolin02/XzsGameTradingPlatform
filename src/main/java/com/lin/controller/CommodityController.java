@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/search")
-public class SearchController {
+@RequestMapping("/commodity")
+public class CommodityController {
     @Autowired
     CommodityServiceImpl commodityService;
 
@@ -24,7 +24,7 @@ public class SearchController {
      * @desc 搜索商品，支持按时间、价格、议价、描述来搜索商品（仅能搜索售卖中(status=1)的商品）
      * @date 2023/5/4 13:50
      */
-    @GetMapping("/commodity")
+    @GetMapping("/search")
     public ResponseResult<Object> searchCommodity(@RequestHeader String token, @RequestBody SearchCommodityDTO searchDTO) {
         return commodityService.searchCommodity(searchDTO);
     }

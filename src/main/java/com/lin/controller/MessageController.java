@@ -16,6 +16,7 @@ import java.io.IOException;
  */
 @Slf4j
 @RestController
+@RequestMapping("/message")
 public class MessageController {
 
     @Autowired
@@ -25,7 +26,7 @@ public class MessageController {
      * @desc 向某用户推送消息(在线聊天)
      * @date 2023/4/22 10:45
      */
-    @GetMapping("/pushMsg/{toId}")
+    @GetMapping("/online/push/{toId}")
     public ResponseResult pushMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
         log.info("访问了{}接口",Thread.currentThread().getStackTrace()[1].getMethodName());
@@ -37,7 +38,7 @@ public class MessageController {
      * @desc 向某用户推送系统消息
      * @date 2023/4/22 11:41
      */
-    @PostMapping("/pushSystemMsg/{toId}")
+    @PostMapping("/system/push/{toId}")
     public ResponseResult pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody MessageDTO messageDTO) {
 
         return messageService.pushSystemMsgToOneUser(token, toId, messageDTO.getContent(), messageDTO.getTitle());
@@ -48,7 +49,7 @@ public class MessageController {
      * @desc 向某用户推送消息(离线发送)
      * @date 2023/4/22 10:45
      */
-    @PostMapping("/pushMsg/{toId}")
+    @PostMapping("/offline/push/{toId}")
     public ResponseResult pushMsg(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
         return messageService.pushMsg(token,toId,content);

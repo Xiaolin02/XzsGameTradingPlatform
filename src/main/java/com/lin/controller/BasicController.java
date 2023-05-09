@@ -41,7 +41,7 @@ public class BasicController {
      * @desc 注册获取手机验证码接口
      * @date 2023/4/16 19:26
      */
-    @GetMapping("/getCode")
+    @PostMapping("/getCode")
     public ResponseResult getCode(@RequestBody GetCodeDTO getCodeDTO) throws ExecutionException, InterruptedException {
         if (!Objects.isNull(getCodeDTO.getPhone())) {
             if (!Pattern.matches("^1[3-9]\\d{9}$", getCodeDTO.getPhone()))

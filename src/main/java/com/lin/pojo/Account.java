@@ -7,20 +7,17 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 林炳昌
- * @desc 用户实体类
- * @date 2023年03月31日 15:20
+ * @desc 账号实体类
+ * @date 2023年05月09日 14:11
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Account {
 
     @TableId
-    private Integer userId;
-    private String username;
-    private String password;
-    private String phone;
-    private Integer balance;
-    private String registerAt;
+    private Integer commodityId;
+    private String accountNumber;
+    private String accountPassword;
 
 }

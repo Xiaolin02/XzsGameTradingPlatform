@@ -5,7 +5,9 @@ import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
+import com.lin.mapper.AccountMapper;
 import com.lin.mapper.CommodityMapper;
+import com.lin.pojo.Account;
 import com.lin.pojo.Commodity;
 import com.lin.pojo.User;
 import com.lin.service.SellerService;
@@ -33,6 +35,9 @@ public class SellerServiceImpl implements SellerService {
     @Autowired
     OssUtil ossUtil;
 
+    @Autowired
+    AccountMapper accountMapper;
+
     @Override
     public ResponseResult release(String token, ReleaseDTO releaseDTO) {
 
@@ -46,11 +51,14 @@ public class SellerServiceImpl implements SellerService {
         commodity.setPrice(releaseDTO.getPrice());
         commodity.setSellerId(user.getUserId());
         commodity.setGame(releaseDTO.getGame());
-        commodity.setAccountNumber(releaseDTO.getAccountNumber());
-        commodity.setAccountPassword(releaseDTO.getAccountPassword());
         commodity.setAllowBargaining(releaseDTO.getAllowBargaining());
         commodity.setStatus(CommodityStatusConstants.STATUS_INSPECTING);
         commodityMapper.insert(commodity);
+        Account account = new Account();
+        account.setCommodityId(count + 1);
+        account.setAccountNumber(releaseDTO.getAccountNumber());
+        account.setAccountPassword(releaseDTO.getAccountPassword());
+        accountMapper.insert(account);
         return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
 
     }

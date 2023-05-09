@@ -27,10 +27,6 @@ public class Commodity {
     private Integer sellerId;
     @ApiModelProperty("游戏名")
     private String game;
-    @ApiModelProperty("游戏账号")
-    private String accountNumber;
-    @ApiModelProperty("游戏账号的密码")
-    private String accountPassword;
     private boolean allowBargaining;
     @TableField(value = "`status`")
     private Integer status;

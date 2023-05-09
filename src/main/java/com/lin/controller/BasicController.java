@@ -2,9 +2,7 @@ package com.lin.controller;
 
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.ForgetpwdDTO;
-import com.lin.controller.DTO.RegisterDTO;
-import com.lin.controller.DTO.UserDTO;
+import com.lin.controller.DTO.*;
 import com.lin.service.impl.BasicServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +32,24 @@ public class BasicController {
         return basicService.login(userDTO);
     }
 
+    @PostMapping("/login/code")
+    public ResponseResult codeLogin(@RequestBody CodeLoginDTO codeLoginDTO) {
+        return basicService.codeLogin(codeLoginDTO);
+    }
+
     /**
-     * @desc 获取手机验证码接口
+     * @desc 注册获取手机验证码接口
      * @date 2023/4/16 19:26
      */
     @GetMapping("/getCode")
-    public ResponseResult getCode(@RequestHeader String phone) throws ExecutionException, InterruptedException {
-        if (!Objects.isNull(phone)) {
-            if (!Pattern.matches("^1[3-9]\\d{9}$", phone))
+    public ResponseResult getCode(@RequestBody GetCodeDTO getCodeDTO) throws ExecutionException, InterruptedException {
+        if (!Objects.isNull(getCodeDTO.getPhone())) {
+            if (!Pattern.matches("^1[3-9]\\d{9}$", getCodeDTO.getPhone()))
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
         } else {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
         }
-        return basicService.getCode(phone);
+        return basicService.getCode(getCodeDTO.getPhone(), getCodeDTO.getType());
     }
 
     /**

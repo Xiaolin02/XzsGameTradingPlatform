@@ -2,10 +2,7 @@ package com.lin.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.ForgetpwdDTO;
-import com.lin.controller.DTO.OfferDTO;
-import com.lin.controller.DTO.RegisterDTO;
-import com.lin.controller.DTO.UserDTO;
+import com.lin.controller.DTO.*;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.utils.TokenUtil;
@@ -23,7 +20,7 @@ public interface BasicService {
 
     ResponseResult login(UserDTO userDTO);
 
-    ResponseResult getCode(String phone) throws ExecutionException, InterruptedException;
+    ResponseResult getCode(String phone, String type) throws ExecutionException, InterruptedException;
 
     ResponseResult register(RegisterDTO registerDTO);
 
@@ -39,4 +36,6 @@ public interface BasicService {
         User user = userMapper.selectOne(wrapper);
         return user.getUserId();
     }
+
+    ResponseResult codeLogin(CodeLoginDTO codeLoginDTO);
 }

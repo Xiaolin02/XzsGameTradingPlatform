@@ -4,15 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.CodeLoginDTO;
 import com.lin.controller.DTO.ForgetpwdDTO;
-import com.lin.controller.DTO.OfferDTO;
 import com.lin.controller.DTO.RegisterDTO;
 import com.lin.controller.DTO.UserDTO;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.service.BasicService;
 import com.lin.utils.*;
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class BasicServiceImpl implements BasicService {
 
-    //由于redis服务容易使服务器受到攻击,在类中临时使用一个code变量来保存手机验证码
-    private static String code;
+    @Autowired
+    RedisUtil redisUtil;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -69,13 +68,16 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public ResponseResult getCode(String phone) throws ExecutionException, InterruptedException {
+    public ResponseResult getCode(String phone, String type) throws ExecutionException, InterruptedException {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("phone", phone);
-        User user = userMapper.selectOne(wrapper);
-        if (!Objects.isNull(user))
-            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "该手机号已经被注册");
-        code = sendMsgUtil.sendMsg(phone);
+        if (Objects.equals("register", type)) {
+            User user = userMapper.selectOne(wrapper);
+            if (!Objects.isNull(user))
+                return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "该手机号已经被注册");
+        }
+        String code = sendMsgUtil.sendMsg(phone);
+        redisUtil.set(type + ":" + phone, code);
 //        redisUtil.set("code",code);
 //        HashMap<String, String> map = new HashMap<>();
 //        map.put("phone",phone);
@@ -85,7 +87,7 @@ public class BasicServiceImpl implements BasicService {
     @Override
     public ResponseResult register(RegisterDTO registerDTO) {
 
-        if (!Objects.equals(registerDTO.getCode(), code)) {
+        if (!Objects.equals(registerDTO.getCode(), redisUtil.get("register:" + registerDTO.getPhone()))) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             User newUser = new User();
@@ -110,7 +112,7 @@ public class BasicServiceImpl implements BasicService {
     @Override
     public ResponseResult forgetpwd(ForgetpwdDTO forgetpwdDTO) {
 
-        if (!Objects.equals(code, forgetpwdDTO.getCode())) {
+        if (!Objects.equals(redisUtil.get("forgetPwd:" + forgetpwdDTO.getPhone()), forgetpwdDTO.getCode())) {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
@@ -127,6 +129,23 @@ public class BasicServiceImpl implements BasicService {
     public void contact(HttpServletResponse response) {
 
         ossUtil.downFile("https://xzs-gametradingplatform.oss-cn-shenzhen.aliyuncs.com/Xiaolin/QQ/MyQQ.png", response);
+
+    }
+
+    @Override
+    public ResponseResult codeLogin(CodeLoginDTO codeLoginDTO) {
+
+        if (!Objects.equals(redisUtil.get("codeLogin:" + codeLoginDTO.getPhone()), codeLoginDTO.getCode())) {
+            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
+        } else {
+            QueryWrapper<User> wrapper = new QueryWrapper<>();
+            wrapper.eq("phone", codeLoginDTO.getPhone());
+            User user = userMapper.selectOne(wrapper);
+            String jwt = TokenUtil.getToken(user.getUsername());
+            HashMap<String, String> map = new HashMap<>();
+            map.put("token", jwt);
+            return new ResponseResult(CodeConstants.CODE_SUCCESS, "登陆成功", map);
+        }
 
     }
 

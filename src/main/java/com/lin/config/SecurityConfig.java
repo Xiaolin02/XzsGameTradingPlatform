@@ -56,7 +56,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login","/register","/forgetpwd","/contact","/socket/*","/getCode").anonymous()
+                .requestMatchers("/login","/register","/forgetpwd","/contact","/socket/*","/getCode","/login/code").anonymous()
                 .anyRequest()
                 .authenticated()
                 .and()

@@ -30,7 +30,7 @@ public class BuyerController {
      * @desc 提交订单
      * @date 2023/5/7 15:22
      */
-    @PostMapping("/addOrder/{commodityId}")
+    @PostMapping("/order/add/{commodityId}")
     public ResponseResult addOffer(@RequestHeader String token, @PathVariable Integer commodityId) {
         return buyerService.addOrder(token, commodityId);
     }
@@ -39,7 +39,7 @@ public class BuyerController {
      * @desc 查看订单
      * @date 2023/5/7 15:22
      */
-    @GetMapping("/getOrder")
+    @GetMapping("/order/view")
     public ResponseResult getOrder(@RequestHeader String token) {
         return buyerService.getOrder(token);
     }
@@ -48,7 +48,7 @@ public class BuyerController {
      * @desc 取消订单(订单状态置为 2 )
      * @date 2023/5/7 15:22
      */
-    @PostMapping("/delOrder/{orderId}")
+    @PostMapping("/order/del/{orderId}")
     public ResponseResult delOrder(@RequestHeader String token, @PathVariable Integer orderId) {
         return buyerService.delOrder(token, orderId);
     }
@@ -57,7 +57,7 @@ public class BuyerController {
      * @desc 付款(订单状态置为 1 )
      * @date 2023/5/7 15:23
      */
-    @PostMapping("/payOrder/{orderId}")
+    @PostMapping("/order/pay/{orderId}")
     public ResponseResult payOrder(@RequestHeader String token, @PathVariable Integer orderId) {
         return buyerService.payOrder(token, orderId);
     }

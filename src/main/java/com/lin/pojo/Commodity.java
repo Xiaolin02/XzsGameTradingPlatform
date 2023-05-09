@@ -27,7 +27,8 @@ public class Commodity {
     private Integer sellerId;
     @ApiModelProperty("游戏名")
     private String game;
-    private boolean allowBargaining;
+    private Integer allowBargaining;
     @TableField(value = "`status`")
     private Integer status;
+
 }

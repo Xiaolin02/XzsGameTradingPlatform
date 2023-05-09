@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface SellerService {
 
-    ResponseResult release(String token, ReleaseDTO releaseDTO);
+    ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files);
 
-    ResponseResult upload(String token, MultipartFile[] files);
 }

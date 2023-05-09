@@ -2,6 +2,7 @@ package com.lin.controller.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author 林炳昌
@@ -18,6 +19,6 @@ public class ReleaseDTO {
     private String game;
     private String accountNumber;
     private String accountPassword;
-    private Boolean allowBargaining;
+    private Integer allowBargaining;
 
 }

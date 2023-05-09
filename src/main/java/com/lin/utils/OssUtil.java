@@ -46,7 +46,12 @@ public class OssUtil {
             //String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileUrl = type + "/" +userId + "/" + dataPath + "/" + originalFilename;
             ossClient.putObject(bucketName, fileUrl, inputStream);
-            return "https://" + bucketName + "." + aliyunConfig.getEndpoint() + "/" + fileUrl;
+
+            Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000);
+
+            String url = ossClient.generatePresignedUrl(aliyunConfig.getBucketName(), fileUrl, expiration).toString();
+
+            return url;
         } catch (Exception e) {
             e.printStackTrace();
         }

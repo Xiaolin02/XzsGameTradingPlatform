@@ -39,7 +39,7 @@ public class SellerServiceImpl implements SellerService {
     AccountMapper accountMapper;
 
     @Override
-    public ResponseResult release(String token, ReleaseDTO releaseDTO) {
+    public ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
 
         User user = parseTokenUtil.parseTokenToGetUser(token);
         int count = commodityMapper.selectCount(null).intValue();
@@ -59,19 +59,11 @@ public class SellerServiceImpl implements SellerService {
         account.setAccountNumber(releaseDTO.getAccountNumber());
         account.setAccountPassword(releaseDTO.getAccountPassword());
         accountMapper.insert(account);
-        return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
-
-    }
-
-    @Override
-    public ResponseResult upload(String token, MultipartFile[] files) {
-
-        User user = parseTokenUtil.parseTokenToGetUser(token);
         for (MultipartFile file : files) {
-            ossUtil.uploadfile(file, user.getUserId(), "release");
+            String url = ossUtil.uploadfile(file, user.getUserId(), "release");
+            commodityMapper.addUrl(count + 1,url);
         }
-
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "上传成功");
+        return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
 
     }
 

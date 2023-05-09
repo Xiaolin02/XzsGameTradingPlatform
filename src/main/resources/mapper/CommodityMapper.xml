@@ -7,4 +7,9 @@
         values (#{commodityId}, #{buyerId}, #{offer});
     </insert>
 
+    <insert id="addUrl">
+        insert into commodity_url (commodity_id, url)
+        values (#{commodityId}, #{url});
+    </insert>
+
 </mapper>

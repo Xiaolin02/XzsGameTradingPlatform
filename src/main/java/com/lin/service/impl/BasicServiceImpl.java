@@ -78,9 +78,6 @@ public class BasicServiceImpl implements BasicService {
         }
         String code = sendMsgUtil.sendMsg(phone);
         redisUtil.set(type + ":" + phone, code);
-//        redisUtil.set("code",code);
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("phone",phone);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "验证码已发送到用户填写的手机号上，请注意查收");
     }
 

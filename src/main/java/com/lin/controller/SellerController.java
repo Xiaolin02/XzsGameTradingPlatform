@@ -24,14 +24,8 @@ public class SellerController {
      * @date 2023/5/7 16:37
      */
     @PostMapping("/release")
-    public ResponseResult release(@RequestHeader String token, @RequestBody ReleaseDTO releaseDTO) {
-        return sellerService.release(token, releaseDTO);
+    public ResponseResult release(@RequestHeader String token, @RequestParam("files") MultipartFile[] files, ReleaseDTO releaseDTO) {
+        return sellerService.release(token, releaseDTO, files);
     }
-
-    @PostMapping("/release/upload")
-    public ResponseResult upload(@RequestHeader String token, @RequestPart MultipartFile[] files) {
-        return sellerService.upload(token, files);
-    }
-
 
 }

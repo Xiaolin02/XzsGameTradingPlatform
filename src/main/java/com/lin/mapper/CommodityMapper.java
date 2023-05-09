@@ -15,4 +15,7 @@ import java.util.List;
 @Mapper
 public interface CommodityMapper extends BaseMapper<Commodity> {
     void offer(Integer commodityId, Integer buyerId, Integer offer);
+
+    void addUrl(Integer commodityId, String url);
+
 }

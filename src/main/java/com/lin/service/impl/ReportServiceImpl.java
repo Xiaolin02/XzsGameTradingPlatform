@@ -10,6 +10,7 @@ import com.lin.pojo.Report;
 import com.lin.service.BasicService;
 import com.lin.service.ReportService;
 import com.lin.utils.DateUtil;
+import com.lin.utils.ParseTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,8 @@ public class ReportServiceImpl implements ReportService {
     ReportMapper reportMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    ParseTokenUtil parseTokenUtil;
 
     /**
      * @Author czh
@@ -32,7 +35,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> insertReport(String token, ReportDTO reportDTO) {
-        Integer userId = BasicService.getUserIdByToken(userMapper, token);
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
         if (reportDTO.getReportedCommodityId() == null && reportDTO.getReportedUserId() == null) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "至少举报商品或用户之一");
         }
@@ -53,7 +56,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> deleteReport(String token, Integer reportId) {
-        Integer userId = BasicService.getUserIdByToken(userMapper, token);
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
         QueryWrapper<Report> reportQueryWrapper = new QueryWrapper<>();
         reportQueryWrapper.eq("report_id", reportId);
         reportQueryWrapper.eq("reporter_id", userId);

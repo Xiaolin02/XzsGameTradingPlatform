@@ -51,12 +51,12 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult offer(String token, OfferDTO offerDTO) {
 
-        User user = parseTokenUtil.parseTokenToGetUser(token);
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
         Commodity commodity = commodityMapper.selectById(offerDTO.getCommodityId());
         if(commodity.getPrice() <= offerDTO.getMoney()) {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "出价小于等于商品价格");
         }
-        commodityMapper.offer(offerDTO.getCommodityId(), user.getUserId(), offerDTO.getMoney());
+        commodityMapper.offer(offerDTO.getCommodityId(), userId, offerDTO.getMoney());
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "出价成功");
 
     }
@@ -64,11 +64,11 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult addOrder(String token, Integer commodityId) {
 
-        User user = parseTokenUtil.parseTokenToGetUser(token);
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
         Commodity commodity = commodityMapper.selectById(commodityId);
         if(Objects.isNull(commodity))
             return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "未找到该商品");
-        orderMapper.insert(new Order(RandomUtil.getEighteenBitRandom(), commodityId, commodity.getSellerId(), user.getUserId(), commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
+        orderMapper.insert(new Order(RandomUtil.getEighteenBitRandom(), commodityId, commodity.getSellerId(), userId, commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"提交成功");
 
     }
@@ -76,9 +76,9 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult getOrder(String token) {
 
-        User user = parseTokenUtil.parseTokenToGetUser(token);
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
-        wrapper.eq("buyer_id", user.getUserId());
+        wrapper.eq("buyer_id", userId);
         List<Order> orders = orderMapper.selectList(wrapper);
         if (Objects.equals(orders.size(), 0 ))
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "该用户没有订单");
@@ -114,7 +114,7 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult payOrder(String token, Integer orderId) {
 
-        User user = parseTokenUtil.parseTokenToGetUser(token);
+        User user = parseTokenUtil.parseTokenToUser(token);
         Order order = orderMapper.selectById(orderId);
         if(user.getBalance() < order.getPrice())
             return new ResponseResult<>(CodeConstants.CODE_INSUFFICIENT_BALANCE, "用户余额不足");

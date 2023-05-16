@@ -28,14 +28,5 @@ public interface BasicService {
 
     void contact(HttpServletResponse response);
 
-    static Integer getUserIdByToken(UserMapper userMapper, String token) {
-        Claims claims = TokenUtil.parseToken(token);
-        String username = claims.get("username").toString();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
-        User user = userMapper.selectOne(wrapper);
-        return user.getUserId();
-    }
-
     ResponseResult codeLogin(CodeLoginDTO codeLoginDTO);
 }

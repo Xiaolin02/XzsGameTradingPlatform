@@ -1,6 +1,5 @@
 package com.lin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ResponseResult;
@@ -41,7 +40,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
 
-        User user = parseTokenUtil.parseTokenToGetUser(token);
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
         int count = commodityMapper.selectCount(null).intValue();
         Commodity commodity = new Commodity();
         commodity.setCommodityId(count + 1);
@@ -49,7 +48,7 @@ public class SellerServiceImpl implements SellerService {
         commodity.setTitle(releaseDTO.getTitle());
         commodity.setDescription(releaseDTO.getDescription());
         commodity.setPrice(releaseDTO.getPrice());
-        commodity.setSellerId(user.getUserId());
+        commodity.setSellerId(userId);
         commodity.setGame(releaseDTO.getGame());
         commodity.setAllowBargaining(releaseDTO.getAllowBargaining());
         commodity.setStatus(CommodityStatusConstants.STATUS_INSPECTING);
@@ -60,7 +59,7 @@ public class SellerServiceImpl implements SellerService {
         account.setAccountPassword(releaseDTO.getAccountPassword());
         accountMapper.insert(account);
         for (MultipartFile file : files) {
-            String url = ossUtil.uploadfile(file, user.getUserId(), "release");
+            String url = ossUtil.uploadfile(file, userId, "release");
             commodityMapper.addUrl(count + 1,url);
         }
         return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");

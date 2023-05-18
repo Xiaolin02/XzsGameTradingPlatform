@@ -5,6 +5,7 @@ import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
+import com.lin.controller.VO.ViewReleasedVO;
 import com.lin.mapper.AccountMapper;
 import com.lin.mapper.CommodityMapper;
 import com.lin.pojo.Account;
@@ -17,6 +18,9 @@ import com.lin.utils.ParseTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 林炳昌
@@ -72,8 +76,36 @@ public class SellerServiceImpl implements SellerService {
 
 
         QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
-        wrapper.eq("seller_id", parseTokenUtil.parseTokenToUser(token).getUserId());
-        Commodity commodity = commodityMapper.selectOne(wrapper);
+        wrapper.eq("seller_id", parseTokenUtil.parseTokenToUserId(token));
+        List<Commodity> commodities = commodityMapper.selectList(wrapper);
+        ArrayList<ViewReleasedVO> releasedVOS = new ArrayList<>();
+        Integer status;
+        for (Commodity commodity : commodities) {
+
+            ViewReleasedVO releasedVO = new ViewReleasedVO();
+            releasedVO.setReleasedTime(commodity.getReleaseTime());
+            releasedVO.setTitle(commodity.getTitle());
+            releasedVO.setDescription(commodity.getDescription());
+            releasedVO.setGame(commodity.getGame());
+            releasedVO.setPrice(commodity.getPrice());
+            releasedVO.setAllowBargaining(commodity.getAllowBargaining());
+            status = commodity.getStatus();
+            if(status == CommodityStatusConstants.STATUS_INSPECTING)
+                releasedVO.setStatus("审核中");
+            else if (status == CommodityStatusConstants.STATUS_SELLING)
+                releasedVO.setStatus("售卖中");
+            else if (status == CommodityStatusConstants.STATUS_SOLD)
+                releasedVO.setStatus("已售出");
+            else if (status == CommodityStatusConstants.STATUS_CANCEL)
+                releasedVO.setStatus("已下架");
+            else
+                releasedVO.setStatus("审核失败");
+            releasedVOS.add(releasedVO);
+
+        }
+
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, releasedVOS);
+
 
     }
 

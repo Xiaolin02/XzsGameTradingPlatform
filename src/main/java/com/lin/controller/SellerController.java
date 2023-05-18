@@ -28,4 +28,9 @@ public class SellerController {
         return sellerService.release(token, releaseDTO, files);
     }
 
+    @GetMapping("/released/view")
+    public ResponseResult view(@RequestHeader String token) {
+        return sellerService.view(token);
+    }
+
 }

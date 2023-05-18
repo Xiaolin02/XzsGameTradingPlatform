@@ -1,5 +1,6 @@
 package com.lin.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ResponseResult;
@@ -63,6 +64,16 @@ public class SellerServiceImpl implements SellerService {
             commodityMapper.addUrl(count + 1,url);
         }
         return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
+
+    }
+
+    @Override
+    public ResponseResult view(String token) {
+
+
+        QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
+        wrapper.eq("seller_id", parseTokenUtil.parseTokenToUser(token).getUserId());
+        Commodity commodity = commodityMapper.selectOne(wrapper);
 
     }
 

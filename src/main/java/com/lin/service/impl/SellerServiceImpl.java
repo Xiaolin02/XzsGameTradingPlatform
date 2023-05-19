@@ -109,4 +109,11 @@ public class SellerServiceImpl implements SellerService {
 
     }
 
+//    @Override
+//    public ResponseResult newPrice(Integer newPrice, String token) {
+//
+//
+//
+//    }
+
 }

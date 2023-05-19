@@ -14,4 +14,6 @@ public interface SellerService {
     ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files);
 
     ResponseResult view(String token);
+
+//    ResponseResult newPrice(Integer newPrice, String token);
 }

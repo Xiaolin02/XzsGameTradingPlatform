@@ -28,9 +28,18 @@ public class SellerController {
         return sellerService.release(token, releaseDTO, files);
     }
 
+    /**
+     * @desc 查看发布
+     * @date 2023/5/19 14:16
+     */
     @GetMapping("/released/view")
     public ResponseResult view(@RequestHeader String token) {
         return sellerService.view(token);
     }
+
+//    @PostMapping("/order/price/{newPrice}")
+//    public ResponseResult newPrice(@PathVariable Integer newPrice, @RequestHeader String token) {
+//        return sellerService.newPrice(newPrice, token);
+//    }
 
 }

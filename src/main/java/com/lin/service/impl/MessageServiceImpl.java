@@ -2,6 +2,7 @@ package com.lin.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.WebSocketServer;
 import com.lin.mapper.MessageMapper;
@@ -9,6 +10,7 @@ import com.lin.mapper.UserMapper;
 import com.lin.pojo.Message;
 import com.lin.pojo.User;
 import com.lin.service.MessageService;
+import com.lin.utils.CheckMsgUtil;
 import com.lin.utils.DateUtil;
 import com.lin.utils.TokenUtil;
 import io.jsonwebtoken.Claims;
@@ -35,7 +37,10 @@ public class MessageServiceImpl implements MessageService {
     public ResponseResult pushMsgToOneUser(String token, Integer toId, String content) throws IOException {
 
         WebSocketServer.sendInfo(content, toId);
-        return new ResponseResult<>(200);
+        if (CheckMsgUtil.checkMsg(content))
+            return new ResponseResult(CodeConstants.CODE_SUCCESS,"含有敏感信息");
+        else
+            return new ResponseResult(CodeConstants.CODE_SUCCESS,"无异常");
 
     }
 
@@ -50,7 +55,7 @@ public class MessageServiceImpl implements MessageService {
         message.setContent(content);
         message.setSendTime(DateUtil.getDateTime());
         messageMapper.insert(message);
-        return new ResponseResult(200);
+        return new ResponseResult(CodeConstants.CODE_SUCCESS);
 
 
     }
@@ -71,7 +76,10 @@ public class MessageServiceImpl implements MessageService {
         message.setContent(toStringContent);
         message.setSendTime(DateUtil.getDateTime());
         messageMapper.insert(message);
-        return new ResponseResult(200);
+        if (CheckMsgUtil.checkMsg(content))
+            return new ResponseResult(CodeConstants.CODE_SUCCESS,"含有敏感信息");
+        else
+            return new ResponseResult(CodeConstants.CODE_SUCCESS,"无异常");
     }
 
 }

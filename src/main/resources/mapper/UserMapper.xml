@@ -14,5 +14,17 @@
             and
             r.status = 1
     </select>
-
+    <insert id="addUrl">
+        insert into user_picture_url (user_id, url)
+        values (#{userId}, #{url});
+    </insert>
+    <select id="getUrl" resultType="java.lang.String">
+        select url
+        from user_picture_url
+        where user_id = #{userId}
+    </select>
+    <delete id="deleteUrl">
+        delete from user_picture_url
+        where user_id = #{userId}
+    </delete>
 </mapper>

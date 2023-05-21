@@ -14,4 +14,9 @@ public interface UserMapper extends BaseMapper<User> {
 
     String selectRoleByUserId(Integer userId);
 
+    int addUrl(Integer userId, String url);
+
+    String getUrl(Integer userId);
+    int deleteUrl(Integer userId);
+
 }

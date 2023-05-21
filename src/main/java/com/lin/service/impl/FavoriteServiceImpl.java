@@ -48,7 +48,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         if (favoriteMapper.selectOne(favoriteQueryWrapper) != null) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "重复添加收藏记录");
         }
-        favoriteMapper.insert(new Favorite(commodityId, parseTokenUtil.parseTokenToUserId(token)));
+        Favorite favorite = new Favorite();
+        favorite.setCommodityId(commodityId);
+        favorite.setUserId(parseTokenUtil.parseTokenToUserId(token));
+        favoriteMapper.insert(favorite);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功添加收藏记录");
     }
 

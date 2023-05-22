@@ -10,7 +10,6 @@ import com.lin.mapper.AccountMapper;
 import com.lin.mapper.CommodityMapper;
 import com.lin.pojo.Account;
 import com.lin.pojo.Commodity;
-import com.lin.pojo.User;
 import com.lin.service.SellerService;
 import com.lin.utils.DateUtil;
 import com.lin.utils.OssUtil;

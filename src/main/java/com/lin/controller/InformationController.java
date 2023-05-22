@@ -1,8 +1,6 @@
 package com.lin.controller;
 
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.ReleaseDTO;
-import com.lin.controller.DTO.SearchCommodityDTO;
 import com.lin.service.InformationService;
 import com.lin.utils.ParseTokenUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +66,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @GetMapping("/password/modify/byPhone/getCode")
-    public ResponseResult<Object> passwordModifyByPhoneGetCode(@RequestHeader String token, @RequestBody Map<String, String> requestData) throws ExecutionException, InterruptedException {
+    public ResponseResult<Object> passwordModifyByPhoneGetCode(@RequestHeader String token) throws ExecutionException, InterruptedException {
         return informationService.passwordModifyByPhoneGetCode(token);
     }
 

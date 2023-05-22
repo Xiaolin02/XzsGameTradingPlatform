@@ -7,9 +7,6 @@ import com.lin.pojo.User;
 import com.lin.utils.DateUtil;
 import com.lin.utils.OssUtil;
 import com.lin.utils.RedisUtil;
-import jakarta.servlet.ServletOutputStream;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +14,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Locale;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class XzsGameTradingPlatformApplicationTests {
@@ -122,4 +115,3 @@ class XzsGameTradingPlatformApplicationTests {
 
     }
 }
-;

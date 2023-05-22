@@ -183,7 +183,7 @@ public class InformationServiceImpl implements InformationService {
 
     /**
      * @Author czh
-     * @desc TODO 查看个人信息
+     * @desc 查看个人信息，自己查看自己的主页
      * @date 2023/5/17 10:46
      */
     @Override

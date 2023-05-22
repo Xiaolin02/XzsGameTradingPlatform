@@ -23,9 +23,9 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(),authException.getMessage());
+        ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
         String json = JSON.toJSONString(result);
-        WebUtil.renderString(response,json);
+        WebUtil.renderString(response, json);
 
     }
 }

@@ -26,6 +26,7 @@ public class InformationController {
     ParseTokenUtil parseTokenUtil;
     @Autowired
     InformationService informationService;
+
     /**
      * @Author czh
      * @desc 修改用户名
@@ -48,6 +49,7 @@ public class InformationController {
         String newPassword = requestData.get("newPassword");
         return informationService.passwordModifyByPassword(token, oldPassword, newPassword);
     }
+
     /**
      * @Author czh
      * @desc 修改密码(通过手机验证码)
@@ -59,6 +61,7 @@ public class InformationController {
         String newPassword = requestData.get("newPassword");
         return informationService.passwordModifyByPhone(token, code, newPassword);
     }
+
     /**
      * @Author czh
      * @desc 修改密码(通过手机验证码)(获取验证码)(5分钟内有效)

@@ -65,7 +65,7 @@ public class SellerServiceImpl implements SellerService {
         accountMapper.insert(account);
         for (MultipartFile file : files) {
             String url = ossUtil.uploadfile(file, userId, "release");
-            commodityMapper.addUrl(count + 1,url);
+            commodityMapper.addUrl(count + 1, url);
         }
         return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
 
@@ -90,7 +90,7 @@ public class SellerServiceImpl implements SellerService {
             releasedVO.setPrice(commodity.getPrice());
             releasedVO.setAllowBargaining(commodity.getAllowBargaining());
             status = commodity.getStatus();
-            if(status == CommodityStatusConstants.STATUS_INSPECTING)
+            if (status == CommodityStatusConstants.STATUS_INSPECTING)
                 releasedVO.setStatus("审核中");
             else if (status == CommodityStatusConstants.STATUS_SELLING)
                 releasedVO.setStatus("售卖中");

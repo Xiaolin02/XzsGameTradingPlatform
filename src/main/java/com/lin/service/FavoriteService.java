@@ -10,6 +10,8 @@ import com.lin.controller.DTO.General.PageDTO;
  */
 public interface FavoriteService {
     ResponseResult<Object> insertFavorite(String token, Integer commodityId);
+
     ResponseResult<Object> deleteFavorite(String token, Integer commodityId);
+
     ResponseResult<Object> selectFavoriteCommodity(String token, PageDTO pageDTO);
 }

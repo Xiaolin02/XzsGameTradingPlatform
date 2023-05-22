@@ -29,8 +29,8 @@ public class MessageController {
     @GetMapping("/online/push/{toId}")
     public ResponseResult pushMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
-        log.info("访问了{}接口",Thread.currentThread().getStackTrace()[1].getMethodName());
-        return messageService.pushMsgToOneUser(token,toId,content);
+        log.info("访问了{}接口", Thread.currentThread().getStackTrace()[1].getMethodName());
+        return messageService.pushMsgToOneUser(token, toId, content);
 
     }
 
@@ -52,7 +52,7 @@ public class MessageController {
     @PostMapping("/offline/push/{toId}")
     public ResponseResult pushMsg(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
-        return messageService.pushMsg(token,toId,content);
+        return messageService.pushMsg(token, toId, content);
 
     }
 

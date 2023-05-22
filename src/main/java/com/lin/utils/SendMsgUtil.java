@@ -46,7 +46,7 @@ public class SendMsgUtil {
                 .signName("林陈一点")
                 .templateCode("SMS_275320148")
                 .phoneNumbers(phone)
-                .templateParam("{\"code\":\""+code+"\"}")
+                .templateParam("{\"code\":\"" + code + "\"}")
                 .build();
 
         CompletableFuture<SendSmsResponse> response = client.sendSms(sendSmsRequest);

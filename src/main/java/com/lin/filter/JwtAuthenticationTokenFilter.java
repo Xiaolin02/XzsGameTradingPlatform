@@ -38,20 +38,20 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = request.getHeader("token");
-        if(!StringUtils.hasText(token)) {
-            filterChain.doFilter(request,response);
+        if (!StringUtils.hasText(token)) {
+            filterChain.doFilter(request, response);
             return;
         }
 
         Claims claims = TokenUtil.parseToken(token);
         String username = (String) claims.get("username");
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username",username);
+        wrapper.eq("username", username);
         User user = userMapper.selectOne(wrapper);
         LoginUser loginUser = new LoginUser(user, menuMapper.selectPermsByUserId(user.getUserId()));
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser,null,loginUser.getAuthorities());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
 
     }
 }

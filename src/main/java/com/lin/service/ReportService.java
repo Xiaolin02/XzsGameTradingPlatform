@@ -10,5 +10,6 @@ import com.lin.controller.DTO.ReportDTO;
  */
 public interface ReportService {
     ResponseResult<Object> insertReport(String token, ReportDTO reportDTO);
+
     ResponseResult<Object> deleteReport(String token, Integer reportId);
 }

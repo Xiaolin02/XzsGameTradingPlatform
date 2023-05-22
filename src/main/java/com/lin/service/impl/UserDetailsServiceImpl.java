@@ -31,15 +31,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.eq("username",username);
+        userQueryWrapper.eq("username", username);
         User user = userMapper.selectOne(userQueryWrapper);
-        if(Objects.isNull(user)) {
+        if (Objects.isNull(user)) {
             throw new RuntimeException("用户名不存在");
         }
 
         List<String> list = menuMapper.selectPermsByUserId(user.getUserId());
 
-        return new LoginUser(user,list);
+        return new LoginUser(user, list);
 
 
     }

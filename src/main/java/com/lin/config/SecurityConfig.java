@@ -45,18 +45,18 @@ public class SecurityConfig {
     AccessDeniedHandlerImpl accessDeniedHandler;
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception{
+    public AuthenticationManager authenticationManager() throws Exception {
         AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
         return authenticationManager;
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http)throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login","/register","/forgetpwd","/contact","/socket/*","/getCode","/login/code").anonymous()
+                .requestMatchers("/login", "/register", "/forgetpwd", "/contact", "/socket/*", "/getCode", "/login/code").anonymous()
                 .anyRequest()
                 .authenticated()
                 .and()

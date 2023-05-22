@@ -13,5 +13,4 @@ import org.apache.ibatis.annotations.Mapper;
 public interface OrderMapper extends BaseMapper<Order> {
 
 
-
 }

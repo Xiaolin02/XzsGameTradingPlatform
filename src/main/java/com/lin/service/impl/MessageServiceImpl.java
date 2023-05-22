@@ -38,9 +38,9 @@ public class MessageServiceImpl implements MessageService {
 
         WebSocketServer.sendInfo(content, toId);
         if (CheckMsgUtil.checkMsg(content))
-            return new ResponseResult(CodeConstants.CODE_SUCCESS,"含有敏感信息");
+            return new ResponseResult(CodeConstants.CODE_SUCCESS, "含有敏感信息");
         else
-            return new ResponseResult(CodeConstants.CODE_SUCCESS,"无异常");
+            return new ResponseResult(CodeConstants.CODE_SUCCESS, "无异常");
 
     }
 
@@ -77,9 +77,9 @@ public class MessageServiceImpl implements MessageService {
         message.setSendTime(DateUtil.getDateTime());
         messageMapper.insert(message);
         if (CheckMsgUtil.checkMsg(content))
-            return new ResponseResult(CodeConstants.CODE_SUCCESS,"含有敏感信息");
+            return new ResponseResult(CodeConstants.CODE_SUCCESS, "含有敏感信息");
         else
-            return new ResponseResult(CodeConstants.CODE_SUCCESS,"无异常");
+            return new ResponseResult(CodeConstants.CODE_SUCCESS, "无异常");
     }
 
 }

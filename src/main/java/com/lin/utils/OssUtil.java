@@ -36,7 +36,7 @@ public class OssUtil {
      * @desc oss上传文件
      * @date 2023/4/10 10:46
      */
-    public String uploadfile(MultipartFile multipartFile,Integer userId,String type) {
+    public String uploadfile(MultipartFile multipartFile, Integer userId, String type) {
         String bucketName = aliyunConfig.getBucketName();
         try {
             InputStream inputStream = multipartFile.getInputStream();
@@ -44,7 +44,7 @@ public class OssUtil {
             String dataPath = dateFormat.format(new Date());
             String originalFilename = multipartFile.getOriginalFilename();
             //String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-            String fileUrl = type + "/" +userId + "/" + dataPath + "/" + originalFilename;
+            String fileUrl = type + "/" + userId + "/" + dataPath + "/" + originalFilename;
             ossClient.putObject(bucketName, fileUrl, inputStream);
 
             Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000);
@@ -72,7 +72,7 @@ public class OssUtil {
     }
 
     /**
-     * @desc 根据文件名删除oss文件("2023/04/09/test4.txt")
+     * @desc 根据文件名删除oss文件(" 2023 / 04 / 09 / test4.txt ")
      * @date 2023/4/10 10:49
      */
     public void delete(String objectName) {

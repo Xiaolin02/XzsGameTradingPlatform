@@ -45,7 +45,7 @@ public class BuyerController {
     }
 
     /**
-     * @desc 取消订单(订单状态置为 2 )
+     * @desc 取消订单(订单状态置为 2)
      * @date 2023/5/7 15:22
      */
     @PostMapping("/order/del/{orderId}")
@@ -54,7 +54,7 @@ public class BuyerController {
     }
 
     /**
-     * @desc 付款(订单状态置为 1 )
+     * @desc 付款(订单状态置为 1)
      * @date 2023/5/7 15:23
      */
     @PostMapping("/order/pay/{orderId}")

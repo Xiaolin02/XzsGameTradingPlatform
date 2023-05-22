@@ -13,6 +13,7 @@ public class DateUtil {
 
     public static final String DEFAULT_DATA_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String DEFAULT_DATA_FORMAT = "yyyy-MM-dd";
+
     /**
      * @desc 获取当天是星期几
      * @date 2023/4/14 22:28

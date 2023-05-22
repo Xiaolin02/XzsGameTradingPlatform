@@ -8,18 +8,17 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author czh
- * @desc 举报记录实体类
+ * @desc 举报用户的记录的实体类
  * @date 2023/5/4 7:54
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Report {
+public class ReportUser {
     @TableId(type = IdType.AUTO)
     private Integer reportId;
-    private String reason;
     private Integer reporterId;
-    private Integer reportedUserId;
-    private Integer reportedCommodityId;
-    private String reportTime;
+    private Integer userId;
+    private String reason;
+    private String reportAt;
 }

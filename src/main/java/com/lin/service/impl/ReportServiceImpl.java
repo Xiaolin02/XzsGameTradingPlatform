@@ -3,16 +3,23 @@ package com.lin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.ReportDTO;
-import com.lin.mapper.ReportMapper;
+import com.lin.controller.DTO.commodity.CommodityMiniDTO;
+import com.lin.controller.DTO.user.UserMiniDTO;
+import com.lin.mapper.CommodityMapper;
+import com.lin.mapper.ReportCommodityMapper;
+import com.lin.mapper.ReportUserMapper;
 import com.lin.mapper.UserMapper;
-import com.lin.pojo.Report;
-import com.lin.service.BasicService;
+import com.lin.pojo.ReportCommodity;
+import com.lin.pojo.ReportUser;
 import com.lin.service.ReportService;
 import com.lin.utils.DateUtil;
 import com.lin.utils.ParseTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author czh
@@ -22,47 +29,120 @@ import org.springframework.stereotype.Service;
 @Service
 public class ReportServiceImpl implements ReportService {
     @Autowired
-    ReportMapper reportMapper;
+    ReportCommodityMapper reportCommodityMapper;
+    @Autowired
+    ReportUserMapper reportUserMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CommodityMapper commodityMapper;
     @Autowired
     ParseTokenUtil parseTokenUtil;
 
     /**
      * @Author czh
-     * @desc 添加举报（用户或商品只能举报一个）
+     * @desc 添加 举报的商品
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> insertReport(String token, ReportDTO reportDTO) {
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
-        if (reportDTO.getReportedCommodityId() == null && reportDTO.getReportedUserId() == null) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "至少举报商品或用户之一");
-        }
-        if (reportDTO.getReportedCommodityId() != null && reportDTO.getReportedUserId() != null) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "不能同时举报商品和用户");
-        }
-        Report report = new Report(null, reportDTO.getReason(), userId,
-                reportDTO.getReportedUserId(), reportDTO.getReportedCommodityId(),
-                DateUtil.getDateTime());
-        reportMapper.insert(report);
+    public ResponseResult<Object> insertReportCommodity(String token, Integer commodityId, String reason) {
+        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        ReportCommodity reportCommodity = new ReportCommodity();
+        reportCommodity.setReason(reason);
+        reportCommodity.setReporterId(reporterId);
+        reportCommodity.setCommodityId(commodityId);
+        reportCommodity.setReportAt(DateUtil.getDateTime());
+        reportCommodityMapper.insert(reportCommodity);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "举报成功");
     }
 
     /**
      * @Author czh
-     * @desc 撤销/删除 举报
+     * @desc 撤销/删除 举报的商品
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> deleteReport(String token, Integer reportId) {
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
-        QueryWrapper<Report> reportQueryWrapper = new QueryWrapper<>();
-        reportQueryWrapper.eq("report_id", reportId);
-        reportQueryWrapper.eq("reporter_id", userId);
-        if (reportMapper.delete(reportQueryWrapper) == 0) {
+    public ResponseResult<Object> deleteReportCommodity(String token, Integer reportId) {
+        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
+        reportCommodityQueryWrapper.eq("report_id", reportId);
+        reportCommodityQueryWrapper.eq("reporter_id", reporterId);
+        if (reportCommodityMapper.delete(reportCommodityQueryWrapper) == 0) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "找不到这个举报记录，或请求删除者和举报记录举报者不匹配");
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功删除举报记录");
     }
+
+    /**
+     * @Author czh
+     * @desc 查看 举报的商品
+     * @date 2023/5/22 21:58
+     */
+    @Override
+    public ResponseResult<Object> selectReportCommodity(String token) {
+        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
+        reportCommodityQueryWrapper.eq("reporter_id", reporterId);
+        List<ReportCommodity> reportCommodityList = reportCommodityMapper.selectList(reportCommodityQueryWrapper);
+        List<CommodityMiniDTO> commodityMiniDTOList = new ArrayList<>();
+        for (ReportCommodity reportCommodity : reportCommodityList) {
+            commodityMiniDTOList.add(new CommodityMiniDTO(
+                    commodityMapper.selectById(reportCommodity.getCommodityId())));
+        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commodityMiniDTOList));
+    }
+
+    /**
+     * @Author czh
+     * @desc 添加 举报的用户
+     * @date 2023/5/4 13:50
+     */
+    @Override
+    public ResponseResult<Object> insertReportUser(String token, Integer userId, String reason) {
+        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        ReportUser reportUser = new ReportUser();
+        reportUser.setReason(reason);
+        reportUser.setReporterId(reporterId);
+        reportUser.setUserId(userId);
+        reportUser.setReportAt(DateUtil.getDateTime());
+        reportUserMapper.insert(reportUser);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "举报成功");
+    }
+
+    /**
+     * @Author czh
+     * @desc 撤销/删除 举报的用户
+     * @date 2023/5/4 13:50
+     */
+    @Override
+    public ResponseResult<Object> deleteReportUser(String token, Integer reportId) {
+        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
+        reportUserQueryWrapper.eq("report_id", reportId);
+        reportUserQueryWrapper.eq("reporter_id", userId);
+        if (reportUserMapper.delete(reportUserQueryWrapper) == 0) {
+            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "找不到这个举报记录，或请求删除者和举报记录举报者不匹配");
+        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功删除举报记录");
+    }
+
+    /**
+     * @Author czh
+     * @desc 查看 举报的用户
+     * @date 2023/5/22 21:58
+     */
+    @Override
+    public ResponseResult<Object> selectReportUser(String token) {
+        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
+        reportUserQueryWrapper.eq("reporter_id", reporterId);
+        List<ReportUser> reportUserList = reportUserMapper.selectList(reportUserQueryWrapper);
+        List<UserMiniDTO> userMiniDTOList = new ArrayList<>();
+        for (ReportUser reportUser : reportUserList) {
+            userMiniDTOList.add(new UserMiniDTO(
+                    userMapper.selectById(reportUser.getUserId())));
+        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("userList", userMiniDTOList));
+    }
+
 }

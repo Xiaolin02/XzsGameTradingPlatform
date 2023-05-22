@@ -2,6 +2,7 @@ package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.*;
+import com.lin.controller.DTO.UserDetailsDTO;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.service.InformationService;
@@ -165,7 +166,7 @@ public class InformationServiceImpl implements InformationService {
 
     /**
      * @Author czh
-     * @desc TODO 修改头像
+     * @desc 修改头像
      * @date 2023/5/17 10:46
      */
     @Override
@@ -175,7 +176,26 @@ public class InformationServiceImpl implements InformationService {
         }
         Integer userId = parseTokenUtil.parseTokenToUserId(token);
         String url = ossUtil.uploadfile(file, userId, OssFilePathConstants.USER_PICTURE_TYPE);
-        userMapper.addUrl(userId, url);
+
+        userMapper.replacePictureUrl(userId, url);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "修改头像成功");
+    }
+
+    /**
+     * @Author czh
+     * @desc TODO 查看个人信息
+     * @date 2023/5/17 10:46
+     */
+    @Override
+    public ResponseResult<Object> viewInformation(String token) {
+        User user = parseTokenUtil.parseTokenToUser(token);
+        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
+        userDetailsDTO.setUserId(user.getUserId());
+        userDetailsDTO.setUsername(user.getUsername());
+        userDetailsDTO.setPictureUrl(userMapper.getPictureUrl(user.getUserId()));
+        userDetailsDTO.setPhone(user.getPhone());
+        userDetailsDTO.setBalance(user.getBalance());
+        userDetailsDTO.setRegisterAt(user.getRegisterAt());
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userDetailsDTO);
     }
 }

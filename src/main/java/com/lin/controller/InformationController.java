@@ -94,11 +94,21 @@ public class InformationController {
 
     /**
      * @Author czh
-     * @desc TODO 修改头像
+     * @desc 修改头像
      * @date 2023/5/17 10:46
      */
     @PostMapping("/picture/modify")
     public ResponseResult<Object> modifyPicture(@RequestHeader String token, @RequestParam("file") MultipartFile file) {
         return informationService.modifyPicture(token, file);
+    }
+
+    /**
+     * @Author czh
+     * @desc TODO 查看个人信息
+     * @date 2023/5/17 10:46
+     */
+    @GetMapping("/view")
+    public ResponseResult<Object> viewInformation(@RequestHeader String token) {
+        return informationService.viewInformation(token);
     }
 }

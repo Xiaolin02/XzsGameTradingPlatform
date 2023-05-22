@@ -24,4 +24,6 @@ public interface InformationService {
     ResponseResult<Object> phoneModifyGetCode(String token, String newPhoneNumber) throws ExecutionException, InterruptedException;
 
     ResponseResult<Object> modifyPicture(String token, MultipartFile file);
+
+    ResponseResult<Object> viewInformation(String token);
 }

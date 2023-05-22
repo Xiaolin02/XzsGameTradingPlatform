@@ -1,12 +1,10 @@
-package com.lin.controller.DTO;
+package com.lin.controller.DTO.commodity;
 
-import com.lin.controller.DTO.General.PageDTO;
+import com.lin.controller.DTO.general.PageDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
-
-import java.util.List;
 
 /**
  * @Author czh
@@ -28,7 +26,7 @@ public class SearchCommodityDTO {
     @Nullable
     private Boolean allowBargaining;
     @Nullable
-    private List<String> descriptionDesiredList;
+    private String keyword;
     private PageDTO page;
 }
 

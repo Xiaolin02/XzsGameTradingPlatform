@@ -2,7 +2,7 @@ package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.*;
-import com.lin.controller.DTO.UserDetailsDTO;
+import com.lin.controller.DTO.user.UserCompleteDTO;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.service.InformationService;
@@ -189,13 +189,13 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public ResponseResult<Object> viewInformation(String token) {
         User user = parseTokenUtil.parseTokenToUser(token);
-        UserDetailsDTO userDetailsDTO = new UserDetailsDTO();
-        userDetailsDTO.setUserId(user.getUserId());
-        userDetailsDTO.setUsername(user.getUsername());
-        userDetailsDTO.setPictureUrl(userMapper.getPictureUrl(user.getUserId()));
-        userDetailsDTO.setPhone(user.getPhone());
-        userDetailsDTO.setBalance(user.getBalance());
-        userDetailsDTO.setRegisterAt(user.getRegisterAt());
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userDetailsDTO);
+        UserCompleteDTO userCompleteDTO = new UserCompleteDTO();
+        userCompleteDTO.setUserId(user.getUserId());
+        userCompleteDTO.setUsername(user.getUsername());
+        userCompleteDTO.setPictureUrl(userMapper.getPictureUrl(user.getUserId()));
+        userCompleteDTO.setPhone(user.getPhone());
+        userCompleteDTO.setBalance(user.getBalance());
+        userCompleteDTO.setRegisterAt(user.getRegisterAt());
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userCompleteDTO);
     }
 }

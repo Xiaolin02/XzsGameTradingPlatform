@@ -64,7 +64,7 @@ public class SellerServiceImpl implements SellerService {
         accountMapper.insert(account);
         for (MultipartFile file : files) {
             String url = ossUtil.uploadfile(file, userId, "release");
-            commodityMapper.addUrl(count + 1, url);
+            commodityMapper.insertPictureUrl(count + 1, url);
         }
         return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
 

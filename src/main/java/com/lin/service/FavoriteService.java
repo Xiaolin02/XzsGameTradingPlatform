@@ -1,7 +1,7 @@
 package com.lin.service;
 
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.General.PageDTO;
+import com.lin.controller.DTO.general.PageDTO;
 
 /**
  * @Author czh

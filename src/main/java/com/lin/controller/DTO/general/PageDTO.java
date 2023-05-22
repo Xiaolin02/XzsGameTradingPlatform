@@ -1,4 +1,4 @@
-package com.lin.controller.DTO.General;
+package com.lin.controller.DTO.general;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;

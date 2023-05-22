@@ -3,6 +3,7 @@ package com.lin.controller;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.*;
+import com.lin.controller.DTO.user.LoginUserDTO;
 import com.lin.service.impl.BasicServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class BasicController {
      * @date 2023/4/16 19:26
      */
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody UserDTO userDTO) {
-        return basicService.login(userDTO);
+    public ResponseResult login(@RequestBody LoginUserDTO loginUserDTO) {
+        return basicService.login(loginUserDTO);
     }
 
     @PostMapping("/login/code")

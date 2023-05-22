@@ -1,4 +1,4 @@
-package com.lin.controller.DTO;
+package com.lin.controller.DTO.user;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
  * @date 2023年03月31日 15:30
  */
 @Data
-public class UserDTO {
+public class LoginUserDTO {
 
     private String username;
 

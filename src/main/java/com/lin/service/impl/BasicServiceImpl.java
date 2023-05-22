@@ -7,7 +7,7 @@ import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.CodeLoginDTO;
 import com.lin.controller.DTO.ForgetpwdDTO;
 import com.lin.controller.DTO.RegisterDTO;
-import com.lin.controller.DTO.UserDTO;
+import com.lin.controller.DTO.user.LoginUserDTO;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
 import com.lin.service.BasicService;
@@ -50,16 +50,16 @@ public class BasicServiceImpl implements BasicService {
     OssUtil ossUtil;
 
     @Override
-    public ResponseResult login(UserDTO userDTO) {
+    public ResponseResult login(LoginUserDTO loginUserDTO) {
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDTO.getUsername(), loginUserDTO.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
 
         if (Objects.isNull(authenticate)) {
             throw new RuntimeException("登陆失败");
         }
 
-        String jwt = TokenUtil.getToken(userDTO.getUsername());
+        String jwt = TokenUtil.getToken(loginUserDTO.getUsername());
         HashMap<String, String> map = new HashMap<>();
         map.put("token", jwt);
 

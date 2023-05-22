@@ -1,12 +1,8 @@
 package com.lin.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.*;
-import com.lin.mapper.UserMapper;
-import com.lin.pojo.User;
-import com.lin.utils.TokenUtil;
-import io.jsonwebtoken.Claims;
+import com.lin.controller.DTO.user.LoginUserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.concurrent.ExecutionException;
@@ -18,7 +14,7 @@ import java.util.concurrent.ExecutionException;
  */
 public interface BasicService {
 
-    ResponseResult login(UserDTO userDTO);
+    ResponseResult login(LoginUserDTO loginUserDTO);
 
     ResponseResult getCode(String phone, String type) throws ExecutionException, InterruptedException;
 

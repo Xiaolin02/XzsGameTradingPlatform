@@ -7,9 +7,12 @@
         values (#{commodityId}, #{buyerId}, #{offer});
     </insert>
 
-    <insert id="addUrl">
+    <insert id="insertPictureUrl">
         insert into commodity_url (commodity_id, url)
         values (#{commodityId}, #{url});
     </insert>
+    <select id="selectPictureUrl" resultType="String">
+        select url from commodity_url where commodity_id = #{commodityId};
+    </select>
 
 </mapper>

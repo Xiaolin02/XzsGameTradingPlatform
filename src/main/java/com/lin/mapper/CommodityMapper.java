@@ -1,7 +1,6 @@
 package com.lin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lin.controller.DTO.SearchCommodityDTO;
 import com.lin.pojo.Commodity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -16,6 +15,8 @@ import java.util.List;
 public interface CommodityMapper extends BaseMapper<Commodity> {
     void offer(Integer commodityId, Integer buyerId, Integer offer);
 
-    void addUrl(Integer commodityId, String url);
+    void insertPictureUrl(Integer commodityId, String url);
+
+    List<String> selectPictureUrl(Integer commodityId);
 
 }

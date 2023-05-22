@@ -1,7 +1,7 @@
 package com.lin.controller;
 
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.General.PageDTO;
+import com.lin.controller.DTO.general.PageDTO;
 import com.lin.service.FavoriteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

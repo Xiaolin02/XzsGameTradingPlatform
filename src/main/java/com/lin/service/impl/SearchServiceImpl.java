@@ -4,16 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ResponseResult;
-import com.lin.controller.DTO.SearchCommodityDTO;
+import com.lin.controller.DTO.commodity.SearchCommodityDTO;
+import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.Commodity;
-import com.lin.service.CommodityService;
+import com.lin.service.SearchService;
 import com.lin.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author czh
@@ -21,7 +25,7 @@ import java.util.List;
  * @date 2023/4/23 22:30
  */
 @Service
-public class CommodityServiceImpl implements CommodityService {
+public class SearchServiceImpl implements SearchService {
     @Autowired
     UserMapper userMapper;
 
@@ -75,15 +79,22 @@ public class CommodityServiceImpl implements CommodityService {
             commodityQueryWrapper.eq("allow_bargaining", searchDTO.getAllowBargaining());
         }
         // 描述条件
-        if (searchDTO.getDescriptionDesiredList() != null) {
-            for (String description : searchDTO.getDescriptionDesiredList()) {
-                commodityQueryWrapper.and(i -> i.eq("title", description).or().eq("description", description));
-            }
+        if (searchDTO.getKeyword() != null) {
+            commodityQueryWrapper.and(i -> i.like("title", searchDTO.getKeyword())
+                    .or().like("description", searchDTO.getKeyword()));
         }
         // 审核条件
         commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_SELLING);
+        // 查询商品
         List<Commodity> records = commodityMapper.selectPage(searchDTO.getPage().toPage(), commodityQueryWrapper).getRecords();
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, records);
+        // 装配DTO
+        List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
+        for (Commodity commodity : records) {
+            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper));
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("commodityList", commoditySimpleDTOList);
+        // 返回结果
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, map);
     }
-
 }

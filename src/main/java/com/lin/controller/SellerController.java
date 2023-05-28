@@ -1,5 +1,6 @@
 package com.lin.controller;
 
+import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
 import com.lin.service.impl.SellerServiceImpl;
@@ -37,9 +38,16 @@ public class SellerController {
         return sellerService.view(token);
     }
 
-//    @PostMapping("/order/price/{newPrice}")
-//    public ResponseResult newPrice(@PathVariable Integer newPrice, @RequestHeader String token) {
-//        return sellerService.newPrice(newPrice, token);
-//    }
+    /**
+     * @desc 修改价格
+     * @date 2023/5/28 20:02
+     */
+    @PostMapping("/commodity/price/{commodityId}/{newPrice}")
+    public ResponseResult newPrice(@PathVariable Integer newPrice, @RequestHeader String token, @PathVariable Integer commodityId) {
+        if(newPrice <= 0) {
+            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "价格小于等于0");
+        }
+        return sellerService.newPrice(commodityId, newPrice, token);
+    }
 
 }

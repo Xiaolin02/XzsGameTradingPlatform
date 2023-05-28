@@ -82,6 +82,7 @@ public class SellerServiceImpl implements SellerService {
         for (Commodity commodity : commodities) {
 
             ViewReleasedVO releasedVO = new ViewReleasedVO();
+            releasedVO.setCommodityId(commodity.getCommodityId());
             releasedVO.setReleasedTime(commodity.getReleaseTime());
             releasedVO.setTitle(commodity.getTitle());
             releasedVO.setDescription(commodity.getDescription());
@@ -108,11 +109,15 @@ public class SellerServiceImpl implements SellerService {
 
     }
 
-//    @Override
-//    public ResponseResult newPrice(Integer newPrice, String token) {
-//
-//
-//
-//    }
+    @Override
+    public ResponseResult newPrice(Integer commodityId, Integer newPrice, String token) {
+
+        Commodity commodity = commodityMapper.selectById(commodityId);
+        Commodity newCommodity = new Commodity(commodity);
+        newCommodity.setPrice(newPrice);
+        commodityMapper.updateById(newCommodity);
+        return new ResponseResult(CodeConstants.CODE_SUCCESS,"修改成功");
+
+    }
 
 }

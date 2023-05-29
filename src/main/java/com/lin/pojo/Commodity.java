@@ -31,4 +31,15 @@ public class Commodity {
     @TableField(value = "`status`")
     private Integer status;
 
+    public Commodity(Commodity commodity) {
+        this.commodityId = commodity.commodityId;
+        this.releaseTime = commodity.releaseTime;
+        this.title = commodity.title;
+        this.description = commodity.description;
+        this.price = commodity.price;
+        this.sellerId = commodity.sellerId;
+        this.game = commodity.game;
+        this.allowBargaining = commodity.allowBargaining;
+        this.status = commodity.status;
+    }
 }

@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ViewReleasedVO {
 
+    private Integer commodityId;
     private String releasedTime;
     private String title;
     private String description;

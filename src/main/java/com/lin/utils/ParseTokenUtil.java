@@ -37,9 +37,9 @@ public class ParseTokenUtil {
 //        wrapper.eq("userId", userId);
 //        return userMapper.selectOne(wrapper);
         Claims claims = TokenUtil.parseToken(token);
-        String username = claims.get("username").toString();
+        Integer userId = (Integer) claims.get("userId");
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
+        wrapper.eq("user_id", userId);
         return userMapper.selectOne(wrapper);
     }
 
@@ -52,9 +52,9 @@ public class ParseTokenUtil {
 //        // redis 获取，key格式为{token}:userId，value为userId
 //        return (Integer) redisUtil.get(token + ":userId");
         Claims claims = TokenUtil.parseToken(token);
-        String username = claims.get("username").toString();
+        Integer userId = (Integer) claims.get("userId");
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
+        wrapper.eq("user_id", userId);
         return userMapper.selectOne(wrapper).getUserId();
     }
 

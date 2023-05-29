@@ -1,11 +1,6 @@
 package com.lin.utils;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lin.mapper.UserMapper;
-import com.lin.pojo.User;
 import io.jsonwebtoken.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author 林炳昌
@@ -16,11 +11,11 @@ public class TokenUtil {
 
     private static final String signature = "user";
 
-    public static String getToken(String username) {
+    public static String getTokenByUserId(Integer userId) {
         JwtBuilder jwtBuilder = Jwts.builder();
         return jwtBuilder.setHeaderParam("typ", "JWT")
                 .setHeaderParam("alg", "HS256")
-                .claim("username", username)
+                .claim("userId", userId)
                 .signWith(SignatureAlgorithm.HS256, signature)
                 .compact();
     }

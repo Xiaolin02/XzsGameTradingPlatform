@@ -59,7 +59,11 @@ public class BasicServiceImpl implements BasicService {
             throw new RuntimeException("登陆失败");
         }
 
-        String jwt = TokenUtil.getToken(loginUserDTO.getUsername());
+//        String jwt = TokenUtil.getTokenByUsername(loginUserDTO.getUsername());
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", loginUserDTO.getUsername());
+        User user = userMapper.selectOne(wrapper);
+        String jwt = TokenUtil.getTokenByUserId(user.getUserId());
         HashMap<String, String> map = new HashMap<>();
         map.put("token", jwt);
 
@@ -138,7 +142,7 @@ public class BasicServiceImpl implements BasicService {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("phone", codeLoginDTO.getPhone());
             User user = userMapper.selectOne(wrapper);
-            String jwt = TokenUtil.getToken(user.getUsername());
+            String jwt = TokenUtil.getTokenByUserId(user.getUserId());
             HashMap<String, String> map = new HashMap<>();
             map.put("token", jwt);
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "登陆成功", map);

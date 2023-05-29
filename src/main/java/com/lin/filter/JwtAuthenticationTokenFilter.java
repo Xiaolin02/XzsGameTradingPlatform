@@ -45,9 +45,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         Claims claims = TokenUtil.parseToken(token);
-        String username = (String) claims.get("username");
+        Integer userId = (Integer) claims.get("userId");
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
+        wrapper.eq("user_id", userId);
         User user = userMapper.selectOne(wrapper);
         LoginUser loginUser = new LoginUser(user, menuMapper.selectPermsByUserId(user.getUserId()));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());

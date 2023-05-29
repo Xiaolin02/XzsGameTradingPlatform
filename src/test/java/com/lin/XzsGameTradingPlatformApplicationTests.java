@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.*;
@@ -75,6 +76,23 @@ class XzsGameTradingPlatformApplicationTests {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername(), "123456");
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+    }
+
+    @Test
+    void AuthenticationTest2() {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken("Xiaolin", 123456);
+        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        Authentication existingAuth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(SecurityContextHolder.getContext());
+
+//        // Create a new Authentication object with the updated username
+//        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(newUsername, existingAuth.getCredentials(), existingAuth.getAuthorities());
+//
+//        // Reauthenticate the user with the new username
+//        Authentication authenticated = authenticationManager.authenticate(authRequest);
+//
+//        // Update the SecurityContext with the newly authenticated user
+//        SecurityContextHolder.getContext().setAuthentication(authenticated);
     }
 
     @Test

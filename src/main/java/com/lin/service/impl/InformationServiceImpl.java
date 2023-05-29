@@ -11,9 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -36,6 +40,8 @@ public class InformationServiceImpl implements InformationService {
     OssUtil ossUtil;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    UserDetailsService userDetailsService;
 
     /**
      * @Author czh
@@ -49,15 +55,19 @@ public class InformationServiceImpl implements InformationService {
         }
         Integer userId = parseTokenUtil.parseTokenToUserId(token);
         User user = userMapper.selectById(userId);
+        String oldUserName = user.getUsername();
         if (newUsername.equals(user.getUsername())) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新用户名不能和原用户名重复");
         }
         if (userMapper.selectOne(new QueryWrapper<User>().eq("username", newUsername)) != null) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "要修改的用户名已被使用");
         }
+        // 修改用户名
         user.setUsername(newUsername);
         userMapper.updateById(user);
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "修改用户名成功");
+        // TODO 后期不用，改成userId token
+        String jwtToken = TokenUtil.getToken(newUsername);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "修改用户名成功", Map.of("token", jwtToken));
     }
 
     /**

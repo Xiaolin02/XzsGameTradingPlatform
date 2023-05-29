@@ -67,11 +67,7 @@ public class MessageServiceImpl implements MessageService {
     public ResponseResult pushMsg(String token, Integer toId, String content) throws IOException {
         JSONObject jsonObject = JSONObject.parseObject(content);
         String toStringContent = jsonObject.get("content").toString();
-        Claims claims = tokenUtil.parseToken(token);
-        String username = claims.get("username").toString();
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", username);
-        User fromUser = userMapper.selectOne(wrapper);
+        User fromUser = tokenUtil.parseTokenToUser(token);
         User toUser = userMapper.selectById(toId);
         Message message = new Message();
         message.setToUser(toUser.getUsername());

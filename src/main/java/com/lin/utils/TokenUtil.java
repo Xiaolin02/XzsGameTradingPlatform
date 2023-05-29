@@ -38,7 +38,7 @@ public class TokenUtil {
                 .compact();
     }
 
-    public Claims parseToken(String token) {
+    private Claims parseToken(String token) {
         JwtParser jwtParser = Jwts.parser();
         Jws<Claims> claimsJws = jwtParser.setSigningKey(signature).parseClaimsJws(token);
         return claimsJws.getBody();

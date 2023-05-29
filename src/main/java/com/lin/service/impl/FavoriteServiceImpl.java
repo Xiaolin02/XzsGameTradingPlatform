@@ -41,15 +41,16 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseResult<Object> insertFavorite(String token, Integer commodityId) {
 
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("commodity_id", commodityId);
-        favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
+        favoriteQueryWrapper.eq("user_id", userId);
         if (favoriteMapper.selectOne(favoriteQueryWrapper) != null) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "重复添加收藏记录");
         }
         Favorite favorite = new Favorite();
         favorite.setCommodityId(commodityId);
-        favorite.setUserId(tokenUtil.parseTokenToUserId(token));
+        favorite.setUserId(userId);
         favoriteMapper.insert(favorite);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功添加收藏记录");
     }

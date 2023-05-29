@@ -35,6 +35,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     MenuMapper menuMapper;
 
+    @Autowired
+    TokenUtil tokenUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
 
@@ -44,7 +47,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        Claims claims = TokenUtil.parseToken(token);
+        Claims claims = tokenUtil.parseToken(token);
         Integer userId = (Integer) claims.get("userId");
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);

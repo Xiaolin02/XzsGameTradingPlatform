@@ -15,8 +15,8 @@ import com.lin.pojo.Order;
 import com.lin.pojo.User;
 import com.lin.service.BuyerService;
 import com.lin.utils.DateUtil;
-import com.lin.utils.ParseTokenUtil;
 import com.lin.utils.RandomUtil;
+import com.lin.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +42,7 @@ public class BuyerServiceImpl implements BuyerService {
     OrderMapper orderMapper;
 
     @Autowired
-    ParseTokenUtil parseTokenUtil;
+    TokenUtil tokenUtil;
 
     @Autowired
     MessageServiceImpl messageService;
@@ -51,7 +51,7 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult offer(String token, OfferDTO offerDTO) {
 
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         Commodity commodity = commodityMapper.selectById(offerDTO.getCommodityId());
         if (commodity.getPrice() <= offerDTO.getMoney()) {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "出价小于等于商品价格");
@@ -64,7 +64,7 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult addOrder(String token, Integer commodityId) {
 
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         Commodity commodity = commodityMapper.selectById(commodityId);
         if (Objects.isNull(commodity))
             return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "未找到该商品");
@@ -76,7 +76,7 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult getOrder(String token) {
 
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
         wrapper.eq("buyer_id", userId);
         List<Order> orders = orderMapper.selectList(wrapper);
@@ -114,7 +114,7 @@ public class BuyerServiceImpl implements BuyerService {
     @Override
     public ResponseResult payOrder(String token, Integer orderId) {
 
-        User user = parseTokenUtil.parseTokenToUser(token);
+        User user = tokenUtil.parseTokenToUser(token);
         Order order = orderMapper.selectById(orderId);
         if (user.getBalance() < order.getPrice())
             return new ResponseResult<>(CodeConstants.CODE_INSUFFICIENT_BALANCE, "用户余额不足");

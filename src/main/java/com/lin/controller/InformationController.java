@@ -2,7 +2,6 @@ package com.lin.controller;
 
 import com.lin.common.ResponseResult;
 import com.lin.service.InformationService;
-import com.lin.utils.ParseTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +19,6 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("/info")
 public class InformationController {
-    @Autowired
-    ParseTokenUtil parseTokenUtil;
     @Autowired
     InformationService informationService;
 

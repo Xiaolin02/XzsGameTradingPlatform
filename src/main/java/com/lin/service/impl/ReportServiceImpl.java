@@ -13,7 +13,7 @@ import com.lin.pojo.ReportCommodity;
 import com.lin.pojo.ReportUser;
 import com.lin.service.ReportService;
 import com.lin.utils.DateUtil;
-import com.lin.utils.ParseTokenUtil;
+import com.lin.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +37,7 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     CommodityMapper commodityMapper;
     @Autowired
-    ParseTokenUtil parseTokenUtil;
+    TokenUtil tokenUtil;
 
     /**
      * @Author czh
@@ -46,7 +46,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> insertReportCommodity(String token, Integer commodityId, String reason) {
-        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        Integer reporterId = tokenUtil.parseTokenToUserId(token);
         ReportCommodity reportCommodity = new ReportCommodity();
         reportCommodity.setReason(reason);
         reportCommodity.setReporterId(reporterId);
@@ -63,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> deleteReportCommodity(String token, Integer reportId) {
-        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         reportCommodityQueryWrapper.eq("report_id", reportId);
         reportCommodityQueryWrapper.eq("reporter_id", reporterId);
@@ -80,7 +80,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> selectReportCommodity(String token) {
-        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         reportCommodityQueryWrapper.eq("reporter_id", reporterId);
         List<ReportCommodity> reportCommodityList = reportCommodityMapper.selectList(reportCommodityQueryWrapper);
@@ -99,7 +99,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> insertReportUser(String token, Integer userId, String reason) {
-        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        Integer reporterId = tokenUtil.parseTokenToUserId(token);
         ReportUser reportUser = new ReportUser();
         reportUser.setReason(reason);
         reportUser.setReporterId(reporterId);
@@ -116,7 +116,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> deleteReportUser(String token, Integer reportId) {
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         reportUserQueryWrapper.eq("report_id", reportId);
         reportUserQueryWrapper.eq("reporter_id", userId);
@@ -133,7 +133,7 @@ public class ReportServiceImpl implements ReportService {
      */
     @Override
     public ResponseResult<Object> selectReportUser(String token) {
-        Integer reporterId = parseTokenUtil.parseTokenToUserId(token);
+        Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         reportUserQueryWrapper.eq("reporter_id", reporterId);
         List<ReportUser> reportUserList = reportUserMapper.selectList(reportUserQueryWrapper);

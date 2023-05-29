@@ -10,7 +10,7 @@ import com.lin.mapper.UserMapper;
 import com.lin.pojo.Commodity;
 import com.lin.pojo.Favorite;
 import com.lin.service.FavoriteService;
-import com.lin.utils.ParseTokenUtil;
+import com.lin.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +31,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     CommodityMapper commodityMapper;
     @Autowired
-    ParseTokenUtil parseTokenUtil;
+    TokenUtil tokenUtil;
 
     /**
      * @Author czh
@@ -43,13 +43,13 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("commodity_id", commodityId);
-        favoriteQueryWrapper.eq("user_id", parseTokenUtil.parseTokenToUserId(token));
+        favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
         if (favoriteMapper.selectOne(favoriteQueryWrapper) != null) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "重复添加收藏记录");
         }
         Favorite favorite = new Favorite();
         favorite.setCommodityId(commodityId);
-        favorite.setUserId(parseTokenUtil.parseTokenToUserId(token));
+        favorite.setUserId(tokenUtil.parseTokenToUserId(token));
         favoriteMapper.insert(favorite);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功添加收藏记录");
     }
@@ -63,7 +63,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public ResponseResult<Object> deleteFavorite(String token, Integer commodityId) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("commodity_id", commodityId);
-        favoriteQueryWrapper.eq("user_id", parseTokenUtil.parseTokenToUserId(token));
+        favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
         if (favoriteMapper.delete(favoriteQueryWrapper) == 0) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "不存在这个收藏记录");
         } else {
@@ -79,7 +79,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public ResponseResult<Object> selectFavoriteCommodity(String token, PageDTO pageDTO) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
-        favoriteQueryWrapper.eq("user_id", parseTokenUtil.parseTokenToUserId(token));
+        favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
         List<Favorite> favoriteList = favoriteMapper.selectPage(pageDTO.toPage(), favoriteQueryWrapper).getRecords();
         List<Commodity> commodityList = new ArrayList<>();
         for (Favorite favorite : favoriteList) {

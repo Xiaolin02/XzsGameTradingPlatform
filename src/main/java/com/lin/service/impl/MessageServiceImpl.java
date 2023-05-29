@@ -33,6 +33,9 @@ public class MessageServiceImpl implements MessageService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    TokenUtil tokenUtil;
+
     @Override
     public ResponseResult pushMsgToOneUser(String token, Integer toId, String content) throws IOException {
 
@@ -64,7 +67,7 @@ public class MessageServiceImpl implements MessageService {
     public ResponseResult pushMsg(String token, Integer toId, String content) throws IOException {
         JSONObject jsonObject = JSONObject.parseObject(content);
         String toStringContent = jsonObject.get("content").toString();
-        Claims claims = TokenUtil.parseToken(token);
+        Claims claims = tokenUtil.parseToken(token);
         String username = claims.get("username").toString();
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);

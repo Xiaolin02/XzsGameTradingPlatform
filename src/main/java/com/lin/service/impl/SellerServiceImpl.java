@@ -13,7 +13,7 @@ import com.lin.pojo.Commodity;
 import com.lin.service.SellerService;
 import com.lin.utils.DateUtil;
 import com.lin.utils.OssUtil;
-import com.lin.utils.ParseTokenUtil;
+import com.lin.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,7 +33,7 @@ public class SellerServiceImpl implements SellerService {
     CommodityMapper commodityMapper;
 
     @Autowired
-    ParseTokenUtil parseTokenUtil;
+    TokenUtil tokenUtil;
 
     @Autowired
     OssUtil ossUtil;
@@ -44,7 +44,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
 
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         int count = commodityMapper.selectCount(null).intValue();
         Commodity commodity = new Commodity();
         commodity.setCommodityId(count + 1);
@@ -75,7 +75,7 @@ public class SellerServiceImpl implements SellerService {
 
 
         QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
-        wrapper.eq("seller_id", parseTokenUtil.parseTokenToUserId(token));
+        wrapper.eq("seller_id", tokenUtil.parseTokenToUserId(token));
         List<Commodity> commodities = commodityMapper.selectList(wrapper);
         ArrayList<ViewReleasedVO> releasedVOS = new ArrayList<>();
         Integer status;

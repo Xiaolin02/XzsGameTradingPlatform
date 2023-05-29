@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -29,7 +28,7 @@ public class InformationServiceImpl implements InformationService {
     @Autowired
     UserMapper userMapper;
     @Autowired
-    ParseTokenUtil parseTokenUtil;
+    TokenUtil tokenUtil;
     @Autowired
     RedisUtil redisUtil;
     @Autowired
@@ -51,7 +50,7 @@ public class InformationServiceImpl implements InformationService {
         if (newUsername == null || newUsername.equals("")) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新用户名不能为空");
         }
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         User user = userMapper.selectById(userId);
         String oldUserName = user.getUsername();
         if (newUsername.equals(user.getUsername())) {
@@ -88,7 +87,7 @@ public class InformationServiceImpl implements InformationService {
         if (PasswordConstants.isPasswordValid(newPassword)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新密码格式错误：" + PasswordConstants.RULE_TIP);
         }
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         User user = userMapper.selectById(userId);
         // 校验密码
         Authentication authenticate = authenticationManager.authenticate(
@@ -115,7 +114,7 @@ public class InformationServiceImpl implements InformationService {
         if (PasswordConstants.isPasswordValid(newPassword)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新密码格式错误：" + PasswordConstants.RULE_TIP);
         }
-        User user = parseTokenUtil.parseTokenToUser(token);
+        User user = tokenUtil.parseTokenToUser(token);
         if (!Objects.equals(code, redisUtil.get(RedisKeyConstants.CODE_PASSWORD_MODIFY_PREFIX + user.getPhone()).toString())) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         }
@@ -135,7 +134,7 @@ public class InformationServiceImpl implements InformationService {
      */
     @Override
     public ResponseResult<Object> passwordModifyByPhoneGetCode(String token) throws ExecutionException, InterruptedException {
-        User user = parseTokenUtil.parseTokenToUser(token);
+        User user = tokenUtil.parseTokenToUser(token);
         String phone = user.getPhone();
         String code = sendMsgUtil.sendMsg(phone);
         redisUtil.set(RedisKeyConstants.CODE_PASSWORD_MODIFY_PREFIX + phone, code, RedisKeyConstants.CODE_EXPIRE_TIME);
@@ -149,7 +148,7 @@ public class InformationServiceImpl implements InformationService {
      */
     @Override
     public ResponseResult<Object> phoneModify(String token, String newPhoneNumber, String newPhoneCode) {
-        User user = parseTokenUtil.parseTokenToUser(token);
+        User user = tokenUtil.parseTokenToUser(token);
         if (!Objects.equals(newPhoneCode, redisUtil.get(RedisKeyConstants.CODE_PHONE_MODIFY_PREFIX + newPhoneNumber).toString())) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         }
@@ -180,7 +179,7 @@ public class InformationServiceImpl implements InformationService {
         if (file == null) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "文件不能为空");
         }
-        Integer userId = parseTokenUtil.parseTokenToUserId(token);
+        Integer userId = tokenUtil.parseTokenToUserId(token);
         String url = ossUtil.uploadfile(file, userId, OssFilePathConstants.USER_PICTURE_TYPE);
 
         userMapper.replacePictureUrl(userId, url);
@@ -194,7 +193,7 @@ public class InformationServiceImpl implements InformationService {
      */
     @Override
     public ResponseResult<Object> viewInformation(String token) {
-        User user = parseTokenUtil.parseTokenToUser(token);
+        User user = tokenUtil.parseTokenToUser(token);
         UserCompleteDTO userCompleteDTO = new UserCompleteDTO();
         userCompleteDTO.setUserId(user.getUserId());
         userCompleteDTO.setUsername(user.getUsername());

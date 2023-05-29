@@ -49,6 +49,9 @@ public class BasicServiceImpl implements BasicService {
     @Autowired
     OssUtil ossUtil;
 
+    @Autowired
+    TokenUtil tokenUtil;
+
     @Override
     public ResponseResult login(LoginUserDTO loginUserDTO) {
 
@@ -63,7 +66,7 @@ public class BasicServiceImpl implements BasicService {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", loginUserDTO.getUsername());
         User user = userMapper.selectOne(wrapper);
-        String jwt = TokenUtil.getTokenByUserId(user.getUserId());
+        String jwt = tokenUtil.getTokenByUserId(user.getUserId());
         HashMap<String, String> map = new HashMap<>();
         map.put("token", jwt);
 
@@ -142,7 +145,7 @@ public class BasicServiceImpl implements BasicService {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("phone", codeLoginDTO.getPhone());
             User user = userMapper.selectOne(wrapper);
-            String jwt = TokenUtil.getTokenByUserId(user.getUserId());
+            String jwt = tokenUtil.getTokenByUserId(user.getUserId());
             HashMap<String, String> map = new HashMap<>();
             map.put("token", jwt);
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "登陆成功", map);

@@ -50,4 +50,17 @@ public class SellerController {
         return sellerService.newPrice(commodityId, newPrice, token);
     }
 
+    /**
+     * @desc 查看订单
+     * @date 2023/5/28 21:08
+     */
+    @GetMapping("/order/view")
+    public ResponseResult viewOrder(@RequestHeader String token) {
+
+
+
+    }
+
+
+
 }

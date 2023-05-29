@@ -48,7 +48,7 @@ public class SellerServiceImpl implements SellerService {
         int count = commodityMapper.selectCount(null).intValue();
         Commodity commodity = new Commodity();
         commodity.setCommodityId(count + 1);
-        commodity.setReleaseTime(DateUtil.getDateTime());
+        commodity.setReleaseAt(DateUtil.getDateTime());
         commodity.setTitle(releaseDTO.getTitle());
         commodity.setDescription(releaseDTO.getDescription());
         commodity.setPrice(releaseDTO.getPrice());
@@ -83,7 +83,7 @@ public class SellerServiceImpl implements SellerService {
 
             ViewReleasedVO releasedVO = new ViewReleasedVO();
             releasedVO.setCommodityId(commodity.getCommodityId());
-            releasedVO.setReleasedTime(commodity.getReleaseTime());
+            releasedVO.setReleasedTime(commodity.getReleaseAt());
             releasedVO.setTitle(commodity.getTitle());
             releasedVO.setDescription(commodity.getDescription());
             releasedVO.setGame(commodity.getGame());

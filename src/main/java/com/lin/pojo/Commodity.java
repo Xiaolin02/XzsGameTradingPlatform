@@ -19,7 +19,7 @@ public class Commodity {
 
     @TableId
     private Integer commodityId;
-    private String releaseTime;
+    private String releaseAt;
     private String title;
     @TableField(value = "`description`")
     private String description;
@@ -33,7 +33,7 @@ public class Commodity {
 
     public Commodity(Commodity commodity) {
         this.commodityId = commodity.commodityId;
-        this.releaseTime = commodity.releaseTime;
+        this.releaseAt = commodity.releaseAt;
         this.title = commodity.title;
         this.description = commodity.description;
         this.price = commodity.price;

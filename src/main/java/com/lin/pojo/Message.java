@@ -22,7 +22,7 @@ public class Message {
     private String toUser;
     private String title;
     private String content;
-    private String sendTime;
+    private String sendAt;
 
 
 }

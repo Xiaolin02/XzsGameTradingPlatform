@@ -90,7 +90,7 @@ public class BuyerServiceImpl implements BuyerService {
                             order.getCommodityId(),
                             userMapper.selectById(order.getSellerId()).getUsername(),
                             order.getPrice(),
-                            order.getAddTime(),
+                            order.getAddAt(),
                             order.getStatus()
                     )
             );

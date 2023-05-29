@@ -53,7 +53,7 @@ public class MessageServiceImpl implements MessageService {
         message.setFromUser("SYSTEM");
         message.setTitle(title);
         message.setContent(content);
-        message.setSendTime(DateUtil.getDateTime());
+        message.setSendAt(DateUtil.getDateTime());
         messageMapper.insert(message);
         return new ResponseResult(CodeConstants.CODE_SUCCESS);
 
@@ -74,7 +74,7 @@ public class MessageServiceImpl implements MessageService {
         message.setToUser(toUser.getUsername());
         message.setFromUser(fromUser.getUsername());
         message.setContent(toStringContent);
-        message.setSendTime(DateUtil.getDateTime());
+        message.setSendAt(DateUtil.getDateTime());
         messageMapper.insert(message);
         if (CheckMsgUtil.checkMsg(content))
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "含有敏感信息");

@@ -137,7 +137,7 @@ public class InformationServiceImpl implements InformationService {
         User user = tokenUtil.parseTokenToUser(token);
         String phone = user.getPhone();
         String code = sendMsgUtil.sendMsg(phone);
-        redisUtil.set(RedisKeyConstants.CODE_PASSWORD_MODIFY_PREFIX + phone, code, RedisKeyConstants.CODE_EXPIRE_TIME);
+        redisUtil.set(RedisKeyConstants.CODE_PASSWORD_MODIFY_PREFIX + phone, code, RedisKeyConstants.CODE_EXPIRE_TIME_SECONDS);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "验证码已发送到用户填写的手机号上，请注意查收");
     }
 
@@ -165,7 +165,7 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public ResponseResult<Object> phoneModifyGetCode(String token, String newPhoneNumber) throws ExecutionException, InterruptedException {
         String code = sendMsgUtil.sendMsg(newPhoneNumber);
-        redisUtil.set(RedisKeyConstants.CODE_PHONE_MODIFY_PREFIX + newPhoneNumber, code, RedisKeyConstants.CODE_EXPIRE_TIME);
+        redisUtil.set(RedisKeyConstants.CODE_PHONE_MODIFY_PREFIX + newPhoneNumber, code, RedisKeyConstants.CODE_EXPIRE_TIME_SECONDS);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "验证码已发送到用户填写的手机号上，请注意查收");
     }
 

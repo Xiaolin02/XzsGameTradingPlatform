@@ -99,7 +99,7 @@ class XzsGameTradingPlatformApplicationTests {
     void RedisTest() {
         String newPhoneNumber = "18350404077";
         String code = "2329";
-        redisUtil.set(RedisKeyConstants.CODE_PHONE_MODIFY_PREFIX + newPhoneNumber, code, RedisKeyConstants.CODE_EXPIRE_TIME);
+        redisUtil.set(RedisKeyConstants.CODE_PHONE_MODIFY_PREFIX + newPhoneNumber, code, RedisKeyConstants.CODE_EXPIRE_TIME_SECONDS);
     }
 
     @Test

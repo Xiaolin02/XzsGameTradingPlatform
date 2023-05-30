@@ -38,6 +38,26 @@ public class DateUtil {
     }
 
     /**
+     * @desc 计算date到现在的秒数
+     * @date 2023/5/29 22:48
+     */
+    public static Long getDurationSecondsUntilNow(Date date) {
+        Date now = new Date();
+        return (now.getTime() - date.getTime()) / 1000;
+    }
+
+    /**
+     * @desc 计算date到现在的秒数
+     * @date 2023/5/29 22:48
+     */
+    public static Long getDurationSecondsUntilNow(String dateAccurateToSecondString) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat(DEFAULT_DATA_TIME_FORMAT);
+        sdf.setLenient(false);
+        Date now = new Date();
+        return (now.getTime() - sdf.parse(dateAccurateToSecondString).getTime()) / 1000;
+    }
+
+    /**
      * @desc 获取当前时间到秒
      * @date 2023/4/22 11:34
      */

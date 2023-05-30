@@ -25,4 +25,6 @@ public interface BasicService {
     void contact(HttpServletResponse response);
 
     ResponseResult codeLogin(CodeLoginDTO codeLoginDTO);
+
+    String test();
 }

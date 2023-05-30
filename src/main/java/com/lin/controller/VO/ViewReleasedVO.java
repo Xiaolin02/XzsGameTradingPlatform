@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ViewReleasedVO {
 
     private Integer commodityId;
-    private String releasedTime;
+    private String releasedAt;
     private String title;
     private String description;
     private Integer price;

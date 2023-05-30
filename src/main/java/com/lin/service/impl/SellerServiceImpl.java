@@ -5,11 +5,15 @@ import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
+import com.lin.controller.VO.ViewOrderVO;
 import com.lin.controller.VO.ViewReleasedVO;
 import com.lin.mapper.AccountMapper;
 import com.lin.mapper.CommodityMapper;
+import com.lin.mapper.OrderMapper;
+import com.lin.mapper.UserMapper;
 import com.lin.pojo.Account;
 import com.lin.pojo.Commodity;
+import com.lin.pojo.Order;
 import com.lin.service.SellerService;
 import com.lin.utils.DateUtil;
 import com.lin.utils.OssUtil;
@@ -40,6 +44,12 @@ public class SellerServiceImpl implements SellerService {
 
     @Autowired
     AccountMapper accountMapper;
+
+    @Autowired
+    OrderMapper orderMapper;
+
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
@@ -83,7 +93,7 @@ public class SellerServiceImpl implements SellerService {
 
             ViewReleasedVO releasedVO = new ViewReleasedVO();
             releasedVO.setCommodityId(commodity.getCommodityId());
-            releasedVO.setReleasedTime(commodity.getReleaseAt());
+            releasedVO.setReleasedAt(commodity.getReleaseAt());
             releasedVO.setTitle(commodity.getTitle());
             releasedVO.setDescription(commodity.getDescription());
             releasedVO.setGame(commodity.getGame());
@@ -117,6 +127,31 @@ public class SellerServiceImpl implements SellerService {
         newCommodity.setPrice(newPrice);
         commodityMapper.updateById(newCommodity);
         return new ResponseResult(CodeConstants.CODE_SUCCESS,"修改成功");
+
+    }
+
+    @Override
+    public ResponseResult viewOrder(String token) {
+
+        Integer userId = tokenUtil.parseTokenToUserId(token);
+        QueryWrapper<Order> wrapper = new QueryWrapper<>();
+        wrapper.eq("seller_id",userId);
+        List<Order> orderList = orderMapper.selectList(wrapper);
+        ArrayList<ViewOrderVO> orderVOList = new ArrayList<>();
+        for (Order order : orderList) {
+
+            ViewOrderVO viewOrderVO = new ViewOrderVO();
+            viewOrderVO.setCommodityId(order.getCommodityId());
+            viewOrderVO.setPrice(order.getPrice());
+            viewOrderVO.setAddAt(order.getAddAt());
+            viewOrderVO.setStatus(order.getStatus());
+            viewOrderVO.setBuyerName(userMapper.selectById(order.getBuyerId()).getUsername());
+            viewOrderVO.setBuyerPictureUrl(userMapper.getPictureUrl(order.getBuyerId()));
+            orderVOList.add(viewOrderVO);
+
+        }
+
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS,orderVOList);
 
     }
 

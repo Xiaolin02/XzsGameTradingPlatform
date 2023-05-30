@@ -92,4 +92,9 @@ public class BasicController {
         basicService.contact(response);
     }
 
+    @GetMapping("/test")
+    public String test() {
+        return basicService.test();
+    }
+
 }

@@ -153,4 +153,10 @@ public class BasicServiceImpl implements BasicService {
 
     }
 
+    @Override
+    public String test() {
+        User user = userMapper.selectById(1);
+        return user.toString();
+    }
+
 }

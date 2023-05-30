@@ -50,13 +50,12 @@ public class SellerController {
         return sellerService.newPrice(commodityId, newPrice, token);
     }
 
-//    /**
-//     * @desc 查看订单
-//     * @date 2023/5/28 21:08
-//     */
-//    @GetMapping("/order/view")
-//    public ResponseResult viewOrder(@RequestHeader String token) {
-//        // TODO 先注释，不然我运行报错，写好了把这个删掉
-//        return null;
-//    }
+    /**
+     * @desc 查看订单
+     * @date 2023/5/28 21:08
+     */
+    @GetMapping("/seller/order/view")
+    public ResponseResult viewOrder(@RequestHeader String token) {
+        return sellerService.viewOrder(token);
+    }
 }

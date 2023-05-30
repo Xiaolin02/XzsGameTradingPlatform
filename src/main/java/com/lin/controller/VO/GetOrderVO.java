@@ -16,7 +16,7 @@ public class GetOrderVO {
     private Integer commodityId;
     private String sellerName;
     private Integer price;
-    private String addTime;
+    private String addAt;
     private Integer status;
 
 }

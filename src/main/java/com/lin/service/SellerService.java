@@ -16,4 +16,6 @@ public interface SellerService {
     ResponseResult view(String token);
 
     ResponseResult newPrice(Integer commodityId, Integer newPrice, String token);
+
+    ResponseResult viewOrder(String token);
 }

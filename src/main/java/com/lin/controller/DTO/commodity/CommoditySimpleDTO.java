@@ -29,7 +29,7 @@ public class CommoditySimpleDTO {
         this.seller = new UserMiniDTO(userMapper.selectById(commodity.getSellerId()));
     }
 
-    private CommoditySimpleDTO(Commodity commodity) {
+    public CommoditySimpleDTO(Commodity commodity) {
         this.commodityId = commodity.getCommodityId();
         this.title = commodity.getTitle();
         this.price = commodity.getPrice();

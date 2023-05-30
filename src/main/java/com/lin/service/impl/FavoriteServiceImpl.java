@@ -3,6 +3,7 @@ package com.lin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.general.PageDTO;
 import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.FavoriteMapper;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author czh
@@ -82,12 +84,12 @@ public class FavoriteServiceImpl implements FavoriteService {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
         List<Favorite> favoriteList = favoriteMapper.selectPage(pageDTO.toPage(), favoriteQueryWrapper).getRecords();
-        List<Commodity> commodityList = new ArrayList<>();
+        List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Favorite favorite : favoriteList) {
             QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
             commodityQueryWrapper.eq("commodity_id", favorite.getCommodityId());
-            commodityList.add(commodityMapper.selectOne(commodityQueryWrapper));
+            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodityMapper.selectOne(commodityQueryWrapper)));
         }
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityList);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList",commoditySimpleDTOList));
     }
 }

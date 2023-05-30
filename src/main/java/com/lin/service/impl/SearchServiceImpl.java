@@ -3,6 +3,7 @@ package com.lin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
+import com.lin.common.ListOrderByConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.commodity.SearchCommodityDTO;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
@@ -38,63 +39,58 @@ public class SearchServiceImpl implements SearchService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> searchCommodity(SearchCommodityDTO searchDTO) {
+    public ResponseResult<Object> searchCommodity(SearchCommodityDTO searchCommodityDTO) {
         QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
         // 价格条件
-        if (searchDTO.getPriceMin() != null) {
-            if (searchDTO.getPriceMin() < 0) {
+        if (searchCommodityDTO.getPriceMin() != null) {
+            if (searchCommodityDTO.getPriceMin() < 0) {
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "最小价格小于0");
             }
-            commodityQueryWrapper.ge("price", searchDTO.getPriceMin());
+            commodityQueryWrapper.ge("price", searchCommodityDTO.getPriceMin());
         }
-        if (searchDTO.getPriceMax() != null) {
-            if (searchDTO.getPriceMax() < 0) {
+        if (searchCommodityDTO.getPriceMax() != null) {
+            if (searchCommodityDTO.getPriceMax() < 0) {
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "最大价格小于0");
             }
-            commodityQueryWrapper.le("price", searchDTO.getPriceMax());
+            commodityQueryWrapper.le("price", searchCommodityDTO.getPriceMax());
         }
-        if (searchDTO.getPriceMax() != null && searchDTO.getPriceMin() != null && searchDTO.getPriceMax() < searchDTO.getPriceMin()) {
+        if (searchCommodityDTO.getPriceMax() != null && searchCommodityDTO.getPriceMin() != null && searchCommodityDTO.getPriceMax() < searchCommodityDTO.getPriceMin()) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "最大价格小于最小价格");
         }
-        // 时间条件
-        if (searchDTO.getReleaseTimeEarliest() != null) {
-            if (DateUtil.isNotValidDate(searchDTO.getReleaseTimeEarliest())) {
-                return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "最早时间格式错误，接受的格式为" + DateUtil.DEFAULT_DATA_FORMAT);
-            }
-            commodityQueryWrapper.ge("release_time", searchDTO.getReleaseTimeEarliest());
-        }
-        if (searchDTO.getReleaseTimeLatest() != null) {
-            if (DateUtil.isNotValidDate(searchDTO.getReleaseTimeLatest())) {
-                return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "最晚时间格式错误，接受的格式为" + DateUtil.DEFAULT_DATA_FORMAT);
-            }
-            commodityQueryWrapper.le("release_time", searchDTO.getReleaseTimeLatest());
-        }
-        if (searchDTO.getReleaseTimeLatest() != null && searchDTO.getReleaseTimeEarliest() != null) {
-            if (searchDTO.getReleaseTimeLatest().compareTo(searchDTO.getReleaseTimeEarliest()) < 0) {
-                return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "最晚时间早于最早时间");
-            }
-        }
         // 议价条件
-        if (searchDTO.getAllowBargaining() != null) {
-            commodityQueryWrapper.eq("allow_bargaining", searchDTO.getAllowBargaining());
-        }
-        // 描述条件
-        if (searchDTO.getKeyword() != null) {
-            commodityQueryWrapper.and(i -> i.like("title", searchDTO.getKeyword())
-                    .or().like("description", searchDTO.getKeyword()));
+        if (searchCommodityDTO.getAllowBargaining() != null) {
+            commodityQueryWrapper.eq("allow_bargaining", searchCommodityDTO.getAllowBargaining());
         }
         // 审核条件
         commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_SELLING);
+        // 描述条件
+        if (searchCommodityDTO.getKeyword() == null || searchCommodityDTO.getKeyword().equals("")) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "关键字为空");
+        }
+        commodityQueryWrapper.and(i -> i.like("title", searchCommodityDTO.getKeyword())
+                .or().like("description", searchCommodityDTO.getKeyword()));
+        // 顺序条件
+        if (searchCommodityDTO.getOrderBy() != null) {
+            if (searchCommodityDTO.getOrderBy() == ListOrderByConstants.COMMODITY_ORDER_BY_RELEASE_AT_ASC) {
+                commodityQueryWrapper.orderByAsc("release_at");
+            } else if (searchCommodityDTO.getOrderBy() == ListOrderByConstants.COMMODITY_ORDER_BY_RELEASE_AT_DESC) {
+                commodityQueryWrapper.orderByDesc("release_at");
+            } else if (searchCommodityDTO.getOrderBy() == ListOrderByConstants.COMMODITY_ORDER_BY_PRICE_ASC) {
+                commodityQueryWrapper.orderByAsc("price");
+            } else if (searchCommodityDTO.getOrderBy() == ListOrderByConstants.COMMODITY_ORDER_BY_PRICE_DESC) {
+                commodityQueryWrapper.orderByDesc("price");
+            } else {
+                return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "排序参数错误");
+            }
+        }
         // 查询商品
-        List<Commodity> records = commodityMapper.selectPage(searchDTO.getPage().toPage(), commodityQueryWrapper).getRecords();
+        List<Commodity> records = commodityMapper.selectPage(searchCommodityDTO.getPage().toPage(), commodityQueryWrapper).getRecords();
         // 装配DTO
         List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Commodity commodity : records) {
             commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper));
         }
-        Map<String, Object> map = new HashMap<>();
-        map.put("commodityList", commoditySimpleDTOList);
         // 返回结果
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, map);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
     }
 }

@@ -20,12 +20,9 @@ public class SearchCommodityDTO {
     @Nullable
     private Integer priceMin;
     @Nullable
-    private String releaseTimeEarliest;
-    @Nullable
-    private String releaseTimeLatest;
+    private Integer orderBy;
     @Nullable
     private Boolean allowBargaining;
-    @Nullable
     private String keyword;
     private PageDTO page;
 }

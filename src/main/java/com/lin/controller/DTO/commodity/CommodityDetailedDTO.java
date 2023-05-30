@@ -44,6 +44,6 @@ public class CommodityDetailedDTO {
         this.allowBargaining = commodity.getAllowBargaining();
         this.status = commodity.getStatus();
         this.description = commodity.getDescription();
-        this.releaseTime = commodity.getReleaseTime();
+        this.releaseTime = commodity.getReleaseAt();
     }
 }

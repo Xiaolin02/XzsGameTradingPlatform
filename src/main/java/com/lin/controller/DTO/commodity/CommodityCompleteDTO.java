@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @Author czh
- * @desc TODO 商品模型（完全）用于自己看自己发布的商品，或者管理员审核
+ * @desc 商品模型（完全）用于自己看自己发布的商品，或者管理员审核
  * @date 2023/5/31 16:31
  */
 @Data

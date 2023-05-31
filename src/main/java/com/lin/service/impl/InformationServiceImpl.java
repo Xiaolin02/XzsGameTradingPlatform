@@ -97,7 +97,6 @@ public class InformationServiceImpl implements InformationService {
         }
         user.setPassword(PasswordEncodingUtil.encoding(newPassword));
         userMapper.updateById(user);
-        // TODO 修改密码后需要重新登录认证？
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "修改密码成功");
     }
 
@@ -121,7 +120,6 @@ public class InformationServiceImpl implements InformationService {
         if (PasswordEncodingUtil.matches(newPassword, user.getPassword())) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新密码不能和原密码重复");
         }
-        // TODO 重新登录认证？
         user.setPassword(PasswordEncodingUtil.encoding(newPassword));
         userMapper.updateById(user);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "修改密码成功");

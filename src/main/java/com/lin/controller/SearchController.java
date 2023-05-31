@@ -25,7 +25,7 @@ public class SearchController {
 
     /**
      * @Author czh
-     * @desc TODO 获取推荐商品列表
+     * @desc 获取推荐商品列表
      * @date 2023/5/22 10:16
      */
     @PostMapping("/commodity/recommend")
@@ -45,7 +45,7 @@ public class SearchController {
 
     /**
      * @Author czh
-     * @desc TODO 搜索单个商品
+     * @desc 搜索单个商品
      * @date 2023/5/22 10:16
      */
     @GetMapping("/commodity/one/{commodityId}")
@@ -55,7 +55,7 @@ public class SearchController {
 
     /**
      * @Author czh
-     * @desc TODO 搜索用户列表
+     * @desc 搜索用户列表
      * @date 2023/5/22 10:16
      */
     @PostMapping("/user/list")
@@ -65,7 +65,7 @@ public class SearchController {
 
     /**
      * @Author czh
-     * @desc TODO 搜索某个用户
+     * @desc 搜索某个用户
      * @date 2023/5/22 10:16
      */
     @GetMapping("/user/one/{userId}")

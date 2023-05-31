@@ -25,7 +25,7 @@ public class UserDetailedDTO {
         this.pictureUrl = userMapper.getPictureUrl(user.getUserId());
     }
 
-    private UserDetailedDTO(User user) {
+    public UserDetailedDTO(User user) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
         this.phone = user.getPhone();

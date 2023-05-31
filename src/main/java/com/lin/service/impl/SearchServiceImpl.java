@@ -5,11 +5,17 @@ import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
 import com.lin.common.ListOrderByConstants;
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.commodity.CommodityDetailedDTO;
 import com.lin.controller.DTO.commodity.SearchCommodityDTO;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
+import com.lin.controller.DTO.general.PageDTO;
+import com.lin.controller.DTO.user.SearchUserDTO;
+import com.lin.controller.DTO.user.UserDetailedDTO;
+import com.lin.controller.DTO.user.UserSimpleDTO;
 import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.Commodity;
+import com.lin.pojo.User;
 import com.lin.service.SearchService;
 import com.lin.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +39,29 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     CommodityMapper commodityMapper;
 
+    @Override
+    public ResponseResult<Object> searchCommodityRecommend(PageDTO pageDTO) {
+        QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
+        // 审核条件
+        commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_SELLING);
+        // 查询商品
+        List<Commodity> records = commodityMapper.selectPage(pageDTO.toPage(), commodityQueryWrapper).getRecords();
+        // 装配DTO
+        List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
+        for (Commodity commodity : records) {
+            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper));
+        }
+        // 返回结果
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
+    }
+
     /**
      * @Author czh
      * @desc 搜索商品，支持按时间、价格、议价、描述来搜索商品（仅能搜索售卖中(status=1)的商品）
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> searchCommodity(SearchCommodityDTO searchCommodityDTO) {
+    public ResponseResult<Object> searchCommodityList(SearchCommodityDTO searchCommodityDTO) {
         QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
         // 价格条件
         if (searchCommodityDTO.getPriceMin() != null) {
@@ -92,5 +114,41 @@ public class SearchServiceImpl implements SearchService {
         }
         // 返回结果
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
+    }
+
+    @Override
+    public ResponseResult<Object> searchCommodityOne(String commodityId) {
+        Commodity commodity = commodityMapper.selectById(commodityId);
+        if (commodity == null) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "商品不存在");
+        }
+        CommodityDetailedDTO commodityDetailedDTO = new CommodityDetailedDTO(commodity);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityDetailedDTO);
+    }
+
+    @Override
+    public ResponseResult<Object> searchUserList(SearchUserDTO searchUserDTO) {
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        // 用户名条件
+        if (searchUserDTO.getKeyword() != null) {
+            userQueryWrapper.like("username", searchUserDTO.getKeyword());
+        }
+        List<User> records = userMapper.selectPage(searchUserDTO.getPage().toPage(), userQueryWrapper).getRecords();
+        // 装配DTO
+        List<UserSimpleDTO> userSimpleDTOList = new ArrayList<>();
+        for (User user : records) {
+            userSimpleDTOList.add(new UserSimpleDTO(user));
+        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("userList", userSimpleDTOList));
+    }
+
+    @Override
+    public ResponseResult<Object> searchUserOne(String userId) {
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "用户不存在");
+        }
+        UserDetailedDTO userDetailedDTO = new UserDetailedDTO(user);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userDetailedDTO);
     }
 }

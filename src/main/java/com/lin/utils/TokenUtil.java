@@ -55,6 +55,14 @@ public class TokenUtil {
     }
 
     /**
+     * @desc 通过token获得createAt
+     * @date 2023/2/31 10:55
+     */
+    public String getFreshAtByToken(String token) {
+        return (String) redisUtil.get(RedisKeyConstants.TOKEN_PREFIX + token);
+    }
+
+    /**
      * @desc 解析token获得Claims对象
      * @date 2023/4/16 20:21
      */
@@ -77,10 +85,7 @@ public class TokenUtil {
      * @desc 解析token获取userId
      * @date 2023/5/16 20:21
      */
-    // TODO 之后改成redis获取
     public Integer parseTokenToUserId(String token) {
-//        // redis 获取，key格式为{token}:userId，value为userId
-//        return (Integer) redisUtil.get(token + ":userId");
         Claims claims = parseTokenToClaims(token);
         return claims.get("userId", Integer.class);
     }
@@ -89,13 +94,7 @@ public class TokenUtil {
      * @desc 解析token获取user对象
      * @date 2023/5/16 20:21
      */
-    // TODO 之后改成redis获取
     public User parseTokenToUser(String token) {
-//        // redis 获取，key格式为{token}:userId，value为userId
-//        Integer userId = (Integer) redisUtil.get(token + ":userId");
-//        QueryWrapper<User> wrapper = new QueryWrapper<>();
-//        wrapper.eq("userId", userId);
-//        return userMapper.selectOne(wrapper);
         Integer userId = parseTokenToUserId(token);
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
@@ -106,9 +105,7 @@ public class TokenUtil {
      * @desc 解析token获取userRole
      * @date 2023/5/16 20:21
      */
-    // TODO 之后改成redis获取
     public List<String> parseTokenToUserRole(String token) {
-//        // redis 获取，key格式为{token}:userId，value格式为","分割的字符串
         return menuMapper.selectPermsByUserId(parseTokenToUserId(token));
     }
 

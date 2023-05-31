@@ -28,7 +28,7 @@ public class CommodityDetailedDTO {
     private Integer status;
     private String description;
     private List<String> pictureUrlList;
-    private String releaseTime;
+    private String releaseAt;
 
     public CommodityDetailedDTO(Commodity commodity, UserMapper userMapper, CommodityMapper commodityMapper) {
         this(commodity);
@@ -44,6 +44,6 @@ public class CommodityDetailedDTO {
         this.allowBargaining = commodity.getAllowBargaining();
         this.status = commodity.getStatus();
         this.description = commodity.getDescription();
-        this.releaseTime = commodity.getReleaseAt();
+        this.releaseAt = commodity.getReleaseAt();
     }
 }

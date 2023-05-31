@@ -24,7 +24,7 @@ public class UserSimpleDTO {
         this.pictureUrl = userMapper.getPictureUrl(user.getUserId());
     }
 
-    public UserSimpleDTO(User user) {
+    private UserSimpleDTO(User user) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
     }

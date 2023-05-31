@@ -122,7 +122,7 @@ public class SearchServiceImpl implements SearchService {
         if (commodity == null) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "商品不存在");
         }
-        CommodityDetailedDTO commodityDetailedDTO = new CommodityDetailedDTO(commodity);
+        CommodityDetailedDTO commodityDetailedDTO = new CommodityDetailedDTO(commodity, userMapper, commodityMapper);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityDetailedDTO);
     }
 
@@ -137,7 +137,7 @@ public class SearchServiceImpl implements SearchService {
         // 装配DTO
         List<UserSimpleDTO> userSimpleDTOList = new ArrayList<>();
         for (User user : records) {
-            userSimpleDTOList.add(new UserSimpleDTO(user));
+            userSimpleDTOList.add(new UserSimpleDTO(user, userMapper));
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("userList", userSimpleDTOList));
     }
@@ -148,7 +148,7 @@ public class SearchServiceImpl implements SearchService {
         if (user == null) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "用户不存在");
         }
-        UserDetailedDTO userDetailedDTO = new UserDetailedDTO(user);
+        UserDetailedDTO userDetailedDTO = new UserDetailedDTO(user, userMapper);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userDetailedDTO);
     }
 }

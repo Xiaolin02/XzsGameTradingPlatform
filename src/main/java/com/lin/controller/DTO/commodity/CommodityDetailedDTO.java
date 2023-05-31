@@ -36,7 +36,7 @@ public class CommodityDetailedDTO {
         this.pictureUrlList = commodityMapper.selectPictureUrl(commodity.getCommodityId());
     }
 
-    public CommodityDetailedDTO(Commodity commodity) {
+    private CommodityDetailedDTO(Commodity commodity) {
         this.commodityId = commodity.getCommodityId();
         this.title = commodity.getTitle();
         this.price = commodity.getPrice();

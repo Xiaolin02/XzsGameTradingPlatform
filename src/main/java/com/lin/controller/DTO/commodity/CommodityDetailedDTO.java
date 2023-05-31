@@ -31,12 +31,12 @@ public class CommodityDetailedDTO {
     private String releaseAt;
 
     public CommodityDetailedDTO(Commodity commodity, UserMapper userMapper, CommodityMapper commodityMapper) {
-        this(commodity);
+        loadCommodity(commodity);
         this.setSeller(new UserMiniDTO(userMapper.selectById(commodity.getSellerId())));
         this.pictureUrlList = commodityMapper.selectPictureUrl(commodity.getCommodityId());
     }
 
-    private CommodityDetailedDTO(Commodity commodity) {
+    private void loadCommodity(Commodity commodity) {
         this.commodityId = commodity.getCommodityId();
         this.title = commodity.getTitle();
         this.price = commodity.getPrice();

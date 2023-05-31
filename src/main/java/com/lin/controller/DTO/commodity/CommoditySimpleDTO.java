@@ -25,11 +25,11 @@ public class CommoditySimpleDTO {
     private Integer status;
 
     public CommoditySimpleDTO(Commodity commodity, UserMapper userMapper) {
-        this(commodity);
+        loadCommodity(commodity);
         this.seller = new UserMiniDTO(userMapper.selectById(commodity.getSellerId()));
     }
 
-    private CommoditySimpleDTO(Commodity commodity) {
+    private void loadCommodity(Commodity commodity) {
         this.commodityId = commodity.getCommodityId();
         this.title = commodity.getTitle();
         this.price = commodity.getPrice();

@@ -34,13 +34,13 @@ public class CommodityCompleteDTO {
     private String releaseAt;
 
     public CommodityCompleteDTO(Commodity commodity, UserMapper userMapper, CommodityMapper commodityMapper, AccountMapper accountMapper) {
-        this(commodity);
+        loadCommodity(commodity);
         this.setSeller(new UserMiniDTO(userMapper.selectById(commodity.getSellerId())));
         this.setPictureUrlList(commodityMapper.selectPictureUrl(commodity.getCommodityId()));
         this.setAccount(accountMapper.selectById(this.getCommodityId()));
     }
 
-    private CommodityCompleteDTO(Commodity commodity) {
+    private void loadCommodity(Commodity commodity) {
         this.commodityId = commodity.getCommodityId();
         this.title = commodity.getTitle();
         this.price = commodity.getPrice();

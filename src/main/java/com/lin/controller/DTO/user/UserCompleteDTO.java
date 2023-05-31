@@ -23,11 +23,11 @@ public class UserCompleteDTO {
     protected String registerAt;
 
     public UserCompleteDTO(User user, UserMapper userMapper) {
-        this(user);
+        loadUser(user);
         this.pictureUrl = userMapper.getPictureUrl(user.getUserId());
     }
 
-    private UserCompleteDTO(User user) {
+    private void loadUser(User user) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
         this.phone = user.getPhone();

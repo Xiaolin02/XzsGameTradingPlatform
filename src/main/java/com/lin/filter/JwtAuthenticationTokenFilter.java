@@ -52,7 +52,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("token");
 
         if (!StringUtils.hasText(token)) {
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "无token"));
+            filterChain.doFilter(request, response);
             return;
         }
 

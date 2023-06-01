@@ -1,6 +1,7 @@
 package com.lin.service.impl;
 
 import com.lin.common.CodeConstants;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.User;
@@ -26,7 +27,7 @@ public class BalanceServiceImpl implements BalanceService {
      * @date 2023/6/1 10:51
      */
     @Override
-    public ResponseResult<Object> recharge(String token, Integer money) {
+    public ResponseResult<NullData> recharge(String token, Integer money) {
         Integer userId = tokenUtil.parseTokenToUserId(token);
         User user = userMapper.selectById(userId);
         user.setBalance(user.getBalance() + money);
@@ -39,7 +40,7 @@ public class BalanceServiceImpl implements BalanceService {
      * @date 2023/6/1 10:51
      */
     @Override
-    public ResponseResult<Object> withdraw(String token, Integer money) {
+    public ResponseResult<NullData> withdraw(String token, Integer money) {
         Integer userId = tokenUtil.parseTokenToUserId(token);
         User user = userMapper.selectById(userId);
         if (user.getBalance() < money) {

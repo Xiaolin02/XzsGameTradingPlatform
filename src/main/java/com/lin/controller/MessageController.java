@@ -1,5 +1,6 @@
 package com.lin.controller;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.MessageDTO;
 import com.lin.service.impl.MessageServiceImpl;
@@ -28,7 +29,7 @@ public class MessageController {
      * @date 2023/4/22 10:45
      */
     @GetMapping("/online/push/{toId}")
-    public ResponseResult pushMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
+    public ResponseResult<NullData> pushMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
         log.info("访问了{}接口", Thread.currentThread().getStackTrace()[1].getMethodName());
         return messageService.pushMsgToOneUser(token, toId, content);
@@ -41,7 +42,7 @@ public class MessageController {
      */
     @PreAuthorize("hasRole('ROLE_MANGER')")
     @PostMapping("/system/push/{toId}")
-    public ResponseResult pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody MessageDTO messageDTO) {
+    public ResponseResult<NullData> pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody MessageDTO messageDTO) {
 
         return messageService.pushSystemMsgToOneUser(token, toId, messageDTO.getContent(), messageDTO.getTitle());
 
@@ -52,7 +53,7 @@ public class MessageController {
      * @date 2023/4/22 10:45
      */
     @PostMapping("/offline/push/{toId}")
-    public ResponseResult pushMsg(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
+    public ResponseResult<NullData> pushMsg(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
         return messageService.pushMsg(token, toId, content);
 

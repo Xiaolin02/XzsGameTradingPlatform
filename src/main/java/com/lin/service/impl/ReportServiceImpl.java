@@ -2,6 +2,7 @@ package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.commodity.CommodityMiniDTO;
 import com.lin.controller.DTO.user.UserMiniDTO;
@@ -45,7 +46,7 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> insertReportCommodity(String token, Integer commodityId, String reason) {
+    public ResponseResult<NullData> insertReportCommodity(String token, Integer commodityId, String reason) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         ReportCommodity reportCommodity = new ReportCommodity();
         reportCommodity.setReason(reason);
@@ -62,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> deleteReportCommodity(String token, Integer reportId) {
+    public ResponseResult<NullData> deleteReportCommodity(String token, Integer reportId) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         reportCommodityQueryWrapper.eq("report_id", reportId);
@@ -79,7 +80,7 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/22 21:58
      */
     @Override
-    public ResponseResult<Object> selectReportCommodity(String token) {
+    public ResponseResult<Map<String, List<CommodityMiniDTO>>> selectReportCommodity(String token) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         reportCommodityQueryWrapper.eq("reporter_id", reporterId);
@@ -98,7 +99,7 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> insertReportUser(String token, Integer userId, String reason) {
+    public ResponseResult<NullData> insertReportUser(String token, Integer userId, String reason) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         ReportUser reportUser = new ReportUser();
         reportUser.setReason(reason);
@@ -115,7 +116,7 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> deleteReportUser(String token, Integer reportId) {
+    public ResponseResult<NullData> deleteReportUser(String token, Integer reportId) {
         Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         reportUserQueryWrapper.eq("report_id", reportId);
@@ -132,7 +133,7 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/22 21:58
      */
     @Override
-    public ResponseResult<Object> selectReportUser(String token) {
+    public ResponseResult<Map<String, List<UserMiniDTO>>> selectReportUser(String token) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         reportUserQueryWrapper.eq("reporter_id", reporterId);

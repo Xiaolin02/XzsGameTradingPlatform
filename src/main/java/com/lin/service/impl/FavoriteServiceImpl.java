@@ -2,6 +2,7 @@ package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.general.PageDTO;
@@ -41,7 +42,7 @@ public class FavoriteServiceImpl implements FavoriteService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> insertFavorite(String token, Integer commodityId) {
+    public ResponseResult<NullData> insertFavorite(String token, Integer commodityId) {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
@@ -63,7 +64,7 @@ public class FavoriteServiceImpl implements FavoriteService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> deleteFavorite(String token, Integer commodityId) {
+    public ResponseResult<NullData> deleteFavorite(String token, Integer commodityId) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("commodity_id", commodityId);
         favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
@@ -80,7 +81,7 @@ public class FavoriteServiceImpl implements FavoriteService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> selectFavoriteCommodity(String token, PageDTO pageDTO) {
+    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> selectFavoriteCommodity(String token, PageDTO pageDTO) {
         QueryWrapper<Favorite> favoriteQueryWrapper = new QueryWrapper<>();
         favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
         List<Favorite> favoriteList = favoriteMapper.selectPage(pageDTO.toPage(), favoriteQueryWrapper).getRecords();

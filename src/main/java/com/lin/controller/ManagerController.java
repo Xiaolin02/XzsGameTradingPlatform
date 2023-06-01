@@ -1,14 +1,23 @@
 package com.lin.controller;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.MessageDTO;
+import com.lin.controller.DTO.ReportCommodityViewDTO;
+import com.lin.controller.DTO.ReportUserViewDTO;
+import com.lin.controller.DTO.commodity.CommodityCompleteDTO;
+import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.general.PageDTO;
+import com.lin.controller.DTO.user.UserCompleteDTO;
 import com.lin.service.ManagerService;
 import com.lin.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -31,7 +40,7 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/user/inform/{receiverId}")
-    public ResponseResult pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer receiverId, @RequestBody MessageDTO messageDTO) {
+    public ResponseResult<NullData> pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer receiverId, @RequestBody MessageDTO messageDTO) {
         return messageService.pushSystemMsgToOneUser(token, receiverId, messageDTO.getContent(), messageDTO.getTitle());
     }
 
@@ -40,8 +49,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @DeleteMapping("/user/reported/done/{reportId}")
-    public ResponseResult<Object> UserReportDone(@PathVariable Integer reportId) {
-        return managerService.UserReportDone(reportId);
+    public ResponseResult<NullData> userReportDone(@PathVariable Integer reportId) {
+        return managerService.userReportDone(reportId);
     }
 
     /**
@@ -49,8 +58,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/user/reported/view/all")
-    public ResponseResult<Object> UserReportViewAll(@RequestBody PageDTO pageDTO) {
-        return managerService.UserReportViewAll(pageDTO);
+    public ResponseResult<Map<String, List<ReportUserViewDTO>>> userReportViewAll(@RequestBody PageDTO pageDTO) {
+        return managerService.userReportViewAll(pageDTO);
     }
 
     /**
@@ -58,8 +67,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @GetMapping("/user/view/one/{userId}")
-    public ResponseResult<Object> UserViewOne(@PathVariable Integer userId) {
-        return managerService.UserViewOne(userId);
+    public ResponseResult<UserCompleteDTO> userViewOne(@PathVariable Integer userId) {
+        return managerService.userViewOne(userId);
     }
 
     /**
@@ -67,8 +76,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PutMapping("/commodity/inspect/allow/{commodityId}")
-    public ResponseResult<Object> CommodityInspectAllow(@PathVariable Integer commodityId) {
-        return managerService.CommodityInspectAllow(commodityId);
+    public ResponseResult<NullData> commodityInspectAllow(@PathVariable Integer commodityId) {
+        return managerService.commodityInspectAllow(commodityId);
     }
 
     /**
@@ -76,8 +85,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PutMapping("/commodity/inspect/reject/{commodityId}")
-    public ResponseResult<Object> CommodityInspectReject(@PathVariable Integer commodityId) {
-        return managerService.CommodityInspectReject(commodityId);
+    public ResponseResult<NullData> commodityInspectReject(@PathVariable Integer commodityId) {
+        return managerService.commodityInspectReject(commodityId);
     }
 
     /**
@@ -85,8 +94,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/commodity/view/all")
-    public ResponseResult<Object> CommodityReportViewAll(@RequestBody PageDTO pageDTO) {
-        return managerService.CommodityInspectViewAll(pageDTO);
+    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> commodityReportViewAll(@RequestBody PageDTO pageDTO) {
+        return managerService.commodityInspectViewAll(pageDTO);
     }
 
     /**
@@ -94,8 +103,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @DeleteMapping("/commodity/reported/done/{reportId}")
-    public ResponseResult<Object> CommodityReportDone(@PathVariable Integer reportId) {
-        return managerService.CommodityReportDone(reportId);
+    public ResponseResult<NullData> commodityReportDone(@PathVariable Integer reportId) {
+        return managerService.commodityReportDone(reportId);
     }
 
     /**
@@ -103,8 +112,8 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/commodity/reported/view/all")
-    public ResponseResult<Object> CommodityInspectViewAll(@RequestBody PageDTO pageDTO) {
-        return managerService.CommodityReportViewAll(pageDTO);
+    public ResponseResult<Map<String, List<ReportCommodityViewDTO>>> commodityInspectViewAll(@RequestBody PageDTO pageDTO) {
+        return managerService.commodityReportViewAll(pageDTO);
     }
 
     /**
@@ -112,7 +121,7 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @GetMapping("/commodity/view/one/{commodityId}")
-    public ResponseResult<Object> CommodityViewOne(@PathVariable Integer commodityId) {
-        return managerService.CommodityViewOne(commodityId);
+    public ResponseResult<CommodityCompleteDTO> commodityViewOne(@PathVariable Integer commodityId) {
+        return managerService.commodityViewOne(commodityId);
     }
 }

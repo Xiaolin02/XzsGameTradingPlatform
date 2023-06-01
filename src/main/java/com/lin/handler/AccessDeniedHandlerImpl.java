@@ -1,6 +1,7 @@
 package com.lin.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.utils.WebUtil;
 import jakarta.servlet.ServletException;
@@ -23,7 +24,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        ResponseResult result = new ResponseResult(HttpStatus.FORBIDDEN.value(), "用户权限不足");
+        ResponseResult<NullData> result = new ResponseResult<>(HttpStatus.FORBIDDEN.value(), "用户权限不足");
         String json = JSON.toJSONString(result);
         WebUtil.renderString(response, json);
 

@@ -13,33 +13,33 @@ import java.util.Random;
  */
 public class RandomUtil {
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
-    private static final DecimalFormat fourdf = new DecimalFormat("0000");
+    private static final DecimalFormat FOURDF = new DecimalFormat("0000");
 
-    private static final DecimalFormat sixdf = new DecimalFormat("000000");
+    private static final DecimalFormat SIXDF = new DecimalFormat("000000");
 
     public static String getFourBitRandom() {
-        return fourdf.format(random.nextInt(10000));
+        return FOURDF.format(RANDOM.nextInt(10000));
     }
 
     public static String getNineBitRandom() {
-        return sixdf.format(random.nextInt(1000000000));
+        return SIXDF.format(RANDOM.nextInt(1000000000));
     }
 
     public static String getEighteenBitRandom() {
-        return sixdf.format(random.nextInt(1000000000)) + sixdf.format(random.nextInt(1000000000));
+        return SIXDF.format(RANDOM.nextInt(1000000000)) + SIXDF.format(RANDOM.nextInt(1000000000));
     }
 
 
     /**
      * 给定数组，抽取n个数据
      *
-     * @param list
-     * @param n
-     * @return
+     * @param list 数组
+     * @param n 抽取n个数据
+     * @return 抽取的数据
      */
-    public static ArrayList getRandom(List list, int n) {
+    public static <T> ArrayList<T> getRandom(List<T> list, int n) {
 
         Random random = new Random();
 
@@ -56,7 +56,7 @@ public class RandomUtil {
         // 从HashMap导入数组
         Object[] robjs = hashMap.values().toArray();
 
-        ArrayList r = new ArrayList();
+        ArrayList<T> r = new ArrayList<>();
 
         // 遍历数组并打印数据
         for (int i = 0; i < n; i++) {

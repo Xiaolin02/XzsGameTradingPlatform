@@ -1,10 +1,7 @@
 package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lin.common.CodeConstants;
-import com.lin.common.OrderStatusConstants;
-import com.lin.common.ResponseResult;
-import com.lin.common.SystemMsgTitleConstants;
+import com.lin.common.*;
 import com.lin.controller.DTO.OfferDTO;
 import com.lin.controller.VO.GetOrderVO;
 import com.lin.mapper.CommodityMapper;
@@ -49,12 +46,12 @@ public class BuyerServiceImpl implements BuyerService {
 
 
     @Override
-    public ResponseResult offer(String token, OfferDTO offerDTO) {
+    public ResponseResult<NullData> offer(String token, OfferDTO offerDTO) {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         Commodity commodity = commodityMapper.selectById(offerDTO.getCommodityId());
         if (commodity.getPrice() <= offerDTO.getMoney()) {
-            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "出价小于等于商品价格");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "出价小于等于商品价格");
         }
         commodityMapper.offer(offerDTO.getCommodityId(), userId, offerDTO.getMoney());
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "出价成功");
@@ -62,7 +59,7 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
-    public ResponseResult addOrder(String token, Integer commodityId) {
+    public ResponseResult<NullData> addOrder(String token, Integer commodityId) {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         Commodity commodity = commodityMapper.selectById(commodityId);
@@ -75,14 +72,14 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
-    public ResponseResult getOrder(String token) {
+    public ResponseResult<ArrayList<GetOrderVO>> getOrder(String token) {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
         wrapper.eq("buyer_id", userId);
         List<Order> orders = orderMapper.selectList(wrapper);
         if (Objects.equals(orders.size(), 0)) {
-            return new ResponseResult(CodeConstants.CODE_SUCCESS, "该用户没有订单");
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "该用户没有订单");
         }
         ArrayList<GetOrderVO> list = new ArrayList<>();
         for (Order order : orders) {
@@ -97,25 +94,25 @@ public class BuyerServiceImpl implements BuyerService {
                     )
             );
         }
-        return new ResponseResult(CodeConstants.CODE_SUCCESS, list);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, list);
 
     }
 
     @Override
-    public ResponseResult delOrder(String token, Integer orderId) {
+    public ResponseResult<NullData> delOrder(String token, Integer orderId) {
 
         Order order = orderMapper.selectById(orderId);
         if (Objects.isNull(order)) {
-            return new ResponseResult(CodeConstants.CODE_NOT_FOUND, "该订单不存在");
+            return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "该订单不存在");
         }
         order.setStatus(OrderStatusConstants.STATUS_BUYER_CANCEL);
         orderMapper.updateById(order);
-        return new ResponseResult(CodeConstants.CODE_SUCCESS, "取消成功");
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "取消成功");
 
     }
 
     @Override
-    public ResponseResult payOrder(String token, Integer orderId) {
+    public ResponseResult<NullData> payOrder(String token, Integer orderId) {
 
         User user = tokenUtil.parseTokenToUser(token);
         Order order = orderMapper.selectById(orderId);

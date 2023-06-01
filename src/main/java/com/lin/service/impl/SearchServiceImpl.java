@@ -38,7 +38,7 @@ public class SearchServiceImpl implements SearchService {
     CommodityMapper commodityMapper;
 
     @Override
-    public ResponseResult<Object> searchCommodityRecommend(PageDTO pageDTO) {
+    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> searchCommodityRecommend(PageDTO pageDTO) {
         QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
         // 审核条件
         commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_SELLING);
@@ -59,7 +59,7 @@ public class SearchServiceImpl implements SearchService {
      * @date 2023/5/4 13:50
      */
     @Override
-    public ResponseResult<Object> searchCommodityList(SearchCommodityDTO searchCommodityDTO) {
+    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> searchCommodityList(SearchCommodityDTO searchCommodityDTO) {
         QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
         // 价格条件
         if (searchCommodityDTO.getPriceMin() != null) {
@@ -115,7 +115,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResponseResult<Object> searchCommodityOne(String commodityId) {
+    public ResponseResult<CommodityDetailedDTO> searchCommodityOne(String commodityId) {
         Commodity commodity = commodityMapper.selectById(commodityId);
         if (commodity == null) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "商品不存在");
@@ -125,7 +125,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResponseResult<Object> searchUserList(SearchUserDTO searchUserDTO) {
+    public ResponseResult<Map<String, List<UserSimpleDTO>>> searchUserList(SearchUserDTO searchUserDTO) {
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         // 用户名条件
         if (searchUserDTO.getKeyword() != null) {
@@ -141,7 +141,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public ResponseResult<Object> searchUserOne(String userId) {
+    public ResponseResult<UserDetailedDTO> searchUserOne(String userId) {
         User user = userMapper.selectById(userId);
         if (user == null) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "用户不存在");

@@ -1,6 +1,7 @@
 package com.lin.controller;
 
 import com.lin.common.CodeConstants;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.*;
 import com.lin.controller.DTO.user.LoginUserDTO;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
@@ -29,12 +31,12 @@ public class BasicController {
      * @date 2023/4/16 19:26
      */
     @PostMapping("/login")
-    public ResponseResult login(@RequestBody LoginUserDTO loginUserDTO) {
+    public ResponseResult<Map<String, String>> login(@RequestBody LoginUserDTO loginUserDTO) {
         return basicService.login(loginUserDTO);
     }
 
     @PostMapping("/login/code")
-    public ResponseResult codeLogin(@RequestBody CodeLoginDTO codeLoginDTO) {
+    public ResponseResult<Map<String, String>> codeLogin(@RequestBody CodeLoginDTO codeLoginDTO) {
         return basicService.codeLogin(codeLoginDTO);
     }
 
@@ -43,13 +45,13 @@ public class BasicController {
      * @date 2023/4/16 19:26
      */
     @PostMapping("/getCode")
-    public ResponseResult getCode(@RequestBody GetCodeDTO getCodeDTO) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> getCode(@RequestBody GetCodeDTO getCodeDTO) throws ExecutionException, InterruptedException {
         if (!Objects.isNull(getCodeDTO.getPhone())) {
             if (!Pattern.matches("^1[3-9]\\d{9}$", getCodeDTO.getPhone())) {
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
             }
         } else {
-            return new ResponseResult(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
         }
         return basicService.getCode(getCodeDTO.getPhone(), getCodeDTO.getType());
     }
@@ -59,7 +61,7 @@ public class BasicController {
      * @date 2023/4/16 20:54
      */
     @PostMapping("/register")
-    public ResponseResult register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseResult<Map<String, String>> register(@RequestBody RegisterDTO registerDTO) {
 
         //验证码固定四位
         if (!Objects.equals(registerDTO.getCode().length(), 4)) {
@@ -75,7 +77,7 @@ public class BasicController {
      * @date 2023/4/19 21:27
      */
     @PostMapping("/forgetpwd")
-    public ResponseResult forgetpwd(@RequestBody ForgetpwdDTO forgetpwdDTO) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> forgetpwd(@RequestBody ForgetpwdDTO forgetpwdDTO) throws ExecutionException, InterruptedException {
         //验证码固定四位
         if (!Objects.equals(forgetpwdDTO.getCode().length(), 4)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");

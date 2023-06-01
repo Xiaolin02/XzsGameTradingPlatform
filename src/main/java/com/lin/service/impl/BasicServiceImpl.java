@@ -3,6 +3,7 @@ package com.lin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.lin.common.CodeConstants;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.CodeLoginDTO;
 import com.lin.controller.DTO.ForgetpwdDTO;
@@ -18,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +54,7 @@ public class BasicServiceImpl implements BasicService {
     TokenUtil tokenUtil;
 
     @Override
-    public ResponseResult login(LoginUserDTO loginUserDTO) {
+    public ResponseResult<Map<String, String>> login(LoginUserDTO loginUserDTO) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDTO.getUsername(), loginUserDTO.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
@@ -70,12 +71,12 @@ public class BasicServiceImpl implements BasicService {
         HashMap<String, String> map = new HashMap<>();
         map.put("token", jwt);
 
-        return new ResponseResult(CodeConstants.CODE_SUCCESS, "登陆成功", map);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "登陆成功", map);
 
     }
 
     @Override
-    public ResponseResult getCode(String phone, String type) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> getCode(String phone, String type) throws ExecutionException, InterruptedException {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("phone", phone);
         if (Objects.equals("register", type)) {
@@ -90,7 +91,7 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public ResponseResult register(RegisterDTO registerDTO) {
+    public ResponseResult<Map<String, String>> register(RegisterDTO registerDTO) {
 
         if (!Objects.equals(registerDTO.getCode(), redisUtil.get("register:" + registerDTO.getPhone()))) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
@@ -116,17 +117,17 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public ResponseResult forgetpwd(ForgetpwdDTO forgetpwdDTO) {
+    public ResponseResult<NullData> forgetpwd(ForgetpwdDTO forgetpwdDTO) {
 
         if (!Objects.equals(redisUtil.get("forgetPwd:" + forgetpwdDTO.getPhone()), forgetpwdDTO.getCode())) {
-            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             QueryWrapper<User> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("phone", forgetpwdDTO.getPhone());
             UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
             updateWrapper.set("password", PasswordEncodingUtil.encoding("123456"));
             userMapper.update(userMapper.selectOne(queryWrapper), updateWrapper);
-            return new ResponseResult(CodeConstants.CODE_SUCCESS, "密码已经重置为123456");
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "密码已经重置为123456");
         }
 
     }
@@ -139,10 +140,10 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public ResponseResult codeLogin(CodeLoginDTO codeLoginDTO) {
+    public ResponseResult<Map<String, String>> codeLogin(CodeLoginDTO codeLoginDTO) {
 
         if (!Objects.equals(redisUtil.get("codeLogin:" + codeLoginDTO.getPhone()), codeLoginDTO.getCode())) {
-            return new ResponseResult(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("phone", codeLoginDTO.getPhone());
@@ -150,7 +151,7 @@ public class BasicServiceImpl implements BasicService {
             String jwt = tokenUtil.getTokenByUserId(user.getUserId());
             HashMap<String, String> map = new HashMap<>();
             map.put("token", jwt);
-            return new ResponseResult(CodeConstants.CODE_SUCCESS, "登陆成功", map);
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "登陆成功", map);
         }
 
     }

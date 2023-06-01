@@ -1,5 +1,6 @@
 package com.lin.service;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 
 import java.io.IOException;
@@ -11,10 +12,10 @@ import java.io.IOException;
  */
 public interface MessageService {
 
-    ResponseResult pushMsgToOneUser(String token, Integer toId, String content) throws IOException;
+    ResponseResult<NullData> pushMsgToOneUser(String token, Integer toId, String content) throws IOException;
 
-    ResponseResult pushSystemMsgToOneUser(String token, Integer toId, String content, String title);
+    ResponseResult<NullData> pushSystemMsgToOneUser(String token, Integer toId, String content, String title);
 
-    ResponseResult pushMsg(String token, Integer toId, String content) throws IOException;
+    ResponseResult<NullData> pushMsg(String token, Integer toId, String content) throws IOException;
 
 }

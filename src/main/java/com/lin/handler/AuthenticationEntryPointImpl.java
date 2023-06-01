@@ -1,6 +1,7 @@
 package com.lin.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.utils.WebUtil;
 import jakarta.servlet.ServletException;
@@ -23,7 +24,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-        ResponseResult result = new ResponseResult(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
+        ResponseResult<NullData> result = new ResponseResult<>(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
         String json = JSON.toJSONString(result);
         WebUtil.renderString(response, json);
 

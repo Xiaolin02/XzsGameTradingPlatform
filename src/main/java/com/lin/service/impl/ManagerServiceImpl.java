@@ -3,6 +3,7 @@ package com.lin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReportCommodityViewDTO;
 import com.lin.controller.DTO.ReportUserViewDTO;
@@ -45,7 +46,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> UserReportDone(Integer reportId) {
+    public ResponseResult<NullData> userReportDone(Integer reportId) {
         if (reportUserMapper.deleteById(reportId) == 0) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "试图完成不存在的举报记录");
         }
@@ -57,7 +58,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> UserReportViewAll(PageDTO pageDTO) {
+    public ResponseResult<Map<String, List<ReportUserViewDTO>>> userReportViewAll(PageDTO pageDTO) {
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         List<ReportUser> records = reportUserMapper.selectPage(pageDTO.toPage(), reportUserQueryWrapper).getRecords();
         List<ReportUserViewDTO> reportUserViewDTOList = new ArrayList<>();
@@ -72,7 +73,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> UserViewOne(Integer userId) {
+    public ResponseResult<UserCompleteDTO> userViewOne(Integer userId) {
         UserCompleteDTO userCompleteDTO = new UserCompleteDTO(userMapper.selectById(userId), userMapper);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userCompleteDTO);
     }
@@ -82,7 +83,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> CommodityInspectAllow(Integer commodityId) {
+    public ResponseResult<NullData> commodityInspectAllow(Integer commodityId) {
         Commodity commodity = commodityMapper.selectById(commodityId);
         commodity.setStatus(CommodityStatusConstants.STATUS_SELLING);
         commodityMapper.updateById(commodity);
@@ -94,7 +95,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> CommodityInspectReject(Integer commodityId) {
+    public ResponseResult<NullData> commodityInspectReject(Integer commodityId) {
         Commodity commodity = commodityMapper.selectById(commodityId);
         commodity.setStatus(CommodityStatusConstants.STATUS_FAILED);
         commodityMapper.updateById(commodity);
@@ -106,7 +107,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> CommodityInspectViewAll(PageDTO pageDTO) {
+    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> commodityInspectViewAll(PageDTO pageDTO) {
         QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
         commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_INSPECTING);
         List<Commodity> records = commodityMapper.selectPage(pageDTO.toPage(), commodityQueryWrapper).getRecords();
@@ -122,7 +123,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> CommodityReportDone(Integer reportId) {
+    public ResponseResult<NullData> commodityReportDone(Integer reportId) {
         if (reportCommodityMapper.deleteById(reportId) == 0) {
             return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "不存在这个举报记录");
         }
@@ -134,7 +135,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> CommodityReportViewAll(PageDTO pageDTO) {
+    public ResponseResult<Map<String, List<ReportCommodityViewDTO>>> commodityReportViewAll(PageDTO pageDTO) {
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         List<ReportCommodity> records = reportCommodityMapper.selectPage(pageDTO.toPage(), reportCommodityQueryWrapper).getRecords();
         List<ReportCommodityViewDTO> reportCommodityViewDTOList = new ArrayList<>();
@@ -149,7 +150,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Object> CommodityViewOne(Integer commodityId) {
+    public ResponseResult<CommodityCompleteDTO> commodityViewOne(Integer commodityId) {
         CommodityCompleteDTO commodityCompleteDTO = new CommodityCompleteDTO(commodityMapper.selectById(commodityId), userMapper, commodityMapper, accountMapper);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityCompleteDTO);
     }

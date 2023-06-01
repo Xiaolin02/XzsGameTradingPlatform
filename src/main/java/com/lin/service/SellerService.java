@@ -1,8 +1,13 @@
 package com.lin.service;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
+import com.lin.controller.VO.ViewOrderVO;
+import com.lin.controller.VO.ViewReleasedVO;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 
 /**
  * @author 林炳昌
@@ -11,13 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface SellerService {
 
-    ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files);
+    ResponseResult<NullData> release(String token, ReleaseDTO releaseDTO, MultipartFile[] files);
 
-    ResponseResult view(String token);
+    ResponseResult<ArrayList<ViewReleasedVO>> view(String token);
 
-    ResponseResult newPrice(Integer commodityId, Integer newPrice, String token);
+    ResponseResult<NullData> newPrice(Integer commodityId, Integer newPrice, String token);
 
-    ResponseResult viewOrder(String token);
+    ResponseResult<ArrayList<ViewOrderVO>> viewOrder(String token);
 
-    ResponseResult delOrder(String token, String orderId);
+    ResponseResult<NullData> delOrder(String token, String orderId);
 }

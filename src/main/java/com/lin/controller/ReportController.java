@@ -1,12 +1,18 @@
 package com.lin.controller;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReportCommodityDTO;
 import com.lin.controller.DTO.ReportUserDTO;
+import com.lin.controller.DTO.commodity.CommodityMiniDTO;
+import com.lin.controller.DTO.user.UserMiniDTO;
 import com.lin.service.ReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author czh
@@ -27,7 +33,7 @@ public class ReportController {
      * @date 2023/5/4 13:50
      */
     @PostMapping("/commodity")
-    public ResponseResult<Object> insertReportCommodity(@RequestHeader String token, @RequestBody ReportCommodityDTO reportCommodityDTO) {
+    public ResponseResult<NullData> insertReportCommodity(@RequestHeader String token, @RequestBody ReportCommodityDTO reportCommodityDTO) {
         String reason = reportCommodityDTO.getReason();
         Integer commodityId = reportCommodityDTO.getCommodityId();
         return reportService.insertReportCommodity(token, commodityId, reason);
@@ -39,7 +45,7 @@ public class ReportController {
      * @date 2023/5/4 13:50
      */
     @DeleteMapping("/commodity/{reportId}")
-    public ResponseResult<Object> deleteReportCommodity(@RequestHeader String token, @PathVariable Integer reportId) {
+    public ResponseResult<NullData> deleteReportCommodity(@RequestHeader String token, @PathVariable Integer reportId) {
         return reportService.deleteReportCommodity(token, reportId);
     }
 
@@ -49,7 +55,7 @@ public class ReportController {
      * @date 2023/5/20 22:12
      */
     @GetMapping("/commodity")
-    public ResponseResult<Object> selectReportCommodity(@RequestHeader String token) {
+    public ResponseResult<Map<String, List<CommodityMiniDTO>>> selectReportCommodity(@RequestHeader String token) {
         return reportService.selectReportCommodity(token);
     }
 
@@ -59,10 +65,10 @@ public class ReportController {
      * @date 2023/5/20 22:12
      */
     @PostMapping("/user")
-    public ResponseResult<Object> insertReportUser(@RequestHeader String token, @RequestBody ReportUserDTO reportUserDTO) {
+    public ResponseResult<NullData> insertReportUser(@RequestHeader String token, @RequestBody ReportUserDTO reportUserDTO) {
         String reason = reportUserDTO.getReason();
-        Integer UserId = reportUserDTO.getUserId();
-        return reportService.insertReportUser(token, UserId, reason);
+        Integer userId = reportUserDTO.getUserId();
+        return reportService.insertReportUser(token, userId, reason);
     }
 
     /**
@@ -71,7 +77,7 @@ public class ReportController {
      * @date 2023/5/20 22:12
      */
     @DeleteMapping("/user/{reportId}")
-    public ResponseResult<Object> deleteReportUser(@RequestHeader String token, @PathVariable Integer reportId) {
+    public ResponseResult<NullData> deleteReportUser(@RequestHeader String token, @PathVariable Integer reportId) {
         return reportService.deleteReportUser(token, reportId);
     }
 
@@ -81,7 +87,7 @@ public class ReportController {
      * @date 2023/5/20 22:12
      */
     @GetMapping("/user")
-    public ResponseResult<Object> selectReportUser(@RequestHeader String token) {
+    public ResponseResult<Map<String, List<UserMiniDTO>>> selectReportUser(@RequestHeader String token) {
         return reportService.selectReportUser(token);
     }
 

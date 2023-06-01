@@ -1,5 +1,6 @@
 package com.lin.controller;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.service.BalanceService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class BalanceController {
      * @date 2023/6/1 10:51
      */
     @PutMapping("/recharge")
-    public ResponseResult<Object> recharge(@RequestHeader String token, @RequestBody Map<String, Object> map) {
+    public ResponseResult<NullData> recharge(@RequestHeader String token, @RequestBody Map<String, Object> map) {
         Integer money = (Integer) map.get("money");
         return balanceService.recharge(token, money);
     }
@@ -35,7 +36,7 @@ public class BalanceController {
      * @date 2023/6/1 10:51
      */
     @PutMapping("/withdraw")
-    public ResponseResult<Object> withdraw(@RequestHeader String token, @RequestBody Map<String, Object> map) {
+    public ResponseResult<NullData> withdraw(@RequestHeader String token, @RequestBody Map<String, Object> map) {
         Integer money = (Integer) map.get("money");
         return balanceService.withdraw(token, money);
     }

@@ -1,10 +1,12 @@
 package com.lin.service;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.*;
 import com.lin.controller.DTO.user.LoginUserDTO;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -14,17 +16,17 @@ import java.util.concurrent.ExecutionException;
  */
 public interface BasicService {
 
-    ResponseResult login(LoginUserDTO loginUserDTO);
+    ResponseResult<Map<String, String>> login(LoginUserDTO loginUserDTO);
 
-    ResponseResult getCode(String phone, String type) throws ExecutionException, InterruptedException;
+    ResponseResult<NullData> getCode(String phone, String type) throws ExecutionException, InterruptedException;
 
-    ResponseResult register(RegisterDTO registerDTO);
+    ResponseResult<Map<String, String>> register(RegisterDTO registerDTO);
 
-    ResponseResult forgetpwd(ForgetpwdDTO forgetpwdDTO);
+    ResponseResult<NullData> forgetpwd(ForgetpwdDTO forgetpwdDTO);
 
     void contact(HttpServletResponse response);
 
-    ResponseResult codeLogin(CodeLoginDTO codeLoginDTO);
+    ResponseResult<Map<String, String>> codeLogin(CodeLoginDTO codeLoginDTO);
 
     String test();
 }

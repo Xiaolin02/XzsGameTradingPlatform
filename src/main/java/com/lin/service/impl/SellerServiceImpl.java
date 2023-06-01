@@ -1,10 +1,7 @@
 package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lin.common.CodeConstants;
-import com.lin.common.CommodityStatusConstants;
-import com.lin.common.OrderStatusConstants;
-import com.lin.common.ResponseResult;
+import com.lin.common.*;
 import com.lin.controller.DTO.ReleaseDTO;
 import com.lin.controller.VO.ViewOrderVO;
 import com.lin.controller.VO.ViewReleasedVO;
@@ -54,7 +51,7 @@ public class SellerServiceImpl implements SellerService {
     UserMapper userMapper;
 
     @Override
-    public ResponseResult release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
+    public ResponseResult<NullData> release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         int count = commodityMapper.selectCount(null).intValue();
@@ -78,12 +75,12 @@ public class SellerServiceImpl implements SellerService {
             String url = ossUtil.uploadfile(file, userId, "release");
             commodityMapper.insertPictureUrl(count + 1, url);
         }
-        return new ResponseResult(CodeConstants.CODE_SUCCESS, "发布成功");
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "发布成功");
 
     }
 
     @Override
-    public ResponseResult view(String token) {
+    public ResponseResult<ArrayList<ViewReleasedVO>> view(String token) {
 
 
         QueryWrapper<Commodity> wrapper = new QueryWrapper<>();
@@ -119,18 +116,18 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public ResponseResult newPrice(Integer commodityId, Integer newPrice, String token) {
+    public ResponseResult<NullData> newPrice(Integer commodityId, Integer newPrice, String token) {
 
         Commodity commodity = commodityMapper.selectById(commodityId);
         Commodity newCommodity = new Commodity(commodity);
         newCommodity.setPrice(newPrice);
         commodityMapper.updateById(newCommodity);
-        return new ResponseResult(CodeConstants.CODE_SUCCESS, "修改成功");
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "修改成功");
 
     }
 
     @Override
-    public ResponseResult viewOrder(String token) {
+    public ResponseResult<ArrayList<ViewOrderVO>> viewOrder(String token) {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
@@ -155,7 +152,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public ResponseResult delOrder(String token, String orderId) {
+    public ResponseResult<NullData> delOrder(String token, String orderId) {
 
         Order order = orderMapper.selectById(orderId);
         if (Objects.isNull(order)) {

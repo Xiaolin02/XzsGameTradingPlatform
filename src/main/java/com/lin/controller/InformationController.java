@@ -1,6 +1,8 @@
 package com.lin.controller;
 
+import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.user.UserCompleteDTO;
 import com.lin.service.InformationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PutMapping("/username/modify")
-    public ResponseResult<Object> usernameModify(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
+    public ResponseResult<NullData> usernameModify(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
         String newUsername = requestData.get("newUsername");
         return informationService.usernameModify(token, newUsername);
     }
@@ -39,7 +41,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PutMapping("/password/modify/byPassword")
-    public ResponseResult<Object> passwordModifyByPassword(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
+    public ResponseResult<NullData> passwordModifyByPassword(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
         String oldPassword = requestData.get("oldPassword");
         String newPassword = requestData.get("newPassword");
         return informationService.passwordModifyByPassword(token, oldPassword, newPassword);
@@ -51,7 +53,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PutMapping("/password/modify/byPhone")
-    public ResponseResult<Object> passwordModifyByPhone(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
+    public ResponseResult<NullData> passwordModifyByPhone(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
         String code = requestData.get("code");
         String newPassword = requestData.get("newPassword");
         return informationService.passwordModifyByPhone(token, code, newPassword);
@@ -63,7 +65,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @GetMapping("/password/modify/byPhone/getCode")
-    public ResponseResult<Object> passwordModifyByPhoneGetCode(@RequestHeader String token) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> passwordModifyByPhoneGetCode(@RequestHeader String token) throws ExecutionException, InterruptedException {
         return informationService.passwordModifyByPhoneGetCode(token);
     }
 
@@ -73,7 +75,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PutMapping("/phone/modify")
-    public ResponseResult<Object> phoneModify(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
+    public ResponseResult<NullData> phoneModify(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
         String newPhoneNumber = requestData.get("newPhoneNumber");
         String newPhoneCode = requestData.get("newPhoneCode");
         return informationService.phoneModify(token, newPhoneNumber, newPhoneCode);
@@ -85,7 +87,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PostMapping("/phone/modify/getCode")
-    public ResponseResult<Object> phoneModifyGetCode(@RequestHeader String token, @RequestBody Map<String, String> requestData) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> phoneModifyGetCode(@RequestHeader String token, @RequestBody Map<String, String> requestData) throws ExecutionException, InterruptedException {
         String newPhoneNumber = requestData.get("newPhoneNumber");
         return informationService.phoneModifyGetCode(token, newPhoneNumber);
     }
@@ -96,7 +98,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PostMapping("/picture/modify")
-    public ResponseResult<Object> modifyPicture(@RequestHeader String token, @RequestParam("file") MultipartFile file) {
+    public ResponseResult<NullData> modifyPicture(@RequestHeader String token, @RequestParam("file") MultipartFile file) {
         return informationService.modifyPicture(token, file);
     }
 
@@ -106,7 +108,7 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @GetMapping("/view")
-    public ResponseResult<Object> viewInformation(@RequestHeader String token) {
+    public ResponseResult<UserCompleteDTO> viewInformation(@RequestHeader String token) {
         return informationService.viewInformation(token);
     }
 }

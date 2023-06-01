@@ -98,6 +98,19 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
 
+        // 检查token的创建时间
+        long duration;
+        try {
+            duration = DateUtil.getDurationSecondsUntilNow(tokenCreateAt);
+        } catch (ParseException e) {
+            logger.error("服务端错误，token存储时间格式错误");
+            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token存储时间格式错误"));
+            return;
+        }
+        if (duration > RedisKeyConstants.TOKEN_MAX_DURATION_SECONDS) {
+            // token过期，重新生成token
+            response.setHeader("token", tokenUtil.getTokenByUserId(user.getUserId()));
+        }
         LoginUser loginUser = new LoginUser(user, menuMapper.selectPermsByUserId(user.getUserId()));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

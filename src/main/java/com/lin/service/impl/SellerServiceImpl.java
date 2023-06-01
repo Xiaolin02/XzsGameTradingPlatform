@@ -169,7 +169,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public ResponseResult deliverOrder(String token, String orderId) {
+    public ResponseResult<NullData> deliverOrder(String token, String orderId) {
 
         Order order = orderMapper.selectById(orderId);
         Commodity commodity = orderMapper.selectCommodityByOrderId(orderId);

@@ -45,8 +45,9 @@ public class BasicController {
     @PostMapping("/getCode")
     public ResponseResult getCode(@RequestBody GetCodeDTO getCodeDTO) throws ExecutionException, InterruptedException {
         if (!Objects.isNull(getCodeDTO.getPhone())) {
-            if (!Pattern.matches("^1[3-9]\\d{9}$", getCodeDTO.getPhone()))
+            if (!Pattern.matches("^1[3-9]\\d{9}$", getCodeDTO.getPhone())) {
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
+            }
         } else {
             return new ResponseResult(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
         }

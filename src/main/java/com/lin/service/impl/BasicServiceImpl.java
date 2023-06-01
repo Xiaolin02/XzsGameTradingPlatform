@@ -80,8 +80,9 @@ public class BasicServiceImpl implements BasicService {
         wrapper.eq("phone", phone);
         if (Objects.equals("register", type)) {
             User user = userMapper.selectOne(wrapper);
-            if (!Objects.isNull(user))
+            if (!Objects.isNull(user)) {
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "该手机号已经被注册");
+            }
         }
         String code = sendMsgUtil.sendMsg(phone);
         redisUtil.set(type + ":" + phone, code);
@@ -97,8 +98,9 @@ public class BasicServiceImpl implements BasicService {
             User newUser = new User();
             Integer randomUserId = Integer.parseInt(RandomUtil.getNineBitRandom());
             String randomUsername = RandomStringUtils.randomAlphanumeric(10);
-            if (randomUserId < 100000000)
+            if (randomUserId < 100000000) {
                 randomUserId += new Random().nextInt(9) + 1;
+            }
             newUser.setUserId(randomUserId);
             newUser.setUsername(randomUsername);
             newUser.setPhone(registerDTO.getPhone());

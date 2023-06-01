@@ -40,10 +40,11 @@ public class MessageServiceImpl implements MessageService {
     public ResponseResult pushMsgToOneUser(String token, Integer toId, String content) throws IOException {
 
         WebSocketServer.sendInfo(content, toId);
-        if (CheckMsgUtil.checkMsg(content))
+        if (CheckMsgUtil.checkMsg(content)) {
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "含有敏感信息");
-        else
+        } else {
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "无异常");
+        }
 
     }
 
@@ -75,10 +76,11 @@ public class MessageServiceImpl implements MessageService {
         message.setContent(toStringContent);
         message.setSendAt(DateUtil.getDateTime());
         messageMapper.insert(message);
-        if (CheckMsgUtil.checkMsg(content))
+        if (CheckMsgUtil.checkMsg(content)) {
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "含有敏感信息");
-        else
+        } else {
             return new ResponseResult(CodeConstants.CODE_SUCCESS, "无异常");
+        }
     }
 
 }

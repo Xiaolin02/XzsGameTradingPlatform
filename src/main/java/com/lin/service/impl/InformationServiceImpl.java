@@ -47,7 +47,7 @@ public class InformationServiceImpl implements InformationService {
      */
     @Override
     public ResponseResult<Object> usernameModify(String token, String newUsername) {
-        if (newUsername == null || newUsername.equals("")) {
+        if (newUsername == null || "".equals(newUsername)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新用户名不能为空");
         }
         Integer userId = tokenUtil.parseTokenToUserId(token);
@@ -72,10 +72,10 @@ public class InformationServiceImpl implements InformationService {
      */
     @Override
     public ResponseResult<Object> passwordModifyByPassword(String token, String oldPassword, String newPassword) {
-        if (oldPassword == null || oldPassword.equals("")) {
+        if (oldPassword == null || "".equals(oldPassword)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "原密码不能为空");
         }
-        if (newPassword == null || newPassword.equals("")) {
+        if (newPassword == null || "".equals(newPassword)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新密码不能为空");
         }
         if (oldPassword.equals(newPassword)) {
@@ -107,7 +107,7 @@ public class InformationServiceImpl implements InformationService {
      */
     @Override
     public ResponseResult<Object> passwordModifyByPhone(String token, String code, String newPassword) {
-        if (newPassword == null || newPassword.equals("")) {
+        if (newPassword == null || "".equals(newPassword)) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "新密码不能为空");
         }
         if (PasswordConstants.isPasswordValid(newPassword)) {

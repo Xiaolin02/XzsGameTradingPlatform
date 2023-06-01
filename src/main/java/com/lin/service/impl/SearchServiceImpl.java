@@ -86,7 +86,7 @@ public class SearchServiceImpl implements SearchService {
         // 审核条件
         commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_SELLING);
         // 描述条件
-        if (searchCommodityDTO.getKeyword() == null || searchCommodityDTO.getKeyword().equals("")) {
+        if (searchCommodityDTO.getKeyword() == null || "".equals(searchCommodityDTO.getKeyword())) {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "关键字为空");
         }
         commodityQueryWrapper.and(i -> i.like("title", searchCommodityDTO.getKeyword())

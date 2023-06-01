@@ -65,7 +65,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         // 检查token的未刷新时间
-        if (tokenFreshAt.equals("")) {
+        if ("".equals(tokenFreshAt)) {
             logger.error("服务端错误，redis未存储token刷新时间");
             WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis未存储token刷新时间"));
             return;
@@ -92,7 +92,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         // 检查token的持续有效时间
         String tokenCreateAt = tokenUtil.parseTokenToCreateAt(token);
-        if (tokenCreateAt == null || tokenCreateAt.equals("")) {
+        if (tokenCreateAt == null || "".equals(tokenCreateAt)) {
             logger.error("服务端错误，token未存储创建时间");
             WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token未存储创建时间"));
             return;

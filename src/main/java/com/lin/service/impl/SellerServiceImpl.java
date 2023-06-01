@@ -102,16 +102,13 @@ public class SellerServiceImpl implements SellerService {
             releasedVO.setPrice(commodity.getPrice());
             releasedVO.setAllowBargaining(commodity.getAllowBargaining());
             status = commodity.getStatus();
-            if (status == CommodityStatusConstants.STATUS_INSPECTING)
-                releasedVO.setStatus("审核中");
-            else if (status == CommodityStatusConstants.STATUS_SELLING)
-                releasedVO.setStatus("售卖中");
-            else if (status == CommodityStatusConstants.STATUS_SOLD)
-                releasedVO.setStatus("已售出");
-            else if (status == CommodityStatusConstants.STATUS_CANCEL)
-                releasedVO.setStatus("已下架");
-            else
-                releasedVO.setStatus("审核失败");
+            switch (status) {
+                case CommodityStatusConstants.STATUS_INSPECTING -> releasedVO.setStatus("审核中");
+                case CommodityStatusConstants.STATUS_SELLING -> releasedVO.setStatus("售卖中");
+                case CommodityStatusConstants.STATUS_SOLD -> releasedVO.setStatus("已售出");
+                case CommodityStatusConstants.STATUS_CANCEL -> releasedVO.setStatus("已下架");
+                case CommodityStatusConstants.STATUS_FAILED -> releasedVO.setStatus("审核失败");
+            }
             releasedVOS.add(releasedVO);
 
         }
@@ -128,7 +125,7 @@ public class SellerServiceImpl implements SellerService {
         Commodity newCommodity = new Commodity(commodity);
         newCommodity.setPrice(newPrice);
         commodityMapper.updateById(newCommodity);
-        return new ResponseResult(CodeConstants.CODE_SUCCESS,"修改成功");
+        return new ResponseResult(CodeConstants.CODE_SUCCESS, "修改成功");
 
     }
 
@@ -137,7 +134,7 @@ public class SellerServiceImpl implements SellerService {
 
         Integer userId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<Order> wrapper = new QueryWrapper<>();
-        wrapper.eq("seller_id",userId);
+        wrapper.eq("seller_id", userId);
         List<Order> orderList = orderMapper.selectList(wrapper);
         ArrayList<ViewOrderVO> orderVOList = new ArrayList<>();
         for (Order order : orderList) {
@@ -153,7 +150,7 @@ public class SellerServiceImpl implements SellerService {
 
         }
 
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS,orderVOList);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, orderVOList);
 
     }
 
@@ -161,7 +158,7 @@ public class SellerServiceImpl implements SellerService {
     public ResponseResult delOrder(String token, String orderId) {
 
         Order order = orderMapper.selectById(orderId);
-        if(Objects.isNull(order)) {
+        if (Objects.isNull(order)) {
             return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "订单不存在");
         } else {
             order.setStatus(OrderStatusConstants.STATUS_SELLER_CANCEL);

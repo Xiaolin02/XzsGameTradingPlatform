@@ -104,7 +104,7 @@ public class BasicServiceImpl implements BasicService {
             newUser.setUserId(randomUserId);
             newUser.setUsername(randomUsername);
             newUser.setPhone(registerDTO.getPhone());
-            newUser.setPassword(new BCryptPasswordEncoder().encode("123456"));
+            newUser.setPassword(PasswordEncodingUtil.encoding("123456"));
             newUser.setBalance(0);
             userMapper.insert(newUser);
             HashMap<String, String> map = new HashMap<>();

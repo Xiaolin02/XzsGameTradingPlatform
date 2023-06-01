@@ -74,5 +74,9 @@ public class SellerController {
         return sellerService.delOrder(token, orderId);
     }
 
+    @PostMapping("/order/deliver/{orderId}")
+    public ResponseResult deliverOrder(@RequestHeader String token, @PathVariable String orderId) {
+        return sellerService.deliverOrder(token, orderId);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.lin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.lin.pojo.Commodity;
 import com.lin.pojo.Order;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,5 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface OrderMapper extends BaseMapper<Order> {
 
+    Commodity selectCommodityByOrderId(String orderId);
 
 }

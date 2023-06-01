@@ -50,6 +50,9 @@ public class SellerServiceImpl implements SellerService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    MessageServiceImpl messageService;
+
     @Override
     public ResponseResult<NullData> release(String token, ReleaseDTO releaseDTO, MultipartFile[] files) {
 
@@ -162,6 +165,21 @@ public class SellerServiceImpl implements SellerService {
             orderMapper.updateById(order);
             return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "取消成功");
         }
+
+    }
+
+    @Override
+    public ResponseResult deliverOrder(String token, String orderId) {
+
+        Order order = orderMapper.selectById(orderId);
+        Commodity commodity = orderMapper.selectCommodityByOrderId(orderId);
+        Account account = accountMapper.selectById(commodity.getCommodityId());
+        String content = "您购买的 \"" + commodity.getTitle() + "\" 买家已发货\n账号:" +
+                account.getAccountNumber() + "\n密码:" + account.getAccountPassword();
+        messageService.pushSystemMsgToOneUser(null, order.getBuyerId(), content, "您购买的商品已发货!");
+        order.setStatus(OrderStatusConstants.STATUS_COMPLETED);
+        orderMapper.updateById(order);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "发货成功,刷新聊天列表查看");
 
     }
 

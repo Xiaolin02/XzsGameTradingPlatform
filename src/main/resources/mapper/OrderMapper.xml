@@ -2,4 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lin.mapper.OrderMapper">
 
+    <select id="selectCommodityByOrderId" resultType="com.lin.pojo.Commodity">
+        select c.commodity_id, release_at, title, description, c.price, c.seller_id, game, allow_bargaining, c.status
+        from `order` o
+        left join commodity c on c.commodity_id = o.commodity_id
+        where
+            o.id = #{orderId}
+    </select>
+
 </mapper>

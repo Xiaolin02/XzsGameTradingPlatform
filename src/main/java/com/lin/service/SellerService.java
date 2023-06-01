@@ -25,4 +25,6 @@ public interface SellerService {
     ResponseResult<ArrayList<ViewOrderVO>> viewOrder(String token);
 
     ResponseResult<NullData> delOrder(String token, String orderId);
+
+    ResponseResult deliverOrder(String token, String orderId);
 }

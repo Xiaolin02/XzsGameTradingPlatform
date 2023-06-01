@@ -5,9 +5,7 @@ import com.lin.controller.DTO.user.UserSimpleDTO;
 import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.ReportCommodity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @Author czh

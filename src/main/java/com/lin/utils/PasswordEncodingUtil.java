@@ -1,7 +1,6 @@
 package com.lin.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
 /**
  * @author 林炳昌

@@ -1,7 +1,5 @@
 package com.lin.common;
 
-import java.util.Objects;
-
 /**
  * @Author czh
  * @desc 商品状态常量

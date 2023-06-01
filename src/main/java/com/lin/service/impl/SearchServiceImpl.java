@@ -17,12 +17,10 @@ import com.lin.mapper.UserMapper;
 import com.lin.pojo.Commodity;
 import com.lin.pojo.User;
 import com.lin.service.SearchService;
-import com.lin.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

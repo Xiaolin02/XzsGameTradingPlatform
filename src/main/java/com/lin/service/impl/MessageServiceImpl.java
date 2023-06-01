@@ -1,7 +1,6 @@
 package com.lin.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.WebSocketServer;
@@ -13,7 +12,6 @@ import com.lin.service.MessageService;
 import com.lin.utils.CheckMsgUtil;
 import com.lin.utils.DateUtil;
 import com.lin.utils.TokenUtil;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

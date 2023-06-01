@@ -96,7 +96,7 @@ public class BasicServiceImpl implements BasicService {
             return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "验证码错误");
         } else {
             User newUser = new User();
-            Integer randomUserId = Integer.parseInt(RandomUtil.getNineBitRandom());
+            int randomUserId = Integer.parseInt(RandomUtil.getNineBitRandom());
             String randomUsername = RandomStringUtils.randomAlphanumeric(10);
             if (randomUserId < 100000000) {
                 randomUserId += new Random().nextInt(9) + 1;

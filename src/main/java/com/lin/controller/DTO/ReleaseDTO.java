@@ -2,7 +2,6 @@ package com.lin.controller.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author 林炳昌

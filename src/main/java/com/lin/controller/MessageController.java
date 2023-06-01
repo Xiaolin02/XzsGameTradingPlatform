@@ -5,6 +5,7 @@ import com.lin.controller.DTO.MessageDTO;
 import com.lin.service.impl.MessageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -38,6 +39,7 @@ public class MessageController {
      * @desc 向某用户推送系统消息
      * @date 2023/4/22 11:41
      */
+    @PreAuthorize("hasRole('ROLE_MANGER')")
     @PostMapping("/system/push/{toId}")
     public ResponseResult pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody MessageDTO messageDTO) {
 

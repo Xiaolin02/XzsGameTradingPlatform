@@ -7,6 +7,7 @@ import com.lin.service.ManagerService;
 import com.lin.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequestMapping("/manager")
+@PreAuthorize("hasRole('ROLE_MANGER')")
 public class ManagerController {
     @Autowired
     ManagerService managerService;

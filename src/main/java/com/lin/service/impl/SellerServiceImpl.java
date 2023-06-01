@@ -3,6 +3,7 @@ package com.lin.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.CommodityStatusConstants;
+import com.lin.common.OrderStatusConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReleaseDTO;
 import com.lin.controller.VO.ViewOrderVO;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 林炳昌
@@ -152,6 +154,20 @@ public class SellerServiceImpl implements SellerService {
         }
 
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS,orderVOList);
+
+    }
+
+    @Override
+    public ResponseResult delOrder(String token, String orderId) {
+
+        Order order = orderMapper.selectById(orderId);
+        if(Objects.isNull(order)) {
+            return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "订单不存在");
+        } else {
+            order.setStatus(OrderStatusConstants.STATUS_SELLER_CANCEL);
+            orderMapper.updateById(order);
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "取消成功");
+        }
 
     }
 

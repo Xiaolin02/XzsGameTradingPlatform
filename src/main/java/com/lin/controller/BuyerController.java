@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2023年04月20日 21:53
  */
 @RestController
+@RequestMapping("/buyer")
 public class BuyerController {
 
     @Autowired

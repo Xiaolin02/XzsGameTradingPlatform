@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2023年05月07日 16:26
  */
 @RestController
+@RequestMapping("/seller")
 public class SellerController {
 
 
@@ -54,8 +55,19 @@ public class SellerController {
      * @desc 查看订单
      * @date 2023/5/28 21:08
      */
-    @GetMapping("/seller/order/view")
+    @GetMapping("/order/view")
     public ResponseResult viewOrder(@RequestHeader String token) {
         return sellerService.viewOrder(token);
     }
+
+    /**
+     * @desc 取消订单
+     * @date 2023/6/1 14:49
+     */
+    @PostMapping("/order/del/{orderId}")
+    public ResponseResult delOrder(@RequestHeader String token, @PathVariable String orderId) {
+        return sellerService.delOrder(token, orderId);
+    }
+
+
 }

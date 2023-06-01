@@ -18,4 +18,6 @@ public interface SellerService {
     ResponseResult newPrice(Integer commodityId, Integer newPrice, String token);
 
     ResponseResult viewOrder(String token);
+
+    ResponseResult delOrder(String token, String orderId);
 }

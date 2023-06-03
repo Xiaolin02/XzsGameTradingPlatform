@@ -55,6 +55,14 @@ public class TokenUtil {
     }
 
     /**
+     * @desc 删除token
+     * @date 2023/6/3 19:28
+     */
+    public void disableToken(String token) {
+        redisUtil.set(RedisKeyConstants.TOKEN_PREFIX + token, DateUtil.getDateTime(), 1);
+    }
+
+    /**
      * @desc 通过token获得createAt
      * @date 2023/2/31 10:55
      */

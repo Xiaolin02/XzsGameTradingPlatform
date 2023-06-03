@@ -109,8 +109,12 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
         if (duration > RedisKeyConstants.TOKEN_MAX_DURATION_SECONDS) {
             // token过期，重新生成token
+            tokenUtil.disableToken(token);
             response.setHeader("token", tokenUtil.getTokenByUserId(user.getUserId()));
         }
+        // 刷新token
+        tokenUtil.freshToken(token);
+
         LoginUser loginUser = new LoginUser(user, menuMapper.selectPermsByUserId(user.getUserId()));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);

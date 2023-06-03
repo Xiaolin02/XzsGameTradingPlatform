@@ -51,7 +51,7 @@ public class BasicController {
                 return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号格式错误");
             }
         } else {
-            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_EMPTY, "手机号不得为空");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "手机号不得为空");
         }
         return basicService.getCode(getCodeDTO.getPhone(), getCodeDTO.getType());
     }

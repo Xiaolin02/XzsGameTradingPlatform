@@ -44,7 +44,7 @@ public class BalanceServiceImpl implements BalanceService {
         Integer userId = tokenUtil.parseTokenToUserId(token);
         User user = userMapper.selectById(userId);
         if (user.getBalance() < money) {
-            return new ResponseResult<>(CodeConstants.CODE_INSUFFICIENT_BALANCE, "余额不足");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "余额不足");
         }
         user.setBalance(user.getBalance() - money);
         userMapper.updateById(user);

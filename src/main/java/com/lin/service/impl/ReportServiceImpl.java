@@ -69,7 +69,7 @@ public class ReportServiceImpl implements ReportService {
         reportCommodityQueryWrapper.eq("report_id", reportId);
         reportCommodityQueryWrapper.eq("reporter_id", reporterId);
         if (reportCommodityMapper.delete(reportCommodityQueryWrapper) == 0) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "找不到这个举报记录，或请求删除者和举报记录举报者不匹配");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "找不到这个举报记录，或请求删除者和举报记录举报者不匹配");
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功删除举报记录");
     }
@@ -87,8 +87,8 @@ public class ReportServiceImpl implements ReportService {
         List<ReportCommodity> reportCommodityList = reportCommodityMapper.selectList(reportCommodityQueryWrapper);
         List<CommodityMiniDTO> commodityMiniDTOList = new ArrayList<>();
         for (ReportCommodity reportCommodity : reportCommodityList) {
-            commodityMiniDTOList.add(new CommodityMiniDTO(
-                    commodityMapper.selectById(reportCommodity.getCommodityId())));
+            Integer commodityId = reportCommodity.getCommodityId();
+            commodityMiniDTOList.add(commodityId == null ? null : new CommodityMiniDTO(commodityMapper.selectById(commodityId)));
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commodityMiniDTOList));
     }
@@ -122,7 +122,7 @@ public class ReportServiceImpl implements ReportService {
         reportUserQueryWrapper.eq("report_id", reportId);
         reportUserQueryWrapper.eq("reporter_id", userId);
         if (reportUserMapper.delete(reportUserQueryWrapper) == 0) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "找不到这个举报记录，或请求删除者和举报记录举报者不匹配");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "找不到这个举报记录，或请求删除者和举报记录举报者不匹配");
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功删除举报记录");
     }
@@ -140,8 +140,8 @@ public class ReportServiceImpl implements ReportService {
         List<ReportUser> reportUserList = reportUserMapper.selectList(reportUserQueryWrapper);
         List<UserMiniDTO> userMiniDTOList = new ArrayList<>();
         for (ReportUser reportUser : reportUserList) {
-            userMiniDTOList.add(new UserMiniDTO(
-                    userMapper.selectById(reportUser.getUserId())));
+            Integer userId = reportUser.getUserId();
+            userMiniDTOList.add(userId == null ? null : new UserMiniDTO(userMapper.selectById(userId)));
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("userList", userMiniDTOList));
     }

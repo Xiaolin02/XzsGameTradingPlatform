@@ -38,12 +38,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public ResponseResult<NullData> pushMsgToOneUser(String token, Integer toId, String content) throws IOException {
 
-        WebSocketServer.sendInfo(content, toId);
         if (CheckMsgUtil.checkMsg(content)) {
-            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "含有敏感信息");
-        } else {
-            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "无异常");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "含有敏感信息");
         }
+        WebSocketServer.sendInfo(content, toId);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "无异常");
 
     }
 
@@ -58,12 +57,15 @@ public class MessageServiceImpl implements MessageService {
         message.setContent(content);
         message.setSendAt(DateUtil.getDateTime());
         messageMapper.insert(message);
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS,"成功");
     }
 
     @Override
     public ResponseResult<NullData> pushMsg(String token, Integer toId, String content) throws IOException {
         JSONObject jsonObject = JSONObject.parseObject(content);
+        if (CheckMsgUtil.checkMsg(content)) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "含有敏感信息");
+        }
         String toStringContent = jsonObject.get("content").toString();
         User fromUser = tokenUtil.parseTokenToUser(token);
         User toUser = userMapper.selectById(toId);
@@ -73,11 +75,7 @@ public class MessageServiceImpl implements MessageService {
         message.setContent(toStringContent);
         message.setSendAt(DateUtil.getDateTime());
         messageMapper.insert(message);
-        if (CheckMsgUtil.checkMsg(content)) {
-            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "含有敏感信息");
-        } else {
-            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "无异常");
-        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "无异常");
     }
 
 }

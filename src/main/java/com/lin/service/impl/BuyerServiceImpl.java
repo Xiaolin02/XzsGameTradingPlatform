@@ -117,7 +117,7 @@ public class BuyerServiceImpl implements BuyerService {
         User user = tokenUtil.parseTokenToUser(token);
         Order order = orderMapper.selectById(orderId);
         if (user.getBalance() < order.getPrice()) {
-            return new ResponseResult<>(CodeConstants.CODE_INSUFFICIENT_BALANCE, "用户余额不足");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "用户余额不足");
         } else {
             user.setBalance(user.getBalance() - order.getPrice());
             order.setStatus(OrderStatusConstants.STATUS_PAID);

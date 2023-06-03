@@ -121,6 +121,9 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public ResponseResult<NullData> newPrice(Integer commodityId, Integer newPrice, String token) {
 
+        if (newPrice < 0) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "价格小于等于0");
+        }
         Commodity commodity = commodityMapper.selectById(commodityId);
         Commodity newCommodity = new Commodity(commodity);
         newCommodity.setPrice(newPrice);

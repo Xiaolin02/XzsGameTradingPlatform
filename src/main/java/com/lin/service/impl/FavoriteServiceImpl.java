@@ -49,7 +49,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteQueryWrapper.eq("commodity_id", commodityId);
         favoriteQueryWrapper.eq("user_id", userId);
         if (favoriteMapper.selectOne(favoriteQueryWrapper) != null) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "重复添加收藏记录");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "重复添加收藏记录");
         }
         Favorite favorite = new Favorite();
         favorite.setCommodityId(commodityId);
@@ -69,7 +69,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteQueryWrapper.eq("commodity_id", commodityId);
         favoriteQueryWrapper.eq("user_id", tokenUtil.parseTokenToUserId(token));
         if (favoriteMapper.delete(favoriteQueryWrapper) == 0) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "不存在这个收藏记录");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "不存在这个收藏记录");
         } else {
             return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "成功删除收藏记录");
         }
@@ -89,7 +89,8 @@ public class FavoriteServiceImpl implements FavoriteService {
         for (Favorite favorite : favoriteList) {
             QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
             commodityQueryWrapper.eq("commodity_id", favorite.getCommodityId());
-            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodityMapper.selectOne(commodityQueryWrapper), userMapper));
+            Commodity commodity = commodityMapper.selectOne(commodityQueryWrapper);
+            commoditySimpleDTOList.add(commodity == null ? null : new CommoditySimpleDTO(commodity, userMapper));
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
     }

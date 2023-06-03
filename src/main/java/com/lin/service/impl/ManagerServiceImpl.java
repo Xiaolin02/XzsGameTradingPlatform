@@ -15,6 +15,7 @@ import com.lin.mapper.*;
 import com.lin.pojo.Commodity;
 import com.lin.pojo.ReportCommodity;
 import com.lin.pojo.ReportUser;
+import com.lin.pojo.User;
 import com.lin.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResponseResult<NullData> userReportDone(Integer reportId) {
         if (reportUserMapper.deleteById(reportId) == 0) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "试图完成不存在的举报记录");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "试图完成不存在的举报记录");
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "完成举报处理成功");
     }
@@ -63,7 +64,10 @@ public class ManagerServiceImpl implements ManagerService {
         List<ReportUser> records = reportUserMapper.selectPage(pageDTO.toPage(), reportUserQueryWrapper).getRecords();
         List<ReportUserViewDTO> reportUserViewDTOList = new ArrayList<>();
         for (ReportUser record : records) {
-            reportUserViewDTOList.add(new ReportUserViewDTO(record, userMapper));
+            try {
+                reportUserViewDTOList.add(new ReportUserViewDTO(record, userMapper));
+            } catch (NullPointerException ignored) {
+            }
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("reportUserList", reportUserViewDTOList));
     }
@@ -74,7 +78,11 @@ public class ManagerServiceImpl implements ManagerService {
      */
     @Override
     public ResponseResult<UserCompleteDTO> userViewOne(Integer userId) {
-        UserCompleteDTO userCompleteDTO = new UserCompleteDTO(userMapper.selectById(userId), userMapper);
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "用户不存在");
+        }
+        UserCompleteDTO userCompleteDTO = new UserCompleteDTO(user, userMapper);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userCompleteDTO);
     }
 
@@ -85,6 +93,9 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResponseResult<NullData> commodityInspectAllow(Integer commodityId) {
         Commodity commodity = commodityMapper.selectById(commodityId);
+        if (commodity == null) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "商品不存在");
+        }
         commodity.setStatus(CommodityStatusConstants.STATUS_SELLING);
         commodityMapper.updateById(commodity);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "审核通过成功");
@@ -97,6 +108,9 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResponseResult<NullData> commodityInspectReject(Integer commodityId) {
         Commodity commodity = commodityMapper.selectById(commodityId);
+        if (commodity == null) {
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "商品不存在");
+        }
         commodity.setStatus(CommodityStatusConstants.STATUS_FAILED);
         commodityMapper.updateById(commodity);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "审核下架成功");
@@ -113,7 +127,10 @@ public class ManagerServiceImpl implements ManagerService {
         List<Commodity> records = commodityMapper.selectPage(pageDTO.toPage(), commodityQueryWrapper).getRecords();
         List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Commodity record : records) {
-            commoditySimpleDTOList.add(new CommoditySimpleDTO(record, userMapper));
+            try {
+                commoditySimpleDTOList.add(new CommoditySimpleDTO(record, userMapper));
+            } catch (NullPointerException ignored) {
+            }
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
     }
@@ -125,7 +142,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public ResponseResult<NullData> commodityReportDone(Integer reportId) {
         if (reportCommodityMapper.deleteById(reportId) == 0) {
-            return new ResponseResult<>(CodeConstants.CODE_CONFLICT, "不存在这个举报记录");
+            return new ResponseResult<>(CodeConstants.CODE_PARAMETER_ERROR, "不存在这个举报记录");
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "完成举报处理成功");
     }
@@ -140,7 +157,10 @@ public class ManagerServiceImpl implements ManagerService {
         List<ReportCommodity> records = reportCommodityMapper.selectPage(pageDTO.toPage(), reportCommodityQueryWrapper).getRecords();
         List<ReportCommodityViewDTO> reportCommodityViewDTOList = new ArrayList<>();
         for (ReportCommodity record : records) {
-            reportCommodityViewDTOList.add(new ReportCommodityViewDTO(record, userMapper, commodityMapper));
+            try {
+                reportCommodityViewDTOList.add(new ReportCommodityViewDTO(record, userMapper, commodityMapper));
+            } catch (NullPointerException ignored) {
+            }
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("reportCommodityList", reportCommodityViewDTOList));
     }

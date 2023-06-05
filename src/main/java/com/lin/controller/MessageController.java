@@ -3,6 +3,7 @@ package com.lin.controller;
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.MessageDTO;
+import com.lin.controller.VO.GetSystemMessageVO;
 import com.lin.service.impl.MessageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author 林炳昌
@@ -56,6 +58,28 @@ public class MessageController {
     public ResponseResult<NullData> pushMsg(@RequestHeader String token, @PathVariable Integer toId, @RequestBody String content) throws IOException {
 
         return messageService.pushMsg(token, toId, content);
+
+    }
+
+    /**
+     * @desc 获取和某用户的消息
+     * @date 2023/6/5 21:47
+     */
+    @GetMapping("/get/{userId}")
+    public ResponseResult<List<String>> getMessage(@RequestHeader String token, @PathVariable(name = "userId") Integer toId) {
+
+        return messageService.getMessage(token, toId);
+
+    }
+
+    /**
+     * @desc 获取系统消息
+     * @date 2023/6/5 21:48
+     */
+    @GetMapping("/system/get")
+    public ResponseResult<List<GetSystemMessageVO>> getSystemMessage(@RequestHeader String token) {
+
+        return messageService.getSystemMessage(token);
 
     }
 

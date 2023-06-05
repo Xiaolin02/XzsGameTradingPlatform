@@ -23,4 +23,6 @@ public interface BuyerService {
     ResponseResult<NullData> delOrder(String token, Integer orderId);
 
     ResponseResult<NullData> payOrder(String token, Integer orderId);
+
+    ResponseResult<NullData> confirmOrder(String token, String orderId);
 }

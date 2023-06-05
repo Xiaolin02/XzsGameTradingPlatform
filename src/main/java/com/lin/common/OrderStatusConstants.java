@@ -9,9 +9,10 @@ public interface OrderStatusConstants {
 
     int STATUS_UNPAID = 0;          //未支付,提交订单一瞬间的默认状态
     int STATUS_PAID = 1;            //已支付
-    int STATUS_BUYER_CANCEL = 2;    //买家取消订单
-    int STATUS_SELLER_CANCEL = 3;   //卖家取消订单
-    int STATUS_ABNORMAL = 4;        //异常订单(系统或管理员发现异常后冻结订单)
-    int STATUS_COMPLETED = 5;       //已完成订单
+    int STATUS_DELIVER = 2;         //已发货
+    int STATUS_BUYER_CANCEL = 3;    //买家取消订单
+    int STATUS_SELLER_CANCEL = 4;   //卖家取消订单
+    int STATUS_ABNORMAL = 5;        //异常订单(系统或管理员发现异常后冻结订单)
+    int STATUS_COMPLETED = 6;       //已完成订单
 
 }

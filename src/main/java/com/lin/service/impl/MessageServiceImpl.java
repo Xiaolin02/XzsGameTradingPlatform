@@ -1,9 +1,11 @@
 package com.lin.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
+import com.lin.controller.VO.GetSystemMessageVO;
 import com.lin.controller.WebSocketServer;
 import com.lin.mapper.MessageMapper;
 import com.lin.mapper.UserMapper;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 林炳昌
@@ -76,6 +80,39 @@ public class MessageServiceImpl implements MessageService {
         message.setSendAt(DateUtil.getDateTime());
         messageMapper.insert(message);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "无异常");
+    }
+
+    @Override
+    public ResponseResult<List<String>> getMessage(String token, Integer toId) {
+
+        String fromUser = tokenUtil.parseTokenToUser(token).getUsername();
+        String toUser = userMapper.selectById(toId).getUsername();
+        QueryWrapper<Message> wrapper = new QueryWrapper<>();
+        wrapper.eq("from_user", fromUser);
+        wrapper.eq("to_user", toUser);
+        List<Message> messageList = messageMapper.selectList(wrapper);
+        ArrayList<String> messages = new ArrayList<>();
+        for (Message message : messageList) {
+            messages.add(message.getContent());
+        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, messages);
+
+    }
+
+    @Override
+    public ResponseResult<List<GetSystemMessageVO>> getSystemMessage(String token) {
+
+        String toUser = tokenUtil.parseTokenToUser(token).getUsername();
+        QueryWrapper<Message> wrapper = new QueryWrapper<>();
+        wrapper.eq("to_user", toUser);
+        wrapper.eq("from_user", "SYSTEM");
+        List<Message> messages = messageMapper.selectList(wrapper);
+        ArrayList<GetSystemMessageVO> systemMessages = new ArrayList<>();
+        for (Message message : messages) {
+            systemMessages.add(new GetSystemMessageVO(message.getTitle(), message.getContent()));
+        }
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, systemMessages);
+
     }
 
 }

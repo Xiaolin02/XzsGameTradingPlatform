@@ -42,7 +42,7 @@ public class MessageController {
      * @desc 向某用户推送系统消息
      * @date 2023/4/22 11:41
      */
-    @PreAuthorize("hasRole('ROLE_MANGER')")
+    @PreAuthorize("hasRole('ROLE_MANAGER')")
     @PostMapping("/system/push/{toId}")
     public ResponseResult<NullData> pushSystemMsgToOneUser(@RequestHeader String token, @PathVariable Integer toId, @RequestBody MessageDTO messageDTO) {
 

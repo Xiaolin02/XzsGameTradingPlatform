@@ -28,7 +28,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/manager")
-@PreAuthorize("hasRole('ROLE_MANGER')")
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 public class ManagerController {
     @Autowired
     ManagerService managerService;

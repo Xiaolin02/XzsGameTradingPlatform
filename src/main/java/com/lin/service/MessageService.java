@@ -2,8 +2,10 @@ package com.lin.service;
 
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
+import com.lin.controller.VO.GetSystemMessageVO;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author 林炳昌
@@ -18,4 +20,7 @@ public interface MessageService {
 
     ResponseResult<NullData> pushMsg(String token, Integer toId, String content) throws IOException;
 
+    ResponseResult<List<String>> getMessage(String token, Integer toId);
+
+    ResponseResult<List<GetSystemMessageVO>> getSystemMessage(String token);
 }

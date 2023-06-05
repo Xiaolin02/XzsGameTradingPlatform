@@ -67,4 +67,13 @@ public class BuyerController {
         return buyerService.payOrder(token, orderId);
     }
 
+    /**
+     * @desc 确认收货
+     * @date 2023/6/5 21:43
+     */
+    @PostMapping("/order/confirm/{orderId}")
+    public ResponseResult<NullData> confirmOrder(@RequestHeader String token, @PathVariable String orderId) {
+        return buyerService.confirmOrder(token, orderId);
+    }
+
 }

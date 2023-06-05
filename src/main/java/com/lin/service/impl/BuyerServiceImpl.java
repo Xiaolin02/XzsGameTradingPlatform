@@ -135,5 +135,24 @@ public class BuyerServiceImpl implements BuyerService {
 
     }
 
+    @Override
+    public ResponseResult<NullData> confirmOrder(String token, String orderId) {
+
+        Order order = orderMapper.selectById(orderId);
+        Commodity commodity = commodityMapper.selectById(order.getCommodityId());
+        User seller = userMapper.selectById(order.getSellerId());
+        messageService.pushSystemMsgToOneUser(null, order.getSellerId(),
+                "您出售的 \"" + commodity.getTitle() + "\" 买家已确认收货,金额已进入您的账户中",
+                "买家已确认收货!");
+        order.setStatus(OrderStatusConstants.STATUS_COMPLETED);
+        commodity.setStatus(CommodityStatusConstants.STATUS_SOLD);
+        seller.setBalance(seller.getBalance() + order.getPrice());
+        orderMapper.updateById(order);
+        commodityMapper.updateById(commodity);
+        userMapper.updateById(seller);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS);
+
+    }
+
 
 }

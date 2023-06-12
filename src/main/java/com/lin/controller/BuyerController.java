@@ -76,4 +76,9 @@ public class BuyerController {
         return buyerService.confirmOrder(token, orderId);
     }
 
+    @PostMapping("/order/refuse/{orderId}")
+    public ResponseResult<NullData> refuseOrder(@RequestHeader String token, @PathVariable String orderId) {
+        return buyerService.refuseOrder(token, orderId);
+    }
+
 }

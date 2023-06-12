@@ -22,5 +22,7 @@ public class User {
     private String phone;
     private Integer balance;
     private String registerAt;
+    private Integer transactionsNumber;
+    private Integer successNumber;
 
 }

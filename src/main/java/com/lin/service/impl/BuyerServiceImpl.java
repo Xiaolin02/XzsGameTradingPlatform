@@ -142,16 +142,38 @@ public class BuyerServiceImpl implements BuyerService {
         Commodity commodity = commodityMapper.selectById(order.getCommodityId());
         User seller = userMapper.selectById(order.getSellerId());
         messageService.pushSystemMsgToOneUser(null, order.getSellerId(),
-                "您出售的 \"" + commodity.getTitle() + "\" 买家已确认收货,金额已进入您的账户中",
+                "您出售的 \"" + commodity.getTitle() + "\" 买家已确认收货,金额已进入您的账户中。",
                 "买家已确认收货!");
         order.setStatus(OrderStatusConstants.STATUS_COMPLETED);
         commodity.setStatus(CommodityStatusConstants.STATUS_SOLD);
         seller.setBalance(seller.getBalance() + order.getPrice());
+        seller.setTransactionsNumber(seller.getTransactionsNumber() + 1);
+        seller.setSuccessNumber(seller.getSuccessNumber() + 1);
         orderMapper.updateById(order);
         commodityMapper.updateById(commodity);
         userMapper.updateById(seller);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS);
 
+    }
+
+    @Override
+    public ResponseResult<NullData> refuseOrder(String token, String orderId) {
+        User buyer = tokenUtil.parseTokenToUser(token);
+        Order order = orderMapper.selectById(orderId);
+        Commodity commodity = commodityMapper.selectById(order.getCommodityId());
+        User seller = userMapper.selectById(order.getSellerId());
+        messageService.pushSystemMsgToOneUser(null, order.getSellerId(),
+                "您出售的 \"" + commodity.getTitle() + "\" 买家拒绝收货,订单已取消,商品重新上架。",
+                "买家拒绝收货!");
+        order.setStatus(OrderStatusConstants.STATUS_BUYER_REFUSE);
+        commodity.setStatus(CommodityStatusConstants.STATUS_SELLING);
+        buyer.setBalance(buyer.getBalance() + order.getPrice());
+        seller.setTransactionsNumber(seller.getTransactionsNumber() + 1);
+        orderMapper.updateById(order);
+        commodityMapper.updateById(commodity);
+        userMapper.updateById(seller);
+        userMapper.updateById(buyer);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS);
     }
 
 

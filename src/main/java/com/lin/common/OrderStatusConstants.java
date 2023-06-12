@@ -13,6 +13,7 @@ public interface OrderStatusConstants {
     int STATUS_BUYER_CANCEL = 3;    //买家取消订单
     int STATUS_SELLER_CANCEL = 4;   //卖家取消订单
     int STATUS_ABNORMAL = 5;        //异常订单(系统或管理员发现异常后冻结订单)
-    int STATUS_COMPLETED = 6;       //已完成订单
+    int STATUS_BUYER_REFUSE = 6;    //买家拒绝收货
+    int STATUS_COMPLETED = 7;       //已完成订单
 
 }

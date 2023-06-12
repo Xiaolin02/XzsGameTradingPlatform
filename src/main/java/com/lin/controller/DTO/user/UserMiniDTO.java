@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.DecimalFormat;
+
 /**
  * @Author czh
  * @desc 用户信息模型（迷你）（只有名字）用于最少的信息查看，如商品只显示发布者名/关注的人
@@ -16,10 +18,16 @@ import lombok.NoArgsConstructor;
 public class UserMiniDTO {
     private Integer userId;
     private String username;
+    private Integer transactionsNumber;
+    private Integer successNumber;
+    private double successRate;
 
     public UserMiniDTO(User user) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
+        this.transactionsNumber = user.getTransactionsNumber();
+        this.successNumber = user.getSuccessNumber();
+        this.successRate = Double.parseDouble(new DecimalFormat("0.00").format((double)successNumber / transactionsNumber));
     }
 
 }

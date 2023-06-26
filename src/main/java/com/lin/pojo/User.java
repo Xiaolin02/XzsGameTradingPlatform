@@ -1,5 +1,6 @@
 package com.lin.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,5 +25,7 @@ public class User {
     private String registerAt;
     private Integer transactionsNumber;
     private Integer successNumber;
+    @TableField(value = "`status`")
+    private Integer status;
 
 }

@@ -59,6 +59,26 @@ public class RedisUtil {
     }
 
     /**
+     * Integer存入值
+     * 默认过期时间为2小时
+     *
+     * @param key
+     */
+    public void set(String key, Integer value) {
+        redisTemplate.opsForValue().set(key, value, 7200, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Integer存入值
+     *
+     * @param expire 过期时间（毫秒计）
+     * @param key
+     */
+    public void set(String key, Integer value, Integer expire) {
+        redisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
+    }
+
+    /**
      * 删出key
      * 这里跟下边deleteKey（）最底层实现都是一样的，应该可以通用
      *

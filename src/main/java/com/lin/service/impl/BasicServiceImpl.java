@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
+import com.lin.common.UserStatusConstants;
 import com.lin.controller.DTO.CodeLoginDTO;
 import com.lin.controller.DTO.ForgetpwdDTO;
 import com.lin.controller.DTO.RegisterDTO;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -34,6 +36,8 @@ import java.util.concurrent.ExecutionException;
  */
 @Service
 public class BasicServiceImpl implements BasicService {
+
+    static Integer MAX_NUMBER_OF_FAIL = 6;
 
     @Autowired
     RedisUtil redisUtil;
@@ -57,21 +61,36 @@ public class BasicServiceImpl implements BasicService {
     public ResponseResult<Map<String, String>> login(LoginUserDTO loginUserDTO) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDTO.getUsername(), loginUserDTO.getPassword());
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
-
-        if (Objects.isNull(authenticate)) {
-            throw new RuntimeException("登陆失败");
+        try{
+            QueryWrapper<User> wrapper = new QueryWrapper<>();
+            wrapper.eq("username", loginUserDTO.getUsername());
+            User user = userMapper.selectOne(wrapper);
+            if(user.getStatus() == UserStatusConstants.STATUS_FREEZE)
+                return new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "该用户已经被冻结");
+            authenticationManager.authenticate(authenticationToken);
+            if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername()))
+                redisUtil.delete("fail_login : " + loginUserDTO.getUsername());
+            String jwt = tokenUtil.getTokenByUserId(user.getUserId());
+            HashMap<String, String> map = new HashMap<>();
+            map.put("token", jwt);
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "登陆成功", map);
+        } catch (AuthenticationException e) {
+            if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername())) {
+                redisUtil.set("fail_login : " + loginUserDTO.getUsername(), (Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) + 1);
+                if((Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) > MAX_NUMBER_OF_FAIL) {
+                    QueryWrapper<User> wrapper = new QueryWrapper<>();
+                    wrapper.eq("username", loginUserDTO.getUsername());
+                    User user = userMapper.selectOne(wrapper);
+                    user.setStatus(UserStatusConstants.STATUS_FREEZE);
+                    userMapper.updateById(user);
+                    return new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "该用户已达最大密码错误次数,已经被暂时冻结账户");
+                }
+            } else {
+                redisUtil.set("fail_login : " + loginUserDTO.getUsername(), 1);
+            }
         }
 
-//        String jwt = TokenUtil.getTokenByUsername(loginUserDTO.getUsername());
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username", loginUserDTO.getUsername());
-        User user = userMapper.selectOne(wrapper);
-        String jwt = tokenUtil.getTokenByUserId(user.getUserId());
-        HashMap<String, String> map = new HashMap<>();
-        map.put("token", jwt);
-
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "登陆成功", map);
+        return new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "登陆失败");
 
     }
 
@@ -109,6 +128,7 @@ public class BasicServiceImpl implements BasicService {
             newUser.setBalance(0);
             newUser.setTransactionsNumber(0);
             newUser.setSuccessNumber(0);
+            newUser.setStatus(UserStatusConstants.STATUS_NORMAL);
             userMapper.insert(newUser);
             HashMap<String, String> map = new HashMap<>();
             map.put("username", randomUsername);

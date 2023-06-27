@@ -27,6 +27,9 @@ import java.util.Objects;
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
     @Autowired
+    WebUtil webUtil;
+
+    @Autowired
     RedisUtil redisUtil;
 
     @Override
@@ -34,7 +37,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
         ResponseResult<NullData> result = new ResponseResult<>(HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
         String json = JSON.toJSONString(result);
-        WebUtil.renderString(response, json);
+        webUtil.renderString(response, json);
 
     }
 }

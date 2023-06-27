@@ -74,6 +74,10 @@ public class SellerController {
         return sellerService.delOrder(token, orderId);
     }
 
+    /**
+     * @desc 发货
+     * @date 2023/6/27 11:35
+     */
     @PostMapping("/order/deliver/{orderId}")
     public ResponseResult deliverOrder(@RequestHeader String token, @PathVariable String orderId) {
         return sellerService.deliverOrder(token, orderId);

@@ -2,10 +2,7 @@ package com.lin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.lin.common.CodeConstants;
-import com.lin.common.NullData;
-import com.lin.common.ResponseResult;
-import com.lin.common.UserStatusConstants;
+import com.lin.common.*;
 import com.lin.controller.DTO.CodeLoginDTO;
 import com.lin.controller.DTO.ForgetpwdDTO;
 import com.lin.controller.DTO.RegisterDTO;
@@ -37,8 +34,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class BasicServiceImpl implements BasicService {
 
-    static Integer MAX_NUMBER_OF_FAIL = 6;
-
     @Autowired
     RedisUtil redisUtil;
 
@@ -66,7 +61,7 @@ public class BasicServiceImpl implements BasicService {
             wrapper.eq("username", loginUserDTO.getUsername());
             User user = userMapper.selectOne(wrapper);
             if(user.getStatus() == UserStatusConstants.STATUS_FREEZE)
-                return new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "该用户已经被冻结");
+                return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该用户已经被冻结");
             authenticationManager.authenticate(authenticationToken);
             if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername()))
                 redisUtil.delete("fail_login : " + loginUserDTO.getUsername());
@@ -77,13 +72,13 @@ public class BasicServiceImpl implements BasicService {
         } catch (AuthenticationException e) {
             if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername())) {
                 redisUtil.set("fail_login : " + loginUserDTO.getUsername(), (Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) + 1);
-                if((Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) > MAX_NUMBER_OF_FAIL) {
+                if((Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) > ParameterConstants.MAX_NUMBER_OF_FAIL) {
                     QueryWrapper<User> wrapper = new QueryWrapper<>();
                     wrapper.eq("username", loginUserDTO.getUsername());
                     User user = userMapper.selectOne(wrapper);
                     user.setStatus(UserStatusConstants.STATUS_FREEZE);
                     userMapper.updateById(user);
-                    return new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "该用户已达最大密码错误次数,已经被暂时冻结账户");
+                    return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该用户已达最大密码错误次数,已经被暂时冻结账户");
                 }
             } else {
                 redisUtil.set("fail_login : " + loginUserDTO.getUsername(), 1);

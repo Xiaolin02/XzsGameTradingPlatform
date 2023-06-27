@@ -1,10 +1,14 @@
 package com.lin.controller;
 
+import com.lin.common.CodeConstants;
 import com.lin.common.NullData;
+import com.lin.common.ParameterConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.OfferDTO;
 import com.lin.controller.VO.GetOrderVO;
 import com.lin.service.impl.BuyerServiceImpl;
+import com.lin.utils.WebUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,12 +26,22 @@ public class BuyerController {
     @Autowired
     BuyerServiceImpl buyerService;
 
+    @Autowired
+    WebUtil webUtil;
+
     /**
      * @desc 出价
      * @date 2023/5/5 20:00
      */
     @PostMapping("/offer")
-    public ResponseResult<NullData> offer(@RequestHeader String token, @RequestBody OfferDTO offerDTO) {
+    public ResponseResult<NullData> offer(HttpServletRequest request, @RequestHeader String token, @RequestBody OfferDTO offerDTO) {
+        String ipAddress = webUtil.getIpAddress(request);
+        Integer requestNumber = webUtil.getRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        if(requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
+            return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该Ip短期内对该接口进行大量请求, 已经被限制访问该接口");
+        } else {
+            webUtil.addRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        }
         return buyerService.offer(token, offerDTO);
     }
 
@@ -45,7 +59,14 @@ public class BuyerController {
      * @date 2023/5/7 15:22
      */
     @GetMapping("/order/view")
-    public ResponseResult<ArrayList<GetOrderVO>> getOrder(@RequestHeader String token) {
+    public ResponseResult<ArrayList<GetOrderVO>> getOrder(HttpServletRequest request,  @RequestHeader String token) {
+        String ipAddress = webUtil.getIpAddress(request);
+        Integer requestNumber = webUtil.getRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        if(requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
+            return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该Ip短期内对该接口进行大量请求, 已经被限制访问该接口");
+        } else {
+            webUtil.addRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        }
         return buyerService.getOrder(token);
     }
 
@@ -76,6 +97,10 @@ public class BuyerController {
         return buyerService.confirmOrder(token, orderId);
     }
 
+    /**
+     * @desc 拒绝收货
+     * @date 2023/6/27 11:33
+     */
     @PostMapping("/order/refuse/{orderId}")
     public ResponseResult<NullData> refuseOrder(@RequestHeader String token, @PathVariable String orderId) {
         return buyerService.refuseOrder(token, orderId);

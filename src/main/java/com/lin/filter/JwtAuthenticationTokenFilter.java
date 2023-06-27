@@ -46,6 +46,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Autowired
     RedisUtil redisUtil;
 
+    @Autowired
+    WebUtil webUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         // 确保有token
@@ -60,14 +63,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String tokenFreshAt = tokenUtil.getFreshAtByToken(token);
         if (tokenFreshAt == null) {
             // 传递信息，无效的token
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "无效的token"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "无效的token"));
             return;
         }
 
         // 检查token的未刷新时间
         if ("".equals(tokenFreshAt)) {
             logger.error("服务端错误，redis未存储token刷新时间");
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis未存储token刷新时间"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis未存储token刷新时间"));
             return;
         }
         long freshDuration;
@@ -75,18 +78,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             freshDuration = DateUtil.getDurationSecondsUntilNow(tokenFreshAt);
         } catch (ParseException e) {
             logger.error("服务端错误，redis存储时间格式错误");
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis存储时间格式错误"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis存储时间格式错误"));
             return;
         }
         if (freshDuration > RedisKeyConstants.TOKEN_MAX_UNREFRESHED_SECONDS) {
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "token已失效，达到最大未刷新时间，请重新登录"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "token已失效，达到最大未刷新时间，请重新登录"));
             return;
         }
 
         // 检查token中的用户信息
         User user = tokenUtil.parseTokenToUser(token);
         if (user == null) {
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "无效的token，没有这个用户"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "无效的token，没有这个用户"));
             return;
         }
 
@@ -94,7 +97,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String tokenCreateAt = tokenUtil.parseTokenToCreateAt(token);
         if (tokenCreateAt == null || "".equals(tokenCreateAt)) {
             logger.error("服务端错误，token未存储创建时间");
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token未存储创建时间"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token未存储创建时间"));
             return;
         }
 
@@ -104,7 +107,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             duration = DateUtil.getDurationSecondsUntilNow(tokenCreateAt);
         } catch (ParseException e) {
             logger.error("服务端错误，token存储时间格式错误");
-            WebUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token存储时间格式错误"));
+            webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token存储时间格式错误"));
             return;
         }
         if (duration > RedisKeyConstants.TOKEN_MAX_DURATION_SECONDS) {

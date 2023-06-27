@@ -1,9 +1,13 @@
 package com.lin.controller;
 
+import com.lin.common.CodeConstants;
 import com.lin.common.NullData;
+import com.lin.common.ParameterConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.user.UserCompleteDTO;
 import com.lin.service.InformationService;
+import com.lin.utils.WebUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +28,23 @@ public class InformationController {
     @Autowired
     InformationService informationService;
 
+    @Autowired
+    WebUtil webUtil;
+
     /**
      * @Author czh
      * @desc 修改用户名
      * @date 2023/5/17 10:46
      */
     @PutMapping("/username/modify")
-    public ResponseResult<NullData> usernameModify(@RequestHeader String token, @RequestBody Map<String, String> requestData) {
+    public ResponseResult<NullData> usernameModify(HttpServletRequest request, @RequestHeader String token, @RequestBody Map<String, String> requestData) {
+        String ipAddress = webUtil.getIpAddress(request);
+        Integer requestNumber = webUtil.getRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        if(requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
+            return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该Ip短期内对该接口进行大量请求, 已经被限制访问该接口");
+        } else {
+            webUtil.addRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        }
         String newUsername = requestData.get("newUsername");
         return informationService.usernameModify(token, newUsername);
     }
@@ -65,7 +79,14 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @GetMapping("/password/modify/byPhone/getCode")
-    public ResponseResult<NullData> passwordModifyByPhoneGetCode(@RequestHeader String token) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> passwordModifyByPhoneGetCode(HttpServletRequest request, @RequestHeader String token) throws ExecutionException, InterruptedException {
+        String ipAddress = webUtil.getIpAddress(request);
+        Integer requestNumber = webUtil.getRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        if(requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
+            return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该Ip短期内对该接口进行大量请求, 已经被限制访问该接口");
+        } else {
+            webUtil.addRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        }
         return informationService.passwordModifyByPhoneGetCode(token);
     }
 
@@ -87,7 +108,14 @@ public class InformationController {
      * @date 2023/5/17 10:46
      */
     @PostMapping("/phone/modify/getCode")
-    public ResponseResult<NullData> phoneModifyGetCode(@RequestHeader String token, @RequestBody Map<String, String> requestData) throws ExecutionException, InterruptedException {
+    public ResponseResult<NullData> phoneModifyGetCode(HttpServletRequest request, @RequestHeader String token, @RequestBody Map<String, String> requestData) throws ExecutionException, InterruptedException {
+        String ipAddress = webUtil.getIpAddress(request);
+        Integer requestNumber = webUtil.getRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        if(requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
+            return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该Ip短期内对该接口进行大量请求, 已经被限制访问该接口");
+        } else {
+            webUtil.addRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
+        }
         String newPhoneNumber = requestData.get("newPhoneNumber");
         return informationService.phoneModifyGetCode(token, newPhoneNumber);
     }

@@ -193,16 +193,7 @@ public class InformationServiceImpl implements InformationService {
     @Override
     public ResponseResult<UserCompleteDTO> viewInformation(String token) {
         User user = tokenUtil.parseTokenToUser(token);
-        UserCompleteDTO userCompleteDTO = new UserCompleteDTO();
-        userCompleteDTO.setUserId(user.getUserId());
-        userCompleteDTO.setUsername(user.getUsername());
-        userCompleteDTO.setPictureUrl(userMapper.getPictureUrl(user.getUserId()));
-        userCompleteDTO.setPhone(user.getPhone());
-        userCompleteDTO.setBalance(user.getBalance());
-        userCompleteDTO.setRegisterAt(user.getRegisterAt());
-        userCompleteDTO.setTransactionsNumber(user.getTransactionsNumber());
-        userCompleteDTO.setSuccessNumber(user.getSuccessNumber());
-        userCompleteDTO.setSuccessRate(Double.parseDouble(new DecimalFormat("0.00").format((double)user.getSuccessNumber() / user.getTransactionsNumber())));
+        UserCompleteDTO userCompleteDTO = new UserCompleteDTO(user, userMapper);
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userCompleteDTO);
     }
 }

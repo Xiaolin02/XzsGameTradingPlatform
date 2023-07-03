@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -199,6 +200,9 @@ public class InformationServiceImpl implements InformationService {
         userCompleteDTO.setPhone(user.getPhone());
         userCompleteDTO.setBalance(user.getBalance());
         userCompleteDTO.setRegisterAt(user.getRegisterAt());
+        userCompleteDTO.setTransactionsNumber(user.getTransactionsNumber());
+        userCompleteDTO.setSuccessNumber(user.getSuccessNumber());
+        userCompleteDTO.setSuccessRate(Double.parseDouble(new DecimalFormat("0.00").format((double)user.getSuccessNumber() / user.getTransactionsNumber())));
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userCompleteDTO);
     }
 }

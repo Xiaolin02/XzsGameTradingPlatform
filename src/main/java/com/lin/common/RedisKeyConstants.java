@@ -23,5 +23,7 @@ public interface RedisKeyConstants {
     int TOKEN_MAX_UNREFRESHED_SECONDS = 60 * 60 * 2;
     // token最大持续时间24小时
     int TOKEN_MAX_DURATION_SECONDS = 60 * 60 * 24;
+    // token延迟删除时间20分钟（删除缓冲时间）
+    int TOKEN_DEFERRED_DELETE_SECONDS = 60 * 20;
 
 }

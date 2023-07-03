@@ -60,28 +60,27 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         // 检查token是否有效
-        String tokenFreshAt = tokenUtil.getFreshAtByToken(token);
-        if (tokenFreshAt == null) {
-            // 传递信息，无效的token
+        String tokenLastRefreshAt = tokenUtil.getRefreshAtByToken(token);
+        if (tokenLastRefreshAt == null) {
             webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "无效的token"));
             return;
         }
 
         // 检查token的未刷新时间
-        if ("".equals(tokenFreshAt)) {
+        if ("".equals(tokenLastRefreshAt)) {
             logger.error("服务端错误，redis未存储token刷新时间");
             webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis未存储token刷新时间"));
             return;
         }
-        long freshDuration;
+        long tokenDurationSinceLastRefresh;
         try {
-            freshDuration = DateUtil.getDurationSecondsUntilNow(tokenFreshAt);
+            tokenDurationSinceLastRefresh = DateUtil.getDurationSecondsUntilNow(tokenLastRefreshAt);
         } catch (ParseException e) {
             logger.error("服务端错误，redis存储时间格式错误");
             webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，redis存储时间格式错误"));
             return;
         }
-        if (freshDuration > RedisKeyConstants.TOKEN_MAX_UNREFRESHED_SECONDS) {
+        if (tokenDurationSinceLastRefresh > RedisKeyConstants.TOKEN_MAX_UNREFRESHED_SECONDS) {
             webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_UNAUTHORIZED, "token已失效，达到最大未刷新时间，请重新登录"));
             return;
         }
@@ -102,21 +101,22 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         // 检查token的创建时间
-        long duration;
+        long tokenDurationSinceCreate;
         try {
-            duration = DateUtil.getDurationSecondsUntilNow(tokenCreateAt);
+            tokenDurationSinceCreate = DateUtil.getDurationSecondsUntilNow(tokenCreateAt);
         } catch (ParseException e) {
             logger.error("服务端错误，token存储时间格式错误");
             webUtil.renderResponseResult(response, new ResponseResult<>(CodeConstants.CODE_SERVER_ERROR, "服务端错误，token存储时间格式错误"));
             return;
         }
-        if (duration > RedisKeyConstants.TOKEN_MAX_DURATION_SECONDS) {
-            // token过期，重新生成token
-            tokenUtil.disableToken(token);
+        if (tokenDurationSinceCreate > RedisKeyConstants.TOKEN_MAX_DURATION_SECONDS) {
+            // token过期，重新生成token并返回
+            tokenUtil.deferredDisableToken(token);
             response.setHeader("token", tokenUtil.getTokenByUserId(user.getUserId()));
+        } else {
+            // 刷新token
+            tokenUtil.refreshToken(token);
         }
-        // 刷新token
-        tokenUtil.freshToken(token);
 
         LoginUser loginUser = new LoginUser(user, menuMapper.selectPermsByUserId(user.getUserId()));
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());

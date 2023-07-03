@@ -50,7 +50,7 @@ public class TokenUtil {
      * @desc 刷新token过期时间
      * @date 2023/5/29 20:21
      */
-    public void freshToken(String token) {
+    public void refreshToken(String token) {
         redisUtil.set(RedisKeyConstants.TOKEN_PREFIX + token, DateUtil.getDateTime(), RedisKeyConstants.TOKEN_MAX_UNREFRESHED_SECONDS);
     }
 
@@ -58,15 +58,15 @@ public class TokenUtil {
      * @desc 删除token
      * @date 2023/6/3 19:28
      */
-    public void disableToken(String token) {
-        redisUtil.set(RedisKeyConstants.TOKEN_PREFIX + token, DateUtil.getDateTime(), 1);
+    public void deferredDisableToken(String token) {
+        redisUtil.set(RedisKeyConstants.TOKEN_PREFIX + token, DateUtil.getDateTime(), RedisKeyConstants.TOKEN_DEFERRED_DELETE_SECONDS);
     }
 
     /**
      * @desc 通过token获得createAt
      * @date 2023/2/31 10:55
      */
-    public String getFreshAtByToken(String token) {
+    public String getRefreshAtByToken(String token) {
         return (String) redisUtil.get(RedisKeyConstants.TOKEN_PREFIX + token);
     }
 

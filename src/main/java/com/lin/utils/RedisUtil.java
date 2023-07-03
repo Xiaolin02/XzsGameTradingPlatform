@@ -79,6 +79,16 @@ public class RedisUtil {
     }
 
     /**
+     * 自增
+     *
+     * @param key
+     * @return 返回自增后的值
+     */
+    public Long incr(String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
+
+    /**
      * 删出key
      * 这里跟下边deleteKey（）最底层实现都是一样的，应该可以通用
      *
@@ -86,6 +96,15 @@ public class RedisUtil {
      */
     public void delete(String key) {
         redisTemplate.opsForValue().getOperations().delete(key);
+    }
+
+    /**
+     * 获取过期时间
+     * @param key
+     * @return 返回剩余过期时间（秒计）
+     */
+    public Long ttl(String key) {
+        return redisTemplate.getExpire(key);
     }
 
     /**

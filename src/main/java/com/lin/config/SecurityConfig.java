@@ -1,6 +1,7 @@
 package com.lin.config;
 
 import com.lin.filter.JwtAuthenticationTokenFilter;
+import com.lin.filter.RateLimitFilter;
 import com.lin.handler.AccessDeniedHandlerImpl;
 import com.lin.handler.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class SecurityConfig {
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     @Autowired
+    private RateLimitFilter rateLimitFilter;
+
+    @Autowired
     AuthenticationEntryPointImpl authenticationEntryPoint;
 
     @Autowired
@@ -56,10 +60,11 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/login", "/register", "/forgetpwd", "/contact", "/socket/*", "/getCode", "/login/code","/test").anonymous()
+                .requestMatchers("/login", "/register", "/forgetpwd", "/contact", "/socket/*", "/getCode", "/login/code", "/test").anonymous()
                 .anyRequest()
                 .authenticated()
                 .and()
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).accessDeniedHandler(accessDeniedHandler)
                 .and()

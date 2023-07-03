@@ -25,7 +25,5 @@ public class User {
     private String registerAt;
     private Integer transactionsNumber;
     private Integer successNumber;
-    @TableField(value = "`status`")
-    private Integer status;
 
 }

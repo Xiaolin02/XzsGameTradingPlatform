@@ -60,7 +60,7 @@ public class BasicServiceImpl implements BasicService {
             QueryWrapper<User> wrapper = new QueryWrapper<>();
             wrapper.eq("username", loginUserDTO.getUsername());
             User user = userMapper.selectOne(wrapper);
-            if(user.getStatus() == UserStatusConstants.STATUS_FREEZE)
+            if(redisUtil.hasKey("freeze:" + loginUserDTO.getUsername()))
                 return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该用户已经被冻结");
             authenticationManager.authenticate(authenticationToken);
             if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername()))
@@ -73,11 +73,7 @@ public class BasicServiceImpl implements BasicService {
             if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername())) {
                 redisUtil.set("fail_login : " + loginUserDTO.getUsername(), (Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) + 1);
                 if((Integer) redisUtil.get("fail_login : " + loginUserDTO.getUsername()) > ParameterConstants.MAX_NUMBER_OF_FAIL) {
-                    QueryWrapper<User> wrapper = new QueryWrapper<>();
-                    wrapper.eq("username", loginUserDTO.getUsername());
-                    User user = userMapper.selectOne(wrapper);
-                    user.setStatus(UserStatusConstants.STATUS_FREEZE);
-                    userMapper.updateById(user);
+                    redisUtil.set("freeze:" + loginUserDTO.getUsername(), "true", 3600);
                     return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该用户已达最大密码错误次数,已经被暂时冻结账户");
                 }
             } else {
@@ -123,7 +119,6 @@ public class BasicServiceImpl implements BasicService {
             newUser.setBalance(0);
             newUser.setTransactionsNumber(0);
             newUser.setSuccessNumber(0);
-            newUser.setStatus(UserStatusConstants.STATUS_NORMAL);
             userMapper.insert(newUser);
             HashMap<String, String> map = new HashMap<>();
             map.put("username", randomUsername);

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.text.DecimalFormat;
+
 /**
  * @Author czh
  * @desc 用户信息模型（详情）（访客查看）用于基本的信息查看，如访客查看其他人的信息
@@ -19,10 +21,16 @@ public class UserDetailedDTO {
     private String username;
     private String pictureUrl;
     private String phone;
+    private Integer transactionsNumber;
+    private Integer successNumber;
+    private double successRate;
 
     public UserDetailedDTO(User user, UserMapper userMapper) {
         loadUser(user);
         this.pictureUrl = userMapper.getPictureUrl(user.getUserId());
+        this.transactionsNumber = user.getTransactionsNumber();
+        this.successNumber = user.getSuccessNumber();
+        this.successRate = Double.parseDouble(new DecimalFormat("0.00").format((double)successNumber / transactionsNumber));
     }
 
     private void loadUser(User user) {
@@ -30,4 +38,5 @@ public class UserDetailedDTO {
         this.username = user.getUsername();
         this.phone = user.getPhone();
     }
+
 }

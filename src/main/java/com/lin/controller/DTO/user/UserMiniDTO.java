@@ -18,16 +18,10 @@ import java.text.DecimalFormat;
 public class UserMiniDTO {
     private Integer userId;
     private String username;
-    private Integer transactionsNumber;
-    private Integer successNumber;
-    private double successRate;
 
     public UserMiniDTO(User user) {
         this.userId = user.getUserId();
         this.username = user.getUsername();
-        this.transactionsNumber = user.getTransactionsNumber();
-        this.successNumber = user.getSuccessNumber();
-        this.successRate = Double.parseDouble(new DecimalFormat("0.00").format((double)successNumber / transactionsNumber));
     }
 
 }

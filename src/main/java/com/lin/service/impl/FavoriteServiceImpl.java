@@ -90,7 +90,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
             commodityQueryWrapper.eq("commodity_id", favorite.getCommodityId());
             Commodity commodity = commodityMapper.selectOne(commodityQueryWrapper);
-            commoditySimpleDTOList.add(commodity == null ? null : new CommoditySimpleDTO(commodity, userMapper));
+            commoditySimpleDTOList.add(commodity == null ? null : new CommoditySimpleDTO(commodity, userMapper, commodityMapper));
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
     }

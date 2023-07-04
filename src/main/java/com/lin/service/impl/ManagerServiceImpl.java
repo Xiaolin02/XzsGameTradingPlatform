@@ -128,7 +128,7 @@ public class ManagerServiceImpl implements ManagerService {
         List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Commodity record : records) {
             try {
-                commoditySimpleDTOList.add(new CommoditySimpleDTO(record, userMapper));
+                commoditySimpleDTOList.add(new CommoditySimpleDTO(record, userMapper, commodityMapper));
             } catch (NullPointerException ignored) {
             }
         }

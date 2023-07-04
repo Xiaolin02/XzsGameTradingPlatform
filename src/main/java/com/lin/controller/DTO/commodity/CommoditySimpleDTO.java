@@ -1,6 +1,7 @@
 package com.lin.controller.DTO.commodity;
 
 import com.lin.controller.DTO.user.UserMiniDTO;
+import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.UserMapper;
 import com.lin.pojo.Commodity;
 import lombok.AllArgsConstructor;
@@ -21,12 +22,14 @@ public class CommoditySimpleDTO {
     private Integer price;
     private String game;
     private UserMiniDTO seller;
+    private String pictureUrl;
     private Integer allowBargaining;
     private Integer status;
 
-    public CommoditySimpleDTO(Commodity commodity, UserMapper userMapper) {
+    public CommoditySimpleDTO(Commodity commodity, UserMapper userMapper, CommodityMapper commodityMapper) {
         loadCommodity(commodity);
         this.seller = new UserMiniDTO(userMapper.selectById(commodity.getSellerId()));
+        this.pictureUrl = commodityMapper.selectCoverUrl(commodity.getCommodityId());
     }
 
     private void loadCommodity(Commodity commodity) {

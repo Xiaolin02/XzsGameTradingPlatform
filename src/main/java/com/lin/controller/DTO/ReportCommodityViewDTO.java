@@ -23,7 +23,7 @@ public class ReportCommodityViewDTO {
     public ReportCommodityViewDTO(ReportCommodity reportCommodity, UserMapper userMapper, CommodityMapper commodityMapper) {
         this(reportCommodity);
         this.reporter = new UserSimpleDTO(userMapper.selectById(reportCommodity.getReporterId()), userMapper);
-        this.reportedCommodity = new CommoditySimpleDTO(commodityMapper.selectById(reportCommodity.getCommodityId()),userMapper);
+        this.reportedCommodity = new CommoditySimpleDTO(commodityMapper.selectById(reportCommodity.getCommodityId()), userMapper, commodityMapper);
     }
 
     private ReportCommodityViewDTO(ReportCommodity reportCommodity) {

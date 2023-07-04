@@ -47,7 +47,7 @@ public class SearchServiceImpl implements SearchService {
         // 装配DTO
         List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Commodity commodity : records) {
-            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper));
+            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper, commodityMapper));
         }
         // 返回结果
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
@@ -108,7 +108,7 @@ public class SearchServiceImpl implements SearchService {
         // 装配DTO
         List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Commodity commodity : records) {
-            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper));
+            commoditySimpleDTOList.add(new CommoditySimpleDTO(commodity, userMapper, commodityMapper));
         }
         // 返回结果
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));

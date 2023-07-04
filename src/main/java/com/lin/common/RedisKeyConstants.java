@@ -31,16 +31,16 @@ public interface RedisKeyConstants {
     // 用户访问次数的key前缀
     String USER_ACCESS_COUNT_PREFIX = "user:accessCount:";
     // 限制访问次数的时间5分钟
-    int USER_ACCESS_COUNT_EXPIRE_TIME_SECONDS = 60 * 5;
+    int USER_ACCESS_COUNT_EXPIRE_TIME_SECONDS = 60 * 1;
     // 限制时间内用户的最大访问次数100次
-    int USER_ACCESS_COUNT_MAX_COUNT = 100;
+    int USER_ACCESS_COUNT_MAX_COUNT = 200;
 
     // IP的访问次数的key，key为userId，value为访问次数
 
     // IP访问次数的key前缀
     String IP_ACCESS_COUNT_PREFIX = "ip:accessCount:";
     // 限制访问次数的时间5分钟
-    int IP_ACCESS_COUNT_EXPIRE_TIME_SECONDS = 60 * 5;
+    int IP_ACCESS_COUNT_EXPIRE_TIME_SECONDS = 60 * 1;
     // 限制时间内IP的最大访问次数100次
-    int IP_ACCESS_COUNT_MAX_COUNT = 100;
+    int IP_ACCESS_COUNT_MAX_COUNT = 200;
 }

@@ -32,7 +32,11 @@ public class UserCompleteDTO {
         this.pictureUrl = userMapper.getPictureUrl(user.getUserId());
         this.transactionsNumber = user.getTransactionsNumber();
         this.successNumber = user.getSuccessNumber();
-        this.successRate = Double.parseDouble(new DecimalFormat("0.00").format((double)successNumber / transactionsNumber));
+        if(transactionsNumber == 0 || successNumber == 0) {
+            this.successRate = Double.parseDouble(new DecimalFormat("0.00").format(0));
+        } else {
+            this.successRate = Double.parseDouble(new DecimalFormat("0.00").format((double)successNumber / transactionsNumber));
+        }
 
     }
 

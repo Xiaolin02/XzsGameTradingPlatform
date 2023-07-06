@@ -79,7 +79,7 @@ public class BuyerServiceImpl implements BuyerService {
         wrapper.eq("buyer_id", userId);
         List<Order> orders = orderMapper.selectList(wrapper);
         if (Objects.equals(orders.size(), 0)) {
-            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "该用户没有订单");
+            return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "该用户没有订单", new ArrayList<>());
         }
         ArrayList<GetOrderVO> list = new ArrayList<>();
         for (Order order : orders) {

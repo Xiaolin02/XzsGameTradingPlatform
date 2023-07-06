@@ -119,6 +119,7 @@ public class BasicServiceImpl implements BasicService {
             newUser.setBalance(0);
             newUser.setTransactionsNumber(0);
             newUser.setSuccessNumber(0);
+            newUser.setRegisterAt(DateUtil.getDateTime());
             userMapper.insert(newUser);
             userMapper.replacePictureUrl(newUser.getUserId(),DefaultValue.DEFAULT_USER_AVATAR_URL);
             HashMap<String, String> map = new HashMap<>();

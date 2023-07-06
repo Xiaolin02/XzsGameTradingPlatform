@@ -7,7 +7,7 @@ package com.lin.common;
  */
 public interface ParameterConstants {
 
-    Integer MAX_NUMBER_OF_FAIL = 6;
-    Integer MAX_REQUEST_NUMBER = 30;
+    Integer MAX_NUMBER_OF_FAIL = 60;
+    Integer MAX_REQUEST_NUMBER = 3000;
 
 }

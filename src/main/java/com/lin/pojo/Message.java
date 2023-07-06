@@ -14,7 +14,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Message {
 
+    private Integer fromId;
     private String fromUser;
+    private Integer toId;
     private String toUser;
     private String title;
     private String content;

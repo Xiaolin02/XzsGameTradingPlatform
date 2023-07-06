@@ -1,16 +1,14 @@
 package com.lin.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.lin.pojo.Message;
+import com.lin.pojo.ChatList;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
 
 /**
  * @author 林炳昌
  * @desc
- * @date 2023年04月22日 11:35
+ * @date 2023年07月06日 17:24
  */
 @Mapper
-public interface MessageMapper extends BaseMapper<Message> {
+public interface ChatListMapper extends BaseMapper<ChatList> {
 }

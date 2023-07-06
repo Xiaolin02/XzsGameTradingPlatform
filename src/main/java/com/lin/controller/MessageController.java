@@ -3,6 +3,7 @@ package com.lin.controller;
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.MessageDTO;
+import com.lin.controller.VO.ChatListVO;
 import com.lin.controller.VO.GetSystemMessageVO;
 import com.lin.service.impl.MessageServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +81,17 @@ public class MessageController {
     public ResponseResult<List<GetSystemMessageVO>> getSystemMessage(@RequestHeader String token) {
 
         return messageService.getSystemMessage(token);
+
+    }
+
+    /**
+     * @desc 获取聊天列表
+     * @date 2023/7/6 17:25
+     */
+    @GetMapping("/getList")
+    public ResponseResult<List<ChatListVO>> getList(@RequestHeader String token) {
+
+        return messageService.getList(token);
 
     }
 

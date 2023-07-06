@@ -16,6 +16,7 @@ public class ChatListVO {
 
     private String pictureUrl;
     private String username;
+    private Integer userId;
     private String lastMsg;
 
 }

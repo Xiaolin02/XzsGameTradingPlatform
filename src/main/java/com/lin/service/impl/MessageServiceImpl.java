@@ -184,7 +184,7 @@ public class MessageServiceImpl implements MessageService {
         for (ChatList chatList : chatLists) {
             User secondUser = userMapper.selectById(chatList.getSecondUserId());
             String pictureUrl = userMapper.getPictureUrl(secondUser.getUserId());
-            chatListVOS.add(new ChatListVO(pictureUrl, secondUser.getUsername(), chatList.getLastMessage()));
+            chatListVOS.add(new ChatListVO(pictureUrl, secondUser.getUsername(), secondUser.getUserId(), chatList.getLastMessage()));
         }
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, chatListVOS);
 

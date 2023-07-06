@@ -6,18 +6,17 @@ import com.lin.controller.DTO.MessageDTO;
 import com.lin.controller.DTO.ReportCommodityViewDTO;
 import com.lin.controller.DTO.ReportUserViewDTO;
 import com.lin.controller.DTO.commodity.CommodityCompleteDTO;
+import com.lin.controller.DTO.commodity.CommodityListDTO;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.general.PageDTO;
 import com.lin.controller.DTO.user.UserCompleteDTO;
+import com.lin.controller.DTO.user.UserListDTO;
 import com.lin.service.ManagerService;
 import com.lin.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -58,7 +57,7 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/user/reported/view/all")
-    public ResponseResult<Map<String, List<ReportUserViewDTO>>> userReportViewAll(@RequestBody PageDTO pageDTO) {
+    public ResponseResult<UserListDTO<ReportUserViewDTO>> userReportViewAll(@RequestBody PageDTO pageDTO) {
         return managerService.userReportViewAll(pageDTO);
     }
 
@@ -94,7 +93,7 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/commodity/view/all")
-    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> commodityReportViewAll(@RequestBody PageDTO pageDTO) {
+    public ResponseResult<CommodityListDTO<CommoditySimpleDTO>> commodityReportViewAll(@RequestBody PageDTO pageDTO) {
         return managerService.commodityInspectViewAll(pageDTO);
     }
 
@@ -112,7 +111,7 @@ public class ManagerController {
      * @date 2023/5/31 17:36
      */
     @PostMapping("/commodity/reported/view/all")
-    public ResponseResult<Map<String, List<ReportCommodityViewDTO>>> commodityInspectViewAll(@RequestBody PageDTO pageDTO) {
+    public ResponseResult<CommodityListDTO<ReportCommodityViewDTO>> commodityInspectViewAll(@RequestBody PageDTO pageDTO) {
         return managerService.commodityReportViewAll(pageDTO);
     }
 

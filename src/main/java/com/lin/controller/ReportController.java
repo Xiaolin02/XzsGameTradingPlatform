@@ -6,7 +6,9 @@ import com.lin.common.ParameterConstants;
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReportCommodityDTO;
 import com.lin.controller.DTO.ReportUserDTO;
+import com.lin.controller.DTO.commodity.CommodityListDTO;
 import com.lin.controller.DTO.commodity.CommodityMiniDTO;
+import com.lin.controller.DTO.user.UserListDTO;
 import com.lin.controller.DTO.user.UserMiniDTO;
 import com.lin.service.ReportService;
 import com.lin.utils.WebUtil;
@@ -15,8 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author czh
@@ -43,7 +43,7 @@ public class ReportController {
     public ResponseResult<NullData> insertReportCommodity(HttpServletRequest request, @RequestHeader String token, @RequestBody ReportCommodityDTO reportCommodityDTO) {
         String ipAddress = webUtil.getIpAddress(request);
         Integer requestNumber = webUtil.getRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
-        if(requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
+        if (requestNumber >= ParameterConstants.MAX_REQUEST_NUMBER) {
             return new ResponseResult<>(CodeConstants.CODE_USER_EXCEPTION, "该Ip短期内对该接口进行大量请求, 已经被限制访问该接口");
         } else {
             webUtil.addRequestNumber(Thread.currentThread().getStackTrace()[1].getMethodName(), ipAddress);
@@ -69,7 +69,7 @@ public class ReportController {
      * @date 2023/5/20 22:12
      */
     @GetMapping("/commodity")
-    public ResponseResult<Map<String, List<CommodityMiniDTO>>> selectReportCommodity(@RequestHeader String token) {
+    public ResponseResult<CommodityListDTO<CommodityMiniDTO>> selectReportCommodity(@RequestHeader String token) {
         return reportService.selectReportCommodity(token);
     }
 
@@ -101,7 +101,7 @@ public class ReportController {
      * @date 2023/5/20 22:12
      */
     @GetMapping("/user")
-    public ResponseResult<Map<String, List<UserMiniDTO>>> selectReportUser(@RequestHeader String token) {
+    public ResponseResult<UserListDTO<UserMiniDTO>> selectReportUser(@RequestHeader String token) {
         return reportService.selectReportUser(token);
     }
 

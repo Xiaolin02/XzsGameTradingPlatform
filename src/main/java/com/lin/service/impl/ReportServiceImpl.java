@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lin.common.CodeConstants;
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.commodity.CommodityListDTO;
 import com.lin.controller.DTO.commodity.CommodityMiniDTO;
+import com.lin.controller.DTO.user.UserListDTO;
 import com.lin.controller.DTO.user.UserMiniDTO;
 import com.lin.mapper.CommodityMapper;
 import com.lin.mapper.ReportCommodityMapper;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author czh
@@ -80,17 +81,19 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/22 21:58
      */
     @Override
-    public ResponseResult<Map<String, List<CommodityMiniDTO>>> selectReportCommodity(String token) {
+    public ResponseResult<CommodityListDTO<CommodityMiniDTO>> selectReportCommodity(String token) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         reportCommodityQueryWrapper.eq("reporter_id", reporterId);
         List<ReportCommodity> reportCommodityList = reportCommodityMapper.selectList(reportCommodityQueryWrapper);
+        Long total = reportCommodityMapper.selectCount(reportCommodityQueryWrapper);
         List<CommodityMiniDTO> commodityMiniDTOList = new ArrayList<>();
         for (ReportCommodity reportCommodity : reportCommodityList) {
             Integer commodityId = reportCommodity.getCommodityId();
             commodityMiniDTOList.add(commodityId == null ? null : new CommodityMiniDTO(commodityMapper.selectById(commodityId)));
         }
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commodityMiniDTOList));
+        CommodityListDTO<CommodityMiniDTO> commodityListDTO = new CommodityListDTO<>(commodityMiniDTOList, total);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityListDTO);
     }
 
     /**
@@ -133,17 +136,19 @@ public class ReportServiceImpl implements ReportService {
      * @date 2023/5/22 21:58
      */
     @Override
-    public ResponseResult<Map<String, List<UserMiniDTO>>> selectReportUser(String token) {
+    public ResponseResult<UserListDTO<UserMiniDTO>> selectReportUser(String token) {
         Integer reporterId = tokenUtil.parseTokenToUserId(token);
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         reportUserQueryWrapper.eq("reporter_id", reporterId);
         List<ReportUser> reportUserList = reportUserMapper.selectList(reportUserQueryWrapper);
+        Long total = reportUserMapper.selectCount(reportUserQueryWrapper);
         List<UserMiniDTO> userMiniDTOList = new ArrayList<>();
         for (ReportUser reportUser : reportUserList) {
             Integer userId = reportUser.getUserId();
             userMiniDTOList.add(userId == null ? null : new UserMiniDTO(userMapper.selectById(userId)));
         }
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("userList", userMiniDTOList));
+        UserListDTO<UserMiniDTO> userListDTO = new UserListDTO<>(userMiniDTOList, total);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userListDTO);
     }
 
 }

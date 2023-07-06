@@ -2,11 +2,10 @@ package com.lin.service;
 
 import com.lin.common.NullData;
 import com.lin.common.ResponseResult;
+import com.lin.controller.DTO.commodity.CommodityListDTO;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.general.PageDTO;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author czh
@@ -18,5 +17,5 @@ public interface FavoriteService {
 
     ResponseResult<NullData> deleteFavorite(String token, Integer commodityId);
 
-    ResponseResult<Map<String, List<CommoditySimpleDTO>>> selectFavoriteCommodity(String token, PageDTO pageDTO);
+    ResponseResult<CommodityListDTO<CommoditySimpleDTO>> selectFavoriteCommodity(String token, PageDTO pageDTO);
 }

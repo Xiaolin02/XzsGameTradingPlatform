@@ -2,19 +2,19 @@ package com.lin.controller;
 
 import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.commodity.CommodityDetailedDTO;
+import com.lin.controller.DTO.commodity.CommodityListDTO;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.commodity.SearchCommodityDTO;
 import com.lin.controller.DTO.general.PageDTO;
 import com.lin.controller.DTO.user.SearchUserDTO;
 import com.lin.controller.DTO.user.UserDetailedDTO;
+import com.lin.controller.DTO.user.UserListDTO;
 import com.lin.controller.DTO.user.UserSimpleDTO;
 import com.lin.service.impl.SearchServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author czh
@@ -34,7 +34,7 @@ public class SearchController {
      * @date 2023/5/22 10:16
      */
     @PostMapping("/commodity/recommend")
-    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> searchCommodityRecommend(@RequestBody PageDTO pageDTO) {
+    public ResponseResult<CommodityListDTO<CommoditySimpleDTO>> searchCommodityRecommend(@RequestBody PageDTO pageDTO) {
         return searchService.searchCommodityRecommend(pageDTO);
     }
 
@@ -44,7 +44,7 @@ public class SearchController {
      * @date 2023/5/4 13:50
      */
     @PostMapping("/commodity/list")
-    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> searchCommodityList(@RequestBody SearchCommodityDTO searchDTO) {
+    public ResponseResult<CommodityListDTO<CommoditySimpleDTO>> searchCommodityList(@RequestBody SearchCommodityDTO searchDTO) {
         return searchService.searchCommodityList(searchDTO);
     }
 
@@ -64,7 +64,7 @@ public class SearchController {
      * @date 2023/5/22 10:16
      */
     @PostMapping("/user/list")
-    public ResponseResult<Map<String, List<UserSimpleDTO>>> searchUserList(@RequestBody SearchUserDTO searchUserDTO) {
+    public ResponseResult<UserListDTO<UserSimpleDTO>> searchUserList(@RequestBody SearchUserDTO searchUserDTO) {
         return searchService.searchUserList(searchUserDTO);
     }
 

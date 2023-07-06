@@ -8,9 +8,11 @@ import com.lin.common.ResponseResult;
 import com.lin.controller.DTO.ReportCommodityViewDTO;
 import com.lin.controller.DTO.ReportUserViewDTO;
 import com.lin.controller.DTO.commodity.CommodityCompleteDTO;
+import com.lin.controller.DTO.commodity.CommodityListDTO;
 import com.lin.controller.DTO.commodity.CommoditySimpleDTO;
 import com.lin.controller.DTO.general.PageDTO;
 import com.lin.controller.DTO.user.UserCompleteDTO;
+import com.lin.controller.DTO.user.UserListDTO;
 import com.lin.mapper.*;
 import com.lin.pojo.Commodity;
 import com.lin.pojo.ReportCommodity;
@@ -22,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author czh
@@ -59,9 +60,10 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Map<String, List<ReportUserViewDTO>>> userReportViewAll(PageDTO pageDTO) {
+    public ResponseResult<UserListDTO<ReportUserViewDTO>> userReportViewAll(PageDTO pageDTO) {
         QueryWrapper<ReportUser> reportUserQueryWrapper = new QueryWrapper<>();
         List<ReportUser> records = reportUserMapper.selectPage(pageDTO.toPage(), reportUserQueryWrapper).getRecords();
+        Long total = reportUserMapper.selectCount(reportUserQueryWrapper);
         List<ReportUserViewDTO> reportUserViewDTOList = new ArrayList<>();
         for (ReportUser record : records) {
             try {
@@ -69,7 +71,8 @@ public class ManagerServiceImpl implements ManagerService {
             } catch (NullPointerException ignored) {
             }
         }
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("reportUserList", reportUserViewDTOList));
+        UserListDTO<ReportUserViewDTO> userListDTO = new UserListDTO<>(reportUserViewDTOList, total);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, userListDTO);
     }
 
     /**
@@ -121,10 +124,11 @@ public class ManagerServiceImpl implements ManagerService {
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Map<String, List<CommoditySimpleDTO>>> commodityInspectViewAll(PageDTO pageDTO) {
+    public ResponseResult<CommodityListDTO<CommoditySimpleDTO>> commodityInspectViewAll(PageDTO pageDTO) {
         QueryWrapper<Commodity> commodityQueryWrapper = new QueryWrapper<>();
         commodityQueryWrapper.eq("status", CommodityStatusConstants.STATUS_INSPECTING);
         List<Commodity> records = commodityMapper.selectPage(pageDTO.toPage(), commodityQueryWrapper).getRecords();
+        Long total = commodityMapper.selectCount(commodityQueryWrapper);
         List<CommoditySimpleDTO> commoditySimpleDTOList = new ArrayList<>();
         for (Commodity record : records) {
             try {
@@ -132,7 +136,8 @@ public class ManagerServiceImpl implements ManagerService {
             } catch (NullPointerException ignored) {
             }
         }
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("commodityList", commoditySimpleDTOList));
+        CommodityListDTO<CommoditySimpleDTO> commodityListDTO = new CommodityListDTO<>(commoditySimpleDTOList, total);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityListDTO);
     }
 
     /**
@@ -148,21 +153,23 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     /**
-     * @desc 查看未处理的全部举报（举报用户）
+     * @desc 查看未处理的全部举报（举报商品）
      * @date 2023/5/31 17:36
      */
     @Override
-    public ResponseResult<Map<String, List<ReportCommodityViewDTO>>> commodityReportViewAll(PageDTO pageDTO) {
+    public ResponseResult<CommodityListDTO<ReportCommodityViewDTO>> commodityReportViewAll(PageDTO pageDTO) {
         QueryWrapper<ReportCommodity> reportCommodityQueryWrapper = new QueryWrapper<>();
         List<ReportCommodity> records = reportCommodityMapper.selectPage(pageDTO.toPage(), reportCommodityQueryWrapper).getRecords();
         List<ReportCommodityViewDTO> reportCommodityViewDTOList = new ArrayList<>();
+        Long total = reportCommodityMapper.selectCount(reportCommodityQueryWrapper);
         for (ReportCommodity record : records) {
             try {
                 reportCommodityViewDTOList.add(new ReportCommodityViewDTO(record, userMapper, commodityMapper));
             } catch (NullPointerException ignored) {
             }
         }
-        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, Map.of("reportCommodityList", reportCommodityViewDTOList));
+        CommodityListDTO<ReportCommodityViewDTO> commodityListDTO = new CommodityListDTO<>(reportCommodityViewDTOList, total);
+        return new ResponseResult<>(CodeConstants.CODE_SUCCESS, commodityListDTO);
     }
 
     /**

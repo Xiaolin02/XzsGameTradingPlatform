@@ -28,4 +28,8 @@
         delete from user_picture_url
         where user_id = #{userId}
     </delete>
+    <insert id="setUserRole">
+        insert into user_role (user_id, role_id)
+        values (#{userId}, 2);
+    </insert>
 </mapper>

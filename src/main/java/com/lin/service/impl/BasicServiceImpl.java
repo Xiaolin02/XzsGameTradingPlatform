@@ -68,6 +68,10 @@ public class BasicServiceImpl implements BasicService {
             String jwt = tokenUtil.getTokenByUserId(user.getUserId());
             HashMap<String, String> map = new HashMap<>();
             map.put("token", jwt);
+            if(Objects.equals(userMapper.selectRoleByUserId(user.getUserId()),"ROLE_MANAGER"))
+                map.put("role", "2");
+            else
+                map.put("role", "1");
             return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "登陆成功", map);
         } catch (AuthenticationException e) {
             if(redisUtil.hasKey("fail_login : " + loginUserDTO.getUsername())) {
@@ -125,6 +129,7 @@ public class BasicServiceImpl implements BasicService {
             HashMap<String, String> map = new HashMap<>();
             map.put("username", randomUsername);
             map.put("password", "123456");
+            userMapper.setUserRole(randomUserId);
             return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "注册成功", map);
         }
 

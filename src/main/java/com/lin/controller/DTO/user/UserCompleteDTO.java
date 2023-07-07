@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 /**
  * @Author czh
@@ -26,6 +27,7 @@ public class UserCompleteDTO {
     private Integer transactionsNumber;
     private Integer successNumber;
     private double successRate;
+    private Integer role;
 
     public UserCompleteDTO(User user, UserMapper userMapper) {
         loadUser(user);
@@ -37,7 +39,10 @@ public class UserCompleteDTO {
         } else {
             this.successRate = Double.parseDouble(new DecimalFormat("0.00").format((double)successNumber / transactionsNumber));
         }
-
+        if(Objects.equals(userMapper.selectRoleByUserId(user.getUserId()), "ROLE_MANAGER"))
+            this.role = 2;
+        else
+            this.role = 1;
     }
 
     private void loadUser(User user) {

@@ -47,7 +47,7 @@ public class OssUtil {
             String fileUrl = type + "/" + userId + "/" + dataPath + "/" + originalFilename;
             ossClient.putObject(bucketName, fileUrl, inputStream);
 
-            Date expiration = new Date(System.currentTimeMillis() + 3600 * 1000);
+            Date expiration = new Date(System.currentTimeMillis() + 3600L * 1000 * 24 * 365);
 
             String url = ossClient.generatePresignedUrl(aliyunConfig.getBucketName(), fileUrl, expiration).toString();
 

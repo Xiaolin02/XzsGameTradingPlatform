@@ -15,8 +15,9 @@
             r.status = 1
     </select>
     <insert id="replacePictureUrl">
-        replace into user_picture_url (user_id, url)
-        values (#{userId}, #{url});
+        update user_picture_url
+        set url = #{url}
+        where user_id = #{userId};
     </insert>
     <select id="getPictureUrl" resultType="java.lang.String">
         select url

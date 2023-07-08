@@ -67,6 +67,7 @@ public class BuyerServiceImpl implements BuyerService {
             return new ResponseResult<>(CodeConstants.CODE_NOT_FOUND, "未找到该商品");
         }
         orderMapper.insert(new Order(RandomUtil.getEighteenBitRandom(), commodityId, commodity.getSellerId(), userId, commodity.getPrice(), DateUtil.getDateTime(), OrderStatusConstants.STATUS_UNPAID));
+        System.out.println(DateUtil.getDateTime());
         return new ResponseResult<>(CodeConstants.CODE_SUCCESS, "提交成功");
 
     }

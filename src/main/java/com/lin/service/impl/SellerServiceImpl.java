@@ -143,6 +143,7 @@ public class SellerServiceImpl implements SellerService {
         for (Order order : orderList) {
 
             ViewOrderVO viewOrderVO = new ViewOrderVO();
+            viewOrderVO.setOrderId(order.getId());
             viewOrderVO.setCommodityId(order.getCommodityId());
             viewOrderVO.setPrice(order.getPrice());
             viewOrderVO.setAddAt(order.getAddAt());

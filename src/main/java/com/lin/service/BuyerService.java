@@ -20,9 +20,9 @@ public interface BuyerService {
 
     ResponseResult<ArrayList<GetOrderVO>> getOrder(String token);
 
-    ResponseResult<NullData> delOrder(String token, Integer orderId);
+    ResponseResult<NullData> delOrder(String token, String orderId);
 
-    ResponseResult<NullData> payOrder(String token, Integer orderId);
+    ResponseResult<NullData> payOrder(String token, String orderId);
 
     ResponseResult<NullData> confirmOrder(String token, String orderId);
 

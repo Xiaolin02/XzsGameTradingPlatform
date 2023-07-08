@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ViewOrderVO {
 
+    String orderId;
     Integer commodityId;
     String buyerName;
     String buyerPictureUrl;

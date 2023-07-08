@@ -75,7 +75,7 @@ public class BuyerController {
      * @date 2023/5/7 15:22
      */
     @PostMapping("/order/del/{orderId}")
-    public ResponseResult<NullData> delOrder(@RequestHeader String token, @PathVariable Integer orderId) {
+    public ResponseResult<NullData> delOrder(@RequestHeader String token, @PathVariable String orderId) {
         return buyerService.delOrder(token, orderId);
     }
 
@@ -84,7 +84,7 @@ public class BuyerController {
      * @date 2023/5/7 15:23
      */
     @PostMapping("/order/pay/{orderId}")
-    public ResponseResult<NullData> payOrder(@RequestHeader String token, @PathVariable Integer orderId) {
+    public ResponseResult<NullData> payOrder(@RequestHeader String token, @PathVariable String orderId) {
         return buyerService.payOrder(token, orderId);
     }
 

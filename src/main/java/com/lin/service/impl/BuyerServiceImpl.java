@@ -99,7 +99,7 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
-    public ResponseResult<NullData> delOrder(String token, Integer orderId) {
+    public ResponseResult<NullData> delOrder(String token, String orderId) {
 
         Order order = orderMapper.selectById(orderId);
         if (Objects.isNull(order)) {
@@ -112,7 +112,7 @@ public class BuyerServiceImpl implements BuyerService {
     }
 
     @Override
-    public ResponseResult<NullData> payOrder(String token, Integer orderId) {
+    public ResponseResult<NullData> payOrder(String token, String orderId) {
 
         User user = tokenUtil.parseTokenToUser(token);
         Order order = orderMapper.selectById(orderId);
